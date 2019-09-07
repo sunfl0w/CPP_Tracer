@@ -1,0 +1,3 @@
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/CMakeFiles/rebuild_cache.dir
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/CMakeFiles/Snek.dir
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/CMakeFiles/edit_cache.dir
