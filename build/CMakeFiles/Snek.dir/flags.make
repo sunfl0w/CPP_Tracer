@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek" 
+CXX_INCLUDES = -I/home/sunfl0w/Projects/CPP/Snek 
 

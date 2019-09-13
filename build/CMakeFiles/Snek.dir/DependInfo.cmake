@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Starter.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/Snek.dir/src/Starter.o"
+  "/home/sunfl0w/Projects/CPP/Snek/src/Starter.cpp" "/home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles/Snek.dir/src/Starter.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

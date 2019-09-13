@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Starter.cpp
+/home/sunfl0w/Projects/CPP/Snek/src/Starter.cpp
 iostream
+-
+string.h
 -
 

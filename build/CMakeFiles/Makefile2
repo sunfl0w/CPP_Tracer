@@ -44,10 +44,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek"
+CMAKE_SOURCE_DIR = /home/sunfl0w/Projects/CPP/Snek
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build"
+CMAKE_BINARY_DIR = /home/sunfl0w/Projects/CPP/Snek/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -74,14 +74,14 @@ preinstall:
 CMakeFiles/Snek.dir/all:
 	$(MAKE) -f CMakeFiles/Snek.dir/build.make CMakeFiles/Snek.dir/depend
 	$(MAKE) -f CMakeFiles/Snek.dir/build.make CMakeFiles/Snek.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" --progress-num=1,2 "Built target Snek"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles --progress-num=1,2 "Built target Snek"
 .PHONY : CMakeFiles/Snek.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Snek.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Snek.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles 0
 .PHONY : CMakeFiles/Snek.dir/rule
 
 # Convenience name for target.

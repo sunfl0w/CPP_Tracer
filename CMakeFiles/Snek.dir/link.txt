@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/Snek.dir/src/Starter.o  -o bin/Snek 
