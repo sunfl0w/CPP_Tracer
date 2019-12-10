@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sunfl0w/Projects/CPP/Snek
+CMAKE_SOURCE_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sunfl0w/Projects/CPP/Snek/build
+CMAKE_BINARY_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles /home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -111,32 +111,71 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Snek
+# Target rules for targets named OpenCG_Starter
 
 # Build rule for target.
-Snek: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Snek
-.PHONY : Snek
+OpenCG_Starter: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 OpenCG_Starter
+.PHONY : OpenCG_Starter
 
 # fast build rule for target.
-Snek/fast:
-	$(MAKE) -f CMakeFiles/Snek.dir/build.make CMakeFiles/Snek.dir/build
-.PHONY : Snek/fast
+OpenCG_Starter/fast:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/build
+.PHONY : OpenCG_Starter/fast
+
+src/Console.o: src/Console.cpp.o
+
+.PHONY : src/Console.o
 
 # target to build an object file
-src/Starter.o:
-	$(MAKE) -f CMakeFiles/Snek.dir/build.make CMakeFiles/Snek.dir/src/Starter.o
-.PHONY : src/Starter.o
+src/Console.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o
+.PHONY : src/Console.cpp.o
+
+src/Console.i: src/Console.cpp.i
+
+.PHONY : src/Console.i
 
 # target to preprocess a source file
-src/Starter.i:
-	$(MAKE) -f CMakeFiles/Snek.dir/build.make CMakeFiles/Snek.dir/src/Starter.i
-.PHONY : src/Starter.i
+src/Console.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.i
+.PHONY : src/Console.cpp.i
+
+src/Console.s: src/Console.cpp.s
+
+.PHONY : src/Console.s
 
 # target to generate assembly for a file
-src/Starter.s:
-	$(MAKE) -f CMakeFiles/Snek.dir/build.make CMakeFiles/Snek.dir/src/Starter.s
+src/Console.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.s
+.PHONY : src/Console.cpp.s
+
+src/Starter.o: src/Starter.cpp.o
+
+.PHONY : src/Starter.o
+
+# target to build an object file
+src/Starter.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o
+.PHONY : src/Starter.cpp.o
+
+src/Starter.i: src/Starter.cpp.i
+
+.PHONY : src/Starter.i
+
+# target to preprocess a source file
+src/Starter.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.i
+.PHONY : src/Starter.cpp.i
+
+src/Starter.s: src/Starter.cpp.s
+
 .PHONY : src/Starter.s
+
+# target to generate assembly for a file
+src/Starter.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.s
+.PHONY : src/Starter.cpp.s
 
 # Help Target
 help:
@@ -145,8 +184,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... Snek"
+	@echo "... OpenCG_Starter"
 	@echo "... edit_cache"
+	@echo "... src/Console.o"
+	@echo "... src/Console.i"
+	@echo "... src/Console.s"
 	@echo "... src/Starter.o"
 	@echo "... src/Starter.i"
 	@echo "... src/Starter.s"

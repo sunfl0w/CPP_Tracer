@@ -1,0 +1,1 @@
+/usr/bin/c++  -g -Wall -g  -rdynamic CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o  -o ../bin/OpenCG_Starter 

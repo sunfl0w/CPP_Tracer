@@ -7,14 +7,20 @@
             "args": [
                 "-H.",
                 "-Bbuild"
-            ]
+            ],
+            "dependsOn": "Clean",
         },
         {
-            "label": "BuildDebug",
+            "label": "Clean",
+            "type": "shell",
+            "command": "rm -rf build",
+        },
+        {
+            "label": "CMakeSetDebug",
             "type": "shell",
             "command": "cmake",
             "args": [
-                "--build",
+                "-DCMAKE_BUILD_TYPE=Debug",
                 "."
             ],
             "options": {
@@ -28,18 +34,65 @@
             "problemMatcher": []
         },
         {
-            "label": "Test",
+            "label": "CMakeSetRelease",
             "type": "shell",
             "command": "cmake",
             "args": [
-                "--build bin/debug",
-                "-- -j3"
+                "-DCMAKE_BUILD_TYPE=Release",
+                "."
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
             },
+            "dependsOn": "GenerateCMakeConfigs",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "BuildDebug",
+            "type": "shell",
+            "command": "cmake",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "args": [
+                "--build",
+                ".",
+                "--",
+                "-j",
+                "8"
+            ],
+            "dependsOn": "CMakeSetDebug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "BuildRelease",
+            "type": "shell",
+            "command": "cmake",
+            "options": {
+                "cwd": "${workspaceFolder}/build"
+            },
+            "args": [
+                "--build",
+                ".",
+                "--",
+                "-j",
+                "8"
+            ],
+            "dependsOn": "CMakeSetRelease",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
     ],
     "version": "2.0.0"
 }

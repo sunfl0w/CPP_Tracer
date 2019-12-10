@@ -1,11 +1,17 @@
-cmake_minimum_required(VERSION 2.4)
+cmake_minimum_required(VERSION 3.1)
 
-project(Snek)
+project(OpenCG)
 
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
-include_directories("${PROJECT_SOURCE_DIR}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O3")
 
-add_executable(Snek ${PROJECT_SOURCE_DIR}/src/Starter.cpp)
+file(STRINGS "includelist.cmake" includes)
+
+include_directories(${includes})
+include(sourcelist.cmake)
+
+add_executable(OpenCG_Starter ${sources})

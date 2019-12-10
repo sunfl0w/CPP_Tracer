@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Console.hpp
+PixelScreenBuffer.hpp
+../include/PixelScreenBuffer.hpp
+
+../include/Pixel.hpp
+vector
+-
+
+../include/PixelScreenBuffer.hpp
+Pixel.hpp
+../include/Pixel.hpp
+vector
+-
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Console.cpp
+Console.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Console.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Starter.cpp
+iostream
+-
+string.h
+-
+

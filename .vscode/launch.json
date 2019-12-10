@@ -8,7 +8,7 @@
             "name": "RunDebug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/Snek",
+            "program": "${workspaceFolder}/bin/OpenCG_Starter",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

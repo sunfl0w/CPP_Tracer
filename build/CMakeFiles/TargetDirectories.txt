@@ -1,3 +1,3 @@
-/home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles/rebuild_cache.dir
-/home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles/Snek.dir
-/home/sunfl0w/Projects/CPP/Snek/build/CMakeFiles/edit_cache.dir
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/rebuild_cache.dir
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/OpenCG_Starter.dir
+/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/edit_cache.dir

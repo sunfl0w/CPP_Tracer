@@ -10,6 +10,8 @@ int main(int, char**) {
             }
         }
     }
-    //std::cout << "\033[38;5;4;176;2mHello";
+    std::cout << "\033[38;5;4;176;2mHello";
+    std::cout << "\033[2J";
+    std::cout << "\033[H";
     //std::cout << "Hello, world!\n";
 }
