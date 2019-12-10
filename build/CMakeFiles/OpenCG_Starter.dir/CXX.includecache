@@ -7,26 +7,54 @@
 #IncludeRegexTransform: 
 
 ../include/Console.hpp
+iostream
+-
 PixelScreenBuffer.hpp
 ../include/PixelScreenBuffer.hpp
 
 ../include/Pixel.hpp
 vector
 -
+RGB_Color.hpp
+../include/RGB_Color.hpp
 
 ../include/PixelScreenBuffer.hpp
-Pixel.hpp
-../include/Pixel.hpp
 vector
 -
+Pixel.hpp
+../include/Pixel.hpp
 
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Console.cpp
+../include/RGB_Color.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.cpp
 Console.hpp
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Console.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.hpp
 
-/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Starter.cpp
-iostream
--
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Pixel.cpp
+Pixel.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Pixel.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.cpp
+PixelScreenBuffer.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.cpp
+RGB_Color.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp
 string.h
 -
+iostream
+-
+vector
+-
+Console.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.hpp
+Pixel.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Pixel.hpp
+PixelScreenBuffer.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.hpp
+RGB_Color.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.hpp
 

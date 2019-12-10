@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek"
+CMAKE_SOURCE_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build"
+CMAKE_BINARY_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -150,6 +150,87 @@ src/Console.cpp.s:
 	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.s
 .PHONY : src/Console.cpp.s
 
+src/Pixel.o: src/Pixel.cpp.o
+
+.PHONY : src/Pixel.o
+
+# target to build an object file
+src/Pixel.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o
+.PHONY : src/Pixel.cpp.o
+
+src/Pixel.i: src/Pixel.cpp.i
+
+.PHONY : src/Pixel.i
+
+# target to preprocess a source file
+src/Pixel.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.i
+.PHONY : src/Pixel.cpp.i
+
+src/Pixel.s: src/Pixel.cpp.s
+
+.PHONY : src/Pixel.s
+
+# target to generate assembly for a file
+src/Pixel.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.s
+.PHONY : src/Pixel.cpp.s
+
+src/PixelScreenBuffer.o: src/PixelScreenBuffer.cpp.o
+
+.PHONY : src/PixelScreenBuffer.o
+
+# target to build an object file
+src/PixelScreenBuffer.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o
+.PHONY : src/PixelScreenBuffer.cpp.o
+
+src/PixelScreenBuffer.i: src/PixelScreenBuffer.cpp.i
+
+.PHONY : src/PixelScreenBuffer.i
+
+# target to preprocess a source file
+src/PixelScreenBuffer.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.i
+.PHONY : src/PixelScreenBuffer.cpp.i
+
+src/PixelScreenBuffer.s: src/PixelScreenBuffer.cpp.s
+
+.PHONY : src/PixelScreenBuffer.s
+
+# target to generate assembly for a file
+src/PixelScreenBuffer.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.s
+.PHONY : src/PixelScreenBuffer.cpp.s
+
+src/RGB_Color.o: src/RGB_Color.cpp.o
+
+.PHONY : src/RGB_Color.o
+
+# target to build an object file
+src/RGB_Color.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o
+.PHONY : src/RGB_Color.cpp.o
+
+src/RGB_Color.i: src/RGB_Color.cpp.i
+
+.PHONY : src/RGB_Color.i
+
+# target to preprocess a source file
+src/RGB_Color.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.i
+.PHONY : src/RGB_Color.cpp.i
+
+src/RGB_Color.s: src/RGB_Color.cpp.s
+
+.PHONY : src/RGB_Color.s
+
+# target to generate assembly for a file
+src/RGB_Color.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.s
+.PHONY : src/RGB_Color.cpp.s
+
 src/Starter.o: src/Starter.cpp.o
 
 .PHONY : src/Starter.o
@@ -189,6 +270,15 @@ help:
 	@echo "... src/Console.o"
 	@echo "... src/Console.i"
 	@echo "... src/Console.s"
+	@echo "... src/Pixel.o"
+	@echo "... src/Pixel.i"
+	@echo "... src/Pixel.s"
+	@echo "... src/PixelScreenBuffer.o"
+	@echo "... src/PixelScreenBuffer.i"
+	@echo "... src/PixelScreenBuffer.s"
+	@echo "... src/RGB_Color.o"
+	@echo "... src/RGB_Color.i"
+	@echo "... src/RGB_Color.s"
 	@echo "... src/Starter.o"
 	@echo "... src/Starter.i"
 	@echo "... src/Starter.s"

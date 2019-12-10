@@ -5,6 +5,23 @@ CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o
  ../include/Console.hpp
  ../include/Pixel.hpp
  ../include/PixelScreenBuffer.hpp
- /run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Console.cpp
+ ../include/RGB_Color.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.cpp
+CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o
+ ../include/Pixel.hpp
+ ../include/RGB_Color.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Pixel.cpp
+CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o
+ ../include/Pixel.hpp
+ ../include/PixelScreenBuffer.hpp
+ ../include/RGB_Color.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.cpp
+CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o
+ ../include/RGB_Color.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.cpp
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o
- /run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Starter.cpp
+ ../include/Console.hpp
+ ../include/Pixel.hpp
+ ../include/PixelScreenBuffer.hpp
+ ../include/RGB_Color.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp

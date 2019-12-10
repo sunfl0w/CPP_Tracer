@@ -1,4 +1,4 @@
-# Install script for directory: /run/media/sunfl0w/Common Storage/Projekte/CPP/Snek
+# Install script for directory: /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

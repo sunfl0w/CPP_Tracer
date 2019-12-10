@@ -4,8 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Console.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o"
-  "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/src/Starter.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/Snek/build/CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Pixel.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

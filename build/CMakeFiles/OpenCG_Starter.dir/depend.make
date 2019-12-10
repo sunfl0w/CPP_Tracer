@@ -4,7 +4,24 @@
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: ../include/Console.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: ../include/Pixel.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: ../include/PixelScreenBuffer.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: ../include/RGB_Color.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: ../src/Console.cpp
 
+CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o: ../include/Pixel.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o: ../include/RGB_Color.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o: ../src/Pixel.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o: ../include/Pixel.hpp
+CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o: ../include/PixelScreenBuffer.hpp
+CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o: ../include/RGB_Color.hpp
+CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o: ../src/PixelScreenBuffer.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o: ../include/RGB_Color.hpp
+CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o: ../src/RGB_Color.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/Console.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/Pixel.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/PixelScreenBuffer.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/RGB_Color.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../src/Starter.cpp
 
