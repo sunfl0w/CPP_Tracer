@@ -9,12 +9,14 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
+  "../include/math"
   )
 
 # Targets to which this target links.

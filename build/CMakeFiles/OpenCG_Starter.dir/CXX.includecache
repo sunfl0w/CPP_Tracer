@@ -26,6 +26,12 @@ Pixel.hpp
 
 ../include/RGB_Color.hpp
 
+../include/math/matrix.hpp
+string
+-
+vector
+-
+
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.cpp
 Console.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.hpp
@@ -57,4 +63,10 @@ PixelScreenBuffer.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.hpp
 RGB_Color.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.hpp
+matrix.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/matrix.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.cpp
+matrix.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.hpp
 

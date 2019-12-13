@@ -7,7 +7,10 @@
 #include "PixelScreenBuffer.hpp"
 #include "RGB_Color.hpp"
 
+#include "matrix.hpp"
+
 using namespace OpenCG;
+using namespace OpenCG::Math;
 
 int main(int, char**) {
     /*for (int r = 0; r < 256; r+= 16) {
@@ -22,7 +25,7 @@ int main(int, char**) {
     Console console(10, 10);
     console.ClearScreen();
 
-    PixelScreenBuffer buffer(10, 10);
+    /*PixelScreenBuffer buffer(10, 10);
     std::vector<Pixel> bufferData = std::vector<Pixel>(10 * 10);
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 10; y++) {
@@ -31,5 +34,10 @@ int main(int, char**) {
     }
     buffer.SetBufferData(bufferData);
 
-    console.DrawBuffer(buffer);
+    console.DrawBuffer(buffer);*/
+
+    Matrix a = Matrix(2, 2, std::vector<float>{1, 2, 3, 4});
+    Matrix b = Matrix(2, 2, std::vector<float>{0, 1, 0, 0});
+    Matrix c = a.MultiplyWith(b);
+    std::cout << c.ToString();
 }

@@ -6,6 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o"
   "CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
   "CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
+  "CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.
