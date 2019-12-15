@@ -285,6 +285,114 @@ src/math/matrix.cpp.s:
 	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.s
 .PHONY : src/math/matrix.cpp.s
 
+src/math/vec3.o: src/math/vec3.cpp.o
+
+.PHONY : src/math/vec3.o
+
+# target to build an object file
+src/math/vec3.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o
+.PHONY : src/math/vec3.cpp.o
+
+src/math/vec3.i: src/math/vec3.cpp.i
+
+.PHONY : src/math/vec3.i
+
+# target to preprocess a source file
+src/math/vec3.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.i
+.PHONY : src/math/vec3.cpp.i
+
+src/math/vec3.s: src/math/vec3.cpp.s
+
+.PHONY : src/math/vec3.s
+
+# target to generate assembly for a file
+src/math/vec3.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.s
+.PHONY : src/math/vec3.cpp.s
+
+src/renderer/camera.o: src/renderer/camera.cpp.o
+
+.PHONY : src/renderer/camera.o
+
+# target to build an object file
+src/renderer/camera.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o
+.PHONY : src/renderer/camera.cpp.o
+
+src/renderer/camera.i: src/renderer/camera.cpp.i
+
+.PHONY : src/renderer/camera.i
+
+# target to preprocess a source file
+src/renderer/camera.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.i
+.PHONY : src/renderer/camera.cpp.i
+
+src/renderer/camera.s: src/renderer/camera.cpp.s
+
+.PHONY : src/renderer/camera.s
+
+# target to generate assembly for a file
+src/renderer/camera.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.s
+.PHONY : src/renderer/camera.cpp.s
+
+src/renderer/projector.o: src/renderer/projector.cpp.o
+
+.PHONY : src/renderer/projector.o
+
+# target to build an object file
+src/renderer/projector.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o
+.PHONY : src/renderer/projector.cpp.o
+
+src/renderer/projector.i: src/renderer/projector.cpp.i
+
+.PHONY : src/renderer/projector.i
+
+# target to preprocess a source file
+src/renderer/projector.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.i
+.PHONY : src/renderer/projector.cpp.i
+
+src/renderer/projector.s: src/renderer/projector.cpp.s
+
+.PHONY : src/renderer/projector.s
+
+# target to generate assembly for a file
+src/renderer/projector.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.s
+.PHONY : src/renderer/projector.cpp.s
+
+src/renderer/viewport.o: src/renderer/viewport.cpp.o
+
+.PHONY : src/renderer/viewport.o
+
+# target to build an object file
+src/renderer/viewport.cpp.o:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o
+.PHONY : src/renderer/viewport.cpp.o
+
+src/renderer/viewport.i: src/renderer/viewport.cpp.i
+
+.PHONY : src/renderer/viewport.i
+
+# target to preprocess a source file
+src/renderer/viewport.cpp.i:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.i
+.PHONY : src/renderer/viewport.cpp.i
+
+src/renderer/viewport.s: src/renderer/viewport.cpp.s
+
+.PHONY : src/renderer/viewport.s
+
+# target to generate assembly for a file
+src/renderer/viewport.cpp.s:
+	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.s
+.PHONY : src/renderer/viewport.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -312,6 +420,18 @@ help:
 	@echo "... src/math/matrix.o"
 	@echo "... src/math/matrix.i"
 	@echo "... src/math/matrix.s"
+	@echo "... src/math/vec3.o"
+	@echo "... src/math/vec3.i"
+	@echo "... src/math/vec3.s"
+	@echo "... src/renderer/camera.o"
+	@echo "... src/renderer/camera.i"
+	@echo "... src/renderer/camera.s"
+	@echo "... src/renderer/projector.o"
+	@echo "... src/renderer/projector.i"
+	@echo "... src/renderer/projector.s"
+	@echo "... src/renderer/viewport.o"
+	@echo "... src/renderer/viewport.i"
+	@echo "... src/renderer/viewport.s"
 .PHONY : help
 
 

@@ -1,6 +1,8 @@
 #include "matrix.hpp"
 
 namespace OpenCG::Math {
+    Matrix::Matrix() {}
+
     Matrix::Matrix(unsigned int width, unsigned int height) {
         this->width = width;
         this->height = height;
@@ -17,20 +19,24 @@ namespace OpenCG::Math {
     }
 
     Matrix Matrix::MultiplyWith(const Matrix& otherMatrix) {
-        if (width != otherMatrix.height || height != otherMatrix.width) {
+        if (width != otherMatrix.height) {
             throw "Can't multiply matrices that are not compatible.";
         }
         Matrix result = Matrix(otherMatrix.width, height);
-        for (int x = 0; x < result.width; x++) {
-            for (int y = 0; y < result.height; y++) {
+        for (int y = 0; y < result.height; y++) {
+            for (int x = 0; x < result.width; x++) {
                 float sum = 0.0f;
                 for (int z = 0; z < width; z++) {
-                    sum += data[y * width + z] * otherMatrix.data[x + z * height];
+                    sum += data[y * width + z] * otherMatrix.data[x + z * otherMatrix.width];
                 }
                 result.data[x + y * result.width] = sum;
             }
         }
         return result;
+    }
+
+    std::vector<float> Matrix::GetData() {
+        return data;
     }
 
     std::string Matrix::ToString() {

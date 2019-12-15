@@ -18,6 +18,8 @@ namespace OpenCG::Math {
 
         Matrix MultiplyWith(const Matrix& otherMatrix);
 
+        std::vector<float> GetData();
+
         std::string ToString();
     };
 }  // namespace OpenCG::Math

@@ -6,5 +6,5 @@ CXX_FLAGS = -g -Wall -g   -std=gnu++14
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include" -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include/math" 
+CXX_INCLUDES = -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include" -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include/math" -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include/renderer" 
 

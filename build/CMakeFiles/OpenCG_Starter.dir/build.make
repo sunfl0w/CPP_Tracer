@@ -70,9 +70,61 @@ CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.cpp" -o CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.s
 
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o: ../src/math/vec3.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.cpp"
+
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.cpp" > CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.i
+
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.cpp" -o CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.s
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o: ../src/renderer/camera.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.cpp"
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.cpp" > CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.i
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.cpp" -o CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.s
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o: ../src/renderer/projector.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.cpp"
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.cpp" > CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.i
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.cpp" -o CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.s
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o: ../src/renderer/viewport.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.cpp"
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.cpp" > CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.i
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.cpp" -o CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.s
+
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o: ../src/Console.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.cpp"
 
 CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.i: cmake_force
@@ -85,7 +137,7 @@ CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.s: cmake_force
 
 CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
 CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o: ../src/Pixel.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Pixel.cpp"
 
 CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.i: cmake_force
@@ -98,7 +150,7 @@ CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.s: cmake_force
 
 CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
 CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o: ../src/PixelScreenBuffer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.cpp"
 
 CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.i: cmake_force
@@ -111,7 +163,7 @@ CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.s: cmake_force
 
 CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
 CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o: ../src/RGB_Color.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.cpp"
 
 CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.i: cmake_force
@@ -124,7 +176,7 @@ CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.s: cmake_force
 
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: CMakeFiles/OpenCG_Starter.dir/flags.make
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../src/Starter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o -c "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp"
 
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.i: cmake_force
@@ -138,6 +190,10 @@ CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.s: cmake_force
 # Object files for target OpenCG_Starter
 OpenCG_Starter_OBJECTS = \
 "CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o" \
+"CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o" \
+"CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o" \
+"CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o" \
+"CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o" \
 "CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o" \
 "CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o" \
 "CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o" \
@@ -148,6 +204,10 @@ OpenCG_Starter_OBJECTS = \
 OpenCG_Starter_EXTERNAL_OBJECTS =
 
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o
+../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o
+../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o
+../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o
+../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/Console.cpp.o
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/Pixel.cpp.o
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/PixelScreenBuffer.cpp.o
@@ -155,7 +215,7 @@ OpenCG_Starter_EXTERNAL_OBJECTS =
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/build.make
 ../bin/OpenCG_Starter: CMakeFiles/OpenCG_Starter.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable ../bin/OpenCG_Starter"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable ../bin/OpenCG_Starter"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/OpenCG_Starter.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

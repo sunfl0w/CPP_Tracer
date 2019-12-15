@@ -24,8 +24,29 @@ CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/Pixel.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/PixelScreenBuffer.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/RGB_Color.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/math/matrix.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/math/vec3.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/renderer/camera.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/renderer/projector.hpp
+CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../include/renderer/viewport.hpp
 CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o: ../src/Starter.cpp
 
 CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o: ../include/math/matrix.hpp
 CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o: ../src/math/matrix.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o: ../include/math/vec3.hpp
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o: ../src/math/vec3.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o: ../include/math/matrix.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o: ../include/math/vec3.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o: ../include/renderer/camera.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o: ../src/renderer/camera.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o: ../include/math/matrix.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o: ../include/renderer/projector.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o: ../src/renderer/projector.cpp
+
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o: ../include/math/matrix.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o: ../include/math/vec3.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o: ../include/renderer/viewport.hpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o: ../src/renderer/viewport.cpp
 

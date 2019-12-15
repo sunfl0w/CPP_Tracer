@@ -32,6 +32,28 @@ string
 vector
 -
 
+../include/math/vec3.hpp
+vector
+-
+math.h
+-
+
+../include/renderer/camera.hpp
+matrix.hpp
+../include/renderer/matrix.hpp
+vec3.hpp
+../include/renderer/vec3.hpp
+
+../include/renderer/projector.hpp
+matrix.hpp
+../include/renderer/matrix.hpp
+
+../include/renderer/viewport.hpp
+matrix.hpp
+../include/renderer/matrix.hpp
+vec3.hpp
+../include/renderer/vec3.hpp
+
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.cpp
 Console.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Console.hpp
@@ -53,6 +75,8 @@ string.h
 -
 iostream
 -
+thread
+-
 vector
 -
 Console.hpp
@@ -63,10 +87,32 @@ PixelScreenBuffer.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/PixelScreenBuffer.hpp
 RGB_Color.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.hpp
+camera.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/camera.hpp
+projector.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/projector.hpp
+viewport.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/viewport.hpp
 matrix.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/matrix.hpp
 
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.cpp
 matrix.hpp
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.cpp
+vec3.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.cpp
+camera.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.cpp
+projector.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.hpp
+
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.cpp
+viewport.hpp
+/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.hpp
 

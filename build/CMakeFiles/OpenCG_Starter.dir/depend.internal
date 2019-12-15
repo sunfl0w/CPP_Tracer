@@ -25,7 +25,28 @@ CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o
  ../include/PixelScreenBuffer.hpp
  ../include/RGB_Color.hpp
  ../include/math/matrix.hpp
+ ../include/math/vec3.hpp
+ ../include/renderer/camera.hpp
+ ../include/renderer/projector.hpp
+ ../include/renderer/viewport.hpp
  /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp
 CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o
  ../include/math/matrix.hpp
  /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.cpp
+CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o
+ ../include/math/vec3.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.cpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o
+ ../include/math/matrix.hpp
+ ../include/math/vec3.hpp
+ ../include/renderer/camera.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.cpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o
+ ../include/math/matrix.hpp
+ ../include/renderer/projector.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.cpp
+CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o
+ ../include/math/matrix.hpp
+ ../include/math/vec3.hpp
+ ../include/renderer/viewport.hpp
+ /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.cpp

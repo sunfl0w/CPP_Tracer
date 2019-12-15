@@ -7,6 +7,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
   "CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
   "CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o"
+  "CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o"
+  "CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o"
+  "CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o"
+  "CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o"
 )
 
 # Per-language clean rules from dependency scanning.

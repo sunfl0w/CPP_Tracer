@@ -10,6 +10,10 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/RGB_Color.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/RGB_Color.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/Starter.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/Starter.cpp.o"
   "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/matrix.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/math/matrix.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/math/vec3.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/math/vec3.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/camera.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/renderer/camera.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/projector.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/renderer/projector.cpp.o"
+  "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/src/renderer/viewport.cpp" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir/src/renderer/viewport.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,6 +21,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
   "../include/math"
+  "../include/renderer"
   )
 
 # Targets to which this target links.
