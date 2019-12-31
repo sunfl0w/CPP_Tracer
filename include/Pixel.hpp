@@ -7,13 +7,11 @@
 namespace OpenCG {
     class Pixel {
     private:
-        char character;
-        RGB_Color characterColor;
+        RGB_Color color;
 
     public:
         Pixel();
-        Pixel(char character, RGB_Color characterColor);
-        char GetCharacter();
+        Pixel(RGB_Color color);
         RGB_Color GetColor();
     };
 }  // namespace OpenCG

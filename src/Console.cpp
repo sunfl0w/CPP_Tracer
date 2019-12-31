@@ -7,7 +7,8 @@ namespace OpenCG {
     }
 
     void Console::ClearScreen() {
-        std::cout << "\033[2J\033[H";
+        std::cout << "\033[2J";
+        std::cout << "\033[H";
     }
 
     void Console::SetCursorHome() {
@@ -22,8 +23,8 @@ namespace OpenCG {
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeX; y++) {
                 Pixel pixel = pixelScreenBuffer.GetBufferData()[pixelScreenBuffer.Width() * y + x];
-                std::cout << "\033[38;2;" + std::to_string(pixel.GetColor().Red()) + ";" + std::to_string(pixel.GetColor().Green()) + ";" + std::to_string(pixel.GetColor().Blue()) + "m" + pixel.GetCharacter();
-                std::cout << "\033[38;2;" + std::to_string(pixel.GetColor().Red()) + ";" + std::to_string(pixel.GetColor().Green()) + ";" + std::to_string(pixel.GetColor().Blue()) + "m" + pixel.GetCharacter();
+                std::cout << "\033[38;2;" + std::to_string(pixel.GetColor().Red()) + ";" + std::to_string(pixel.GetColor().Green()) + ";" + std::to_string(pixel.GetColor().Blue()) + "m" + "\u2588";
+                std::cout << "\033[38;2;" + std::to_string(pixel.GetColor().Red()) + ";" + std::to_string(pixel.GetColor().Green()) + ";" + std::to_string(pixel.GetColor().Blue()) + "m" + "\u2588";
             }
             std::cout << "\n";
         }

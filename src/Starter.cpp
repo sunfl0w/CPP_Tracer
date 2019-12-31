@@ -28,16 +28,16 @@ int main(int, char**) {
         }
     }
     std::cout << "\033[38;5;4;176;2mHello";*/
-    Console console(40, 40);
+    int size = 20;
+    Console console(size, size);
     Matrix point(1, 4, std::vector<float>{5, 0, 5, 1});
 
     for (int i = 0; i < 100; i++) {
         point = Matrix(1, 4, std::vector<float>{5, point.GetData()[1] - 0.5f, 5, 1});
-        console.ClearScreen();
 
-        Projector projector(40, 40, 1, 100);
+        Projector projector(size, size, 1, 100);
         Camera camera(Vec3(0, 0, 0), Vec3(1, 0, 0), Vec3(0, 1, 0));
-        Viewport viewport(40, 40, 1, 100);
+        Viewport viewport(size, size, 1, 100);
 
         Matrix protoPixel = projector.GetMatrix().MultiplyWith(camera.GetMatrix().MultiplyWith(point));
         Vec3 pixel = viewport.TransformPoint(Vec3(protoPixel.GetData()[0], protoPixel.GetData()[1], protoPixel.GetData()[2]));
@@ -46,14 +46,14 @@ int main(int, char**) {
         int x1 = std::round(pixel.X());
         int y1 = std::round(pixel.Y());
 
-        PixelScreenBuffer buffer(40, 40);
-        std::vector<Pixel> bufferData = std::vector<Pixel>(40 * 40);
-        for (int x = 0; x < 40; x++) {
-            for (int y = 0; y < 40; y++) {
+        PixelScreenBuffer buffer(size, size);
+        std::vector<Pixel> bufferData = std::vector<Pixel>(size * size);
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
                 if (x == std::round(pixel.X()) && y == std::round(pixel.Y())) {
-                    bufferData[x + y * 40] = Pixel('#', RGB_Color(200, 100, 100));
+                    bufferData[x + y * size] = Pixel(RGB_Color(200, 100, 100));
                 } else {
-                    bufferData[x + y * 40] = Pixel('#', RGB_Color(50, 50, 50));
+                    bufferData[x + y * size] = Pixel(RGB_Color(50, 50, 50));
                 }
             }
         }
