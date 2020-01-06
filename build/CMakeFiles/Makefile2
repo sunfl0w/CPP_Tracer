@@ -44,10 +44,17 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG"
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build"
+=======
+CMAKE_SOURCE_DIR = /home/sunfl0w/Projects/CPP/OpenCG
+
+# The top-level build directory on which CMake was run.
+CMAKE_BINARY_DIR = /home/sunfl0w/Projects/CPP/OpenCG/build
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -74,14 +81,24 @@ clean: CMakeFiles/OpenCG_Starter.dir/clean
 CMakeFiles/OpenCG_Starter.dir/all:
 	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/depend
 	$(MAKE) -f CMakeFiles/OpenCG_Starter.dir/build.make CMakeFiles/OpenCG_Starter.dir/build
+<<<<<<< HEAD
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target OpenCG_Starter"
+=======
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11 "Built target OpenCG_Starter"
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 .PHONY : CMakeFiles/OpenCG_Starter.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/OpenCG_Starter.dir/rule: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/OpenCG_Starter.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles 11
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/OpenCG_Starter.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles 0
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 .PHONY : CMakeFiles/OpenCG_Starter.dir/rule
 
 # Convenience name for target.

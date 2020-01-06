@@ -6,5 +6,9 @@ CXX_FLAGS = -g -Wall -g   -std=gnu++14
 
 CXX_DEFINES = 
 
+<<<<<<< HEAD
 CXX_INCLUDES = -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include" -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include/math" -I"/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/include/renderer" 
+=======
+CXX_INCLUDES = -I/home/sunfl0w/Projects/CPP/OpenCG/include -I/home/sunfl0w/Projects/CPP/OpenCG/include/math -I/home/sunfl0w/Projects/CPP/OpenCG/include/renderer 
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 

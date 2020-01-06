@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/rebuild_cache.dir
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir
 /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/edit_cache.dir
+=======
+/home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles/rebuild_cache.dir
+/home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles/OpenCG_Starter.dir
+/home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles/edit_cache.dir
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f

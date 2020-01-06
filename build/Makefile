@@ -48,10 +48,17 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
+<<<<<<< HEAD
 CMAKE_SOURCE_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG"
 
 # The top-level build directory on which CMake was run.
 CMAKE_BINARY_DIR = "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build"
+=======
+CMAKE_SOURCE_DIR = /home/sunfl0w/Projects/CPP/OpenCG
+
+# The top-level build directory on which CMake was run.
+CMAKE_BINARY_DIR = /home/sunfl0w/Projects/CPP/OpenCG/build
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +87,15 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
+<<<<<<< HEAD
 	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/CMakeFiles" 0
+=======
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles /home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles/progress.marks
+	$(MAKE) -f CMakeFiles/Makefile2 all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sunfl0w/Projects/CPP/OpenCG/build/CMakeFiles 0
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 .PHONY : all
 
 # The main clean target

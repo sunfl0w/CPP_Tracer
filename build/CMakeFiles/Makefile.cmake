@@ -8,9 +8,15 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "../CMakeLists.txt"
+<<<<<<< HEAD
   "CMakeFiles/3.16.2/CMakeCCompiler.cmake"
   "CMakeFiles/3.16.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.16.2/CMakeSystem.cmake"
+=======
+  "CMakeFiles/3.16.0/CMakeCCompiler.cmake"
+  "CMakeFiles/3.16.0/CMakeCXXCompiler.cmake"
+  "CMakeFiles/3.16.0/CMakeSystem.cmake"
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
   "../sourcelist.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCInformation.cmake"
   "/usr/share/cmake-3.16/Modules/CMakeCXXInformation.cmake"

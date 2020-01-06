@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Install script for directory: /run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG
+=======
+# Install script for directory: /home/sunfl0w/Projects/CPP/OpenCG
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +49,9 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
+<<<<<<< HEAD
 file(WRITE "/run/media/sunfl0w/Common Storage/Projekte/CPP/OpenCG/build/${CMAKE_INSTALL_MANIFEST}"
+=======
+file(WRITE "/home/sunfl0w/Projects/CPP/OpenCG/build/${CMAKE_INSTALL_MANIFEST}"
+>>>>>>> fad2f42e82173bc2d305478a1bb3d688bd49fb8f
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
