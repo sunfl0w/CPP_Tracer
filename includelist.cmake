@@ -1,3 +1,3 @@
 include
 include/math
-include/renderer
+include/rendering

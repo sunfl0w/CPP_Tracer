@@ -1,12 +1,15 @@
 set(sources ${sources}
     src/math/matrix.cpp
     src/math/vec3.cpp
-    src/renderer/camera.cpp
-    src/renderer/projector.cpp
-    src/renderer/viewport.cpp
-    src/Console.cpp
-    src/Pixel.cpp
-    src/PixelScreenBuffer.cpp
-    src/RGB_Color.cpp
+    src/rendering/camera.cpp
+    src/rendering/Console.cpp
+    src/rendering/Pixel.cpp
+    src/rendering/projector.cpp
+    src/rendering/renderer.cpp
+    src/rendering/RGB_Color.cpp
+    src/rendering/screenBuffer.cpp
+    src/rendering/tris.cpp
+    src/rendering/vertex.cpp
+    src/rendering/viewport.cpp
     src/Starter.cpp
 )

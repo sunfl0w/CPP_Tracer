@@ -1,6 +1,6 @@
 #include "camera.hpp"
 
-namespace OpenCG::Renderer {
+namespace OpenCG::Rendering {
     Camera::Camera(const Math::Vec3& camPos, const Math::Vec3& target, const Math::Vec3& up) {
         Math::Vec3 zAxis = camPos.SubtractOther(target);
         zAxis.Normalize();

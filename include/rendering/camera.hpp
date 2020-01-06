@@ -3,7 +3,7 @@
 #include "matrix.hpp"
 #include "vec3.hpp"
 
-namespace OpenCG::Renderer {
+namespace OpenCG::Rendering {
     class Camera {
     private:
         Math::Matrix viewMatrix;

@@ -1,6 +1,9 @@
 #include "projector.hpp"
 
-namespace OpenCG::Renderer {
+namespace OpenCG::Rendering {
+    Projector::Projector() {
+        projection = Math::Matrix(1, 1, std::vector<float>{1.0f});
+    }
     Projector::Projector(int width, int height, int near, int far) {
         projection = Math::Matrix(4, 4, std::vector<float>{2.0f / width, 0, 0, 0, 0, 2.0f / height, 0, 0, 0, 0, 1.0f / (near - far), -1, 0, 0, near / (float)(near - far), 0});
     }

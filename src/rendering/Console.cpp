@@ -1,6 +1,6 @@
 #include "Console.hpp"
 
-namespace OpenCG {
+namespace OpenCG::Rendering {
     Console::Console(int sizeX, int sizeY) {
         this->sizeX = sizeX;
         this->sizeY = sizeY;
@@ -15,16 +15,16 @@ namespace OpenCG {
         std::cout << "\033[H";
     }
 
-    void Console::DrawBuffer(PixelScreenBuffer pixelScreenBuffer) {
-        if (sizeX != pixelScreenBuffer.Width() || sizeY != pixelScreenBuffer.Height()) {
+    void Console::DrawBuffer(ScreenBuffer screenBuffer) {
+        if (sizeX != screenBuffer.Width() || sizeY != screenBuffer.Height()) {
             throw "Pixel screen buffer does not fit the console window.";
         }
 
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeX; y++) {
-                Pixel pixel = pixelScreenBuffer.GetBufferData()[pixelScreenBuffer.Width() * y + x];
-                std::cout << "\033[38;2;" + std::to_string(pixel.GetColor().Red()) + ";" + std::to_string(pixel.GetColor().Green()) + ";" + std::to_string(pixel.GetColor().Blue()) + "m" + "\u2588";
-                std::cout << "\033[38;2;" + std::to_string(pixel.GetColor().Red()) + ";" + std::to_string(pixel.GetColor().Green()) + ";" + std::to_string(pixel.GetColor().Blue()) + "m" + "\u2588";
+                RGB_Color pixelColor = screenBuffer.GetPixelColor(x, y);
+                std::cout << "\033[38;2;" + std::to_string(pixelColor.Red()) + ";" + std::to_string(pixelColor.Green()) + ";" + std::to_string(pixelColor.Blue()) + "m" + "\u2588";
+                std::cout << "\033[38;2;" + std::to_string(pixelColor.Red()) + ";" + std::to_string(pixelColor.Green()) + ";" + std::to_string(pixelColor.Blue()) + "m" + "\u2588";
             }
             std::cout << "\n";
         }

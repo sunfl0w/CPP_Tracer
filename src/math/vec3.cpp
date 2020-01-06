@@ -30,6 +30,12 @@ namespace OpenCG::Math {
         data[2] /= magnitude;
     }
 
+    void Vec3::Round() {
+        data[0] = std::round(data[0]);
+        data[1] = std::round(data[1]);
+        data[2] = std::round(data[2]);
+    }
+
     Vec3 Vec3::AddOther(const Vec3& otherVec3) const {
         return Vec3(X() + otherVec3.X(), Y() + otherVec3.Y(), Z() + otherVec3.Z());
     }

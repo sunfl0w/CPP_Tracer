@@ -1,6 +1,8 @@
 #include "viewport.hpp"
 
-namespace OpenCG::Renderer {
+namespace OpenCG::Rendering {
+    Viewport::Viewport() {}
+
     Viewport::Viewport(unsigned int width, unsigned int height, unsigned int minZ, unsigned int maxZ) {
         this->width = width;
         this->height = height;

@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-#include "PixelScreenBuffer.hpp"
+#include "screenBuffer.hpp"
 
-namespace OpenCG {
+namespace OpenCG::Rendering {
     class Console {
     private:
         int sizeX;
@@ -14,7 +14,7 @@ namespace OpenCG {
 
         void ClearScreen();
         void SetCursorHome();
-        void DrawBuffer(PixelScreenBuffer pixelScreenBuffer);
+        void DrawBuffer(ScreenBuffer pixelScreenBuffer);
         int Width();
         int Height();
     };

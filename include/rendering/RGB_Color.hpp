@@ -1,6 +1,6 @@
 #pragma once
 
-namespace OpenCG {
+namespace OpenCG::Rendering {
     class RGB_Color {
     private:
         unsigned int r;

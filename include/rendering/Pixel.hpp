@@ -4,7 +4,7 @@
 
 #include "RGB_Color.hpp"
 
-namespace OpenCG {
+namespace OpenCG::Rendering {
     class Pixel {
     private:
         RGB_Color color;

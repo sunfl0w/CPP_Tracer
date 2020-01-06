@@ -3,7 +3,7 @@
 #include "matrix.hpp"
 #include "vec3.hpp"
 
-namespace OpenCG::Renderer {
+namespace OpenCG::Rendering {
     class Viewport {
     private:
         unsigned int width;
@@ -12,6 +12,7 @@ namespace OpenCG::Renderer {
         unsigned int maxZ;
 
     public:
+        Viewport();
         Viewport(unsigned int width, unsigned int height, unsigned int minZ, unsigned int maxZ);
 
         Math::Vec3 TransformPoint(const Math::Vec3& point);

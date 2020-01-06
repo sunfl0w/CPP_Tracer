@@ -18,6 +18,7 @@ namespace OpenCG::Math {
 
         float GetMagnitude() const;
         void Normalize();
+        void Round();
         Vec3 AddOther(const Vec3& otherVec3) const;
         Vec3 SubtractOther(const Vec3& otherVec3) const;
         float MultiplyWith(const Vec3& otherVec3) const;
