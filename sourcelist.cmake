@@ -1,4 +1,5 @@
 set(sources ${sources}
+    src/components/mesh.cpp
     src/math/matrix.cpp
     src/math/vec3.cpp
     src/rendering/camera.cpp

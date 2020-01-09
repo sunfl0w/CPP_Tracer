@@ -19,6 +19,10 @@ namespace OpenCG::Math {
         return data[2];
     }
 
+    void Vec3::Set(int index, float value) {
+        data[index] = value;
+    }
+
     float Vec3::GetMagnitude() const {
         return std::sqrt(data[0] * data[0] + data[1] * data[1] + data[2] * data[2]);
     }

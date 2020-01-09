@@ -25,7 +25,9 @@ namespace OpenCG::Rendering {
                     if (IsScreenPointInTris(v1, v2, v3, x, y)) {
                         buffer.SetPixelColor(x, y, RGB_Color(255, 0, 0));
                     } else {
-                        buffer.SetPixelColor(x, y, RGB_Color(0, 0, 0));
+                        if (buffer.GetPixelColor(x, y).Red() == 0) {
+                            buffer.SetPixelColor(x, y, RGB_Color(0, 0, 0));
+                        }
                     }
                 }
             }
@@ -46,7 +48,7 @@ namespace OpenCG::Rendering {
         float area2 = GetAreaOfTriangle(v1.X(), v1.Y(), x, y, v3.X(), v3.Y());
         float area3 = GetAreaOfTriangle(v1.X(), v1.Y(), v2.X(), v2.Y(), x, y);
 
-        if (std::abs(area0 - area1 - area2 - area3) < 0.1f) {
+        if (std::abs(area0 - area1 - area2 - area3) < 0.01f && area0 > 0) {
             return true;
         } else {
             return false;

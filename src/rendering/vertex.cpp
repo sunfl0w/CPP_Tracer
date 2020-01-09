@@ -3,7 +3,9 @@
 using namespace OpenCG::Math;
 
 namespace OpenCG::Rendering {
-    Vertex::Vertex(float x, float y, float z){
+    Vertex::Vertex() {}
+
+    Vertex::Vertex(float x, float y, float z) {
         point = OpenCG::Math::Vec3(x, y, z);
     }
 
@@ -19,7 +21,11 @@ namespace OpenCG::Rendering {
         return point.Z();
     }
 
+    void Vertex::Set(int index, float value) {
+        point.Set(index, value);
+    }
+
     Matrix Vertex::ToMatrix() {
         return Matrix(1, 4, std::vector<float>{X(), Y(), Z(), 1});
     }
-}
+}  // namespace OpenCG::Rendering

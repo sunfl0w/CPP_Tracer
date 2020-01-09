@@ -1,6 +1,8 @@
 #include "tris.hpp"
 
 namespace OpenCG::Rendering {
+    Tris::Tris() {}
+
     Tris::Tris(Vertex v1, Vertex v2, Vertex v3) : vertecies(std::array<Vertex, 3>{v1, v2, v3}) {
     }
 
@@ -14,5 +16,9 @@ namespace OpenCG::Rendering {
 
     Vertex Tris::V3() {
         return vertecies[2];
+    }
+
+    void Tris::Set(int index, Vertex vertex) {
+        vertecies[index] = vertex;
     }
 }  // namespace OpenCG::Renderer

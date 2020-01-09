@@ -7,23 +7,25 @@
 #include "renderer.hpp"
 #include "screenBuffer.hpp"
 #include "camera.hpp"
+#include "mesh.hpp"
 
 using namespace OpenCG;
 using namespace OpenCG::Math;
 using namespace OpenCG::Rendering;
+using namespace OpenCG::Components;
 
 int main(int, char**) {
-    int size = 40;
-    Console console(size, size);
-    Camera camera(Vec3(50, 0, 0), Vec3(1, 0, 0), Vec3(0, 1, 0));
-    Renderer renderer = Renderer(size, size, &camera);
+    Mesh mesh;
+    mesh.LoadFromObjectFile("/home/sunfl0w/Cube.obj");
 
-    std::vector<Tris> triangles = std::vector<Tris>();
-    triangles.push_back(Tris(Vertex(0,0,0), Vertex(0,5,0), Vertex(0,0,5)));
+    int size = 30;
+    Console console(size, size);
+    Camera camera(Vec3(200, 0, 0), Vec3(1, 0, 0), Vec3(0, 1, 0));
+    Renderer renderer = Renderer(size, size, &camera);
 
     for (int i = 0; i < 100; i++) {
         console.ClearScreen();
-        ScreenBuffer buffer = renderer.RenderToBuffer(triangles);
+        ScreenBuffer buffer = renderer.RenderToBuffer(mesh.GetData());
         console.DrawBuffer(buffer);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

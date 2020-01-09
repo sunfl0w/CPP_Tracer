@@ -16,6 +16,7 @@ namespace OpenCG::Math {
         float Y() const;
         float Z() const;
 
+        void Set(int index, float value);
         float GetMagnitude() const;
         void Normalize();
         void Round();
