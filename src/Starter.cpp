@@ -20,8 +20,8 @@ int main(int, char**) {
 
     int size = 30;
     Console console(size, size);
-    Camera camera(Vec3(200, 0, 0), Vec3(1, 0, 0), Vec3(0, 1, 0));
-    Renderer renderer = Renderer(size, size, &camera);
+    Camera camera(Vec3(1, 1, 0), Vec3(-1, 0, 0), Vec3(0, 1, 0));
+    Renderer renderer = Renderer(size, size, 90.0f, &camera);
 
     for (int i = 0; i < 100; i++) {
         console.ClearScreen();

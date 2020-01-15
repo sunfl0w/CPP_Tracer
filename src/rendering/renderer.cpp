@@ -4,12 +4,12 @@ using namespace OpenCG::Math;
 
 namespace OpenCG::Rendering {
     //public
-    Renderer::Renderer(int screenWidth, int screenHeight, Camera* camera) {
+    Renderer::Renderer(int screenWidth, int screenHeight, int fov, Camera* camera) {
         this->screenWidth = screenWidth;
         this->screenHeight = screenHeight;
         this->camera = camera;
 
-        projector = Projector(screenWidth, screenHeight, 1, 100);
+        projector = Projector(fov, 1, 100);
         viewport = Viewport(screenWidth, screenHeight, 1, 100);
     }
 

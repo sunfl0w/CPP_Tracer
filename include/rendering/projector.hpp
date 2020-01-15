@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "matrix.hpp"
 
 namespace OpenCG::Rendering {
@@ -8,7 +10,7 @@ namespace OpenCG::Rendering {
         Math::Matrix projection;
     public:
         Projector();
-        Projector(int width, int height, int near, int far);
+        Projector(int fov, int near, int far);
         Math::Matrix GetMatrix();
     };
 }  // namespace OpenCG::Renderer

@@ -3,16 +3,13 @@
 namespace OpenCG::Math {
     Matrix::Matrix() {}
 
-    Matrix::Matrix(unsigned int width, unsigned int height) {
+    Matrix::Matrix(int width, int height) {
         this->width = width;
         this->height = height;
-        data = std::vector<float>(width * height);
+        this->data = std::vector<float>(width * height);
     }
 
-    Matrix::Matrix(unsigned int width, unsigned int height, std::vector<float> data) {
-        if (width * height != data.size()) {
-            throw "Can't create matrix, data does not have the right size.";
-        }
+    Matrix::Matrix(int width, int height, std::vector<float> data) {
         this->width = width;
         this->height = height;
         this->data = data;

@@ -8,13 +8,13 @@ namespace OpenCG::Math {
     private:
         unsigned int width;
         unsigned int height;
-
+    public:
         std::vector<float> data;
 
     public:
         Matrix();
-        Matrix(unsigned int width, unsigned int height);
-        Matrix(unsigned int width, unsigned int height, std::vector<float> data);
+        Matrix(int width, int height);
+        Matrix(int width, int height, std::vector<float> data);
 
         Matrix MultiplyWith(const Matrix& otherMatrix);
 

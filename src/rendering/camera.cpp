@@ -8,7 +8,7 @@ namespace OpenCG::Rendering {
         xAxis.Normalize();
         Math::Vec3 yAxis = zAxis.CrossWith(xAxis);
 
-        viewMatrix = Math::Matrix(4, 4, std::vector<float>{xAxis.X(), yAxis.X(), zAxis.X(), 0, xAxis.Y(), yAxis.Y(), zAxis.Y(), 0, xAxis.Z(), yAxis.Z(), zAxis.Z(), 0, -xAxis.MultiplyWith(camPos), -yAxis.MultiplyWith(camPos), -zAxis.MultiplyWith(camPos), 1});
+        viewMatrix = Math::Matrix(4, 4, std::vector<float>{xAxis.X(), yAxis.X(), zAxis.X(), 0, xAxis.Y(), yAxis.Y(), zAxis.Y(), 0, xAxis.Z(), yAxis.Z(), zAxis.Z(), 0, camPos.X(), camPos.Y(), camPos.Z(), 1});
     }
 
     Math::Matrix Camera::GetMatrix() {

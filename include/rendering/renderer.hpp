@@ -19,7 +19,7 @@ namespace OpenCG::Rendering {
         Viewport viewport;
 
     public:
-        Renderer(int screenWidth, int screenHeight, Camera* camera);
+        Renderer(int screenWidth, int screenHeight, int fov, Camera* camera);
         ScreenBuffer RenderToBuffer(std::vector<Tris> triangles);
 
     private:
