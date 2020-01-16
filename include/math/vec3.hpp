@@ -22,7 +22,9 @@ namespace OpenCG::Math {
         void Round();
         Vec3 AddOther(const Vec3& otherVec3) const;
         Vec3 SubtractOther(const Vec3& otherVec3) const;
-        float MultiplyWith(const Vec3& otherVec3) const;
+        float DotWith(const Vec3& otherVec3) const;
+        Vec3 MultiplyWith(float num) const;
         Vec3 CrossWith(const Vec3& otherVec3) const;
+        float DistanceTo(const Vec3& otherVec3) const;
     };
 }  // namespace OpenCG::Math

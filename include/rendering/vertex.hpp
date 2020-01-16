@@ -3,12 +3,11 @@
 #include <vector>
 
 #include "vec3.hpp"
-#include "matrix.hpp"
 
 namespace OpenCG::Rendering {
     class Vertex {
-    private:
-        OpenCG::Math::Vec3 point;
+    public:
+        OpenCG::Math::Vec3 data;
 
     public:
         Vertex();
@@ -17,6 +16,5 @@ namespace OpenCG::Rendering {
         float Y();
         float Z();
         void Set(int index, float value);
-        OpenCG::Math::Matrix ToMatrix();
     };
 }  // namespace OpenCG::Renderer

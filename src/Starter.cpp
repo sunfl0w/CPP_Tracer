@@ -4,10 +4,9 @@
 #include <vector>
 
 #include "Console.hpp"
-#include "renderer.hpp"
 #include "screenBuffer.hpp"
-#include "camera.hpp"
 #include "mesh.hpp"
+#include "raytracer.hpp"
 
 using namespace OpenCG;
 using namespace OpenCG::Math;
@@ -20,12 +19,11 @@ int main(int, char**) {
 
     int size = 30;
     Console console(size, size);
-    Camera camera(Vec3(1, 1, 0), Vec3(-1, 0, 0), Vec3(0, 1, 0));
-    Renderer renderer = Renderer(size, size, 90.0f, &camera);
+    Raytracer raytracer;
 
     for (int i = 0; i < 100; i++) {
         console.ClearScreen();
-        ScreenBuffer buffer = renderer.RenderToBuffer(mesh.GetData());
+        ScreenBuffer buffer = raytracer.RenderToBuffer(mesh.GetData(), size, size);
         console.DrawBuffer(buffer);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
