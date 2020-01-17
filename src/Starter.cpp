@@ -16,6 +16,11 @@ using namespace OpenCG::Components;
 int main(int, char**) {
     Mesh mesh;
     mesh.LoadFromObjectFile("/home/sunfl0w/Cube.obj");
+    std::vector<Tris> triangles;
+    triangles.push_back(Tris(Vertex(-5, -5, 5), Vertex(-5, 10, 5), Vertex(10, -5, 5)));
+    /*Ray ray = Ray(Math::Vec3(0, 0, 0), Math::Vec3(0, 0, 1), 100);
+    IntersectData intersectData = ray.Cast(triangles[0]);
+    int i = 0;*/
 
     int size = 30;
     Console console(size, size);

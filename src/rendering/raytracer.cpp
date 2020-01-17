@@ -19,7 +19,7 @@ namespace OpenCG::Rendering {
                 float minDst = 99999999;
                 RGB_Color color;
                 for (Tris triangle : triangles) {
-                    Ray ray = Ray(Math::Vec3(0, 0, 5), rayDir, 100);
+                    Ray ray = Ray(Math::Vec3(0, 0, -40), rayDir, 100);
                     IntersectData intersectData = ray.Cast(triangle);
 
                     if (intersectData.intersectPos.X() != 0 && intersectData.intersectPos.Y() != 0 && intersectData.intersectPos.Z() != 0) {

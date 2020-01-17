@@ -49,7 +49,7 @@ namespace OpenCG::Math {
     }
 
     float Vec3::DotWith(const Vec3& otherVec3) const {
-        return X() * otherVec3.X() + Y() * otherVec3.Y() + Y() * otherVec3.Y();
+        return X() * otherVec3.X() + Y() * otherVec3.Y() + Z() * otherVec3.Z();
     }
 
     Vec3 Vec3::MultiplyWith(float num) const {

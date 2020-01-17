@@ -24,20 +24,23 @@ namespace OpenCG::Rendering {
             return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));  // This ray is parallel to this triangle.
         f = 1.0 / a;
         s = origin.SubtractOther(vertex0);
-        u = f * s.DotWith(h);
+        u = s.DotWith(h) * f;
         if (u < 0.0 || u > 1.0)
             return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
         q = s.CrossWith(edge1);
-        v = f * direction.DotWith(q);
+        v = direction.DotWith(q) * f;
         if (v < 0.0 || u + v > 1.0)
             return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
         // At this stage we can compute t to find out where the intersection point is on the line.
-        float t = f * edge2.DotWith(q);
+        float t = edge2.DotWith(q) * f;
         if (t > EPSILON && t < 1 - EPSILON)  // ray intersection
         {
             Math::Vec3 intersectionPoint = origin.AddOther(direction).MultiplyWith(t);
             return IntersectData(intersectionPoint, RGB_Color(200, 100, 50));
-        } else  // This means that there is a line intersection but not a ray intersection.
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+        } else {  // This means that there is a line intersection but not a ray intersection.
+            Math::Vec3 intersectionPoint = origin.AddOther(direction).MultiplyWith(t);
+            return IntersectData(intersectionPoint, RGB_Color(200, 100, 50));
+            //return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+        }
     }
 }  // namespace OpenCG::Rendering
