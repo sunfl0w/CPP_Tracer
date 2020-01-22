@@ -17,7 +17,7 @@ namespace OpenCG::Rendering {
                 Math::Vec3 rayDir(xx, yy, 1);
                 rayDir.Normalize();
                 float minDst = 99999999;
-                RGB_Color color;
+                IntersectData nearestIntersectData;
                 for (Tris triangle : triangles) {
                     Ray ray = Ray(Math::Vec3(0, 0, -40), rayDir, 100);
                     IntersectData intersectData = ray.Cast(triangle);
@@ -25,13 +25,26 @@ namespace OpenCG::Rendering {
                     if (intersectData.intersectPos.X() != 0 && intersectData.intersectPos.Y() != 0 && intersectData.intersectPos.Z() != 0) {
                         float dst = intersectData.intersectPos.DistanceTo(Math::Vec3(0, 0, 0));
                         if (dst < minDst) {
-                            color = intersectData.color;
+                            nearestIntersectData = intersectData;
                             minDst = dst;
                         }
                     }
                 }
                 if (minDst != 99999999) {
-                    screenBuffer.SetPixelColor(x, y, color);
+                    Ray shadowRay = Ray(nearestIntersectData.intersectPos, Math::Vec3(0, 0, 40).SubtractOther(nearestIntersectData.intersectPos), 100);
+                    bool inShadow = false;
+                    for (Tris triangle : triangles) {
+                        IntersectData intersectData = shadowRay.Cast(triangle);
+
+                        if (intersectData.intersectPos.X() != 0 && intersectData.intersectPos.Y() != 0 && intersectData.intersectPos.Z() != 0) {
+                            inShadow = true;
+                        }
+                    }
+                    if (inShadow) {
+                        screenBuffer.SetPixelColor(x, y, RGB_Color(100, 50, 25));
+                    } else {
+                        screenBuffer.SetPixelColor(x, y, RGB_Color(200, 100, 50));
+                    }
                 } else {
                     screenBuffer.SetPixelColor(x, y, RGB_Color(0, 0, 0));
                 }

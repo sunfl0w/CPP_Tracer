@@ -2,7 +2,7 @@
 
 namespace OpenCG::Rendering {
     class RGB_Color {
-    private:
+    public:
         unsigned int r;
         unsigned int g;
         unsigned int b;

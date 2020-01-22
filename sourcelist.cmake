@@ -1,7 +1,6 @@
 set(sources ${sources}
     src/components/mesh.cpp
     src/math/vec3.cpp
-    src/rendering/Console.cpp
     src/rendering/ray.cpp
     src/rendering/raytracer.cpp
     src/rendering/RGB_Color.cpp

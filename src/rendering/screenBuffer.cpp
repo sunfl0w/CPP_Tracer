@@ -4,7 +4,7 @@ namespace OpenCG::Rendering {
     ScreenBuffer::ScreenBuffer(int sizeX, int sizeY) {
         this->sizeX = sizeX;
         this->sizeY = sizeY;
-        bufferData = std::vector<RGB_Color>(sizeX * sizeY);
+        bufferData = std::vector<sf::Uint8>(sizeX * sizeY * 4);
     }
 
     int ScreenBuffer::Width() {
@@ -14,20 +14,19 @@ namespace OpenCG::Rendering {
         return sizeY;
     }
 
-    std::vector<RGB_Color> ScreenBuffer::GetBufferData() {
-        return bufferData;
+    sf::Uint8* ScreenBuffer::GetBufferData() {
+        return bufferData.data();
     }
 
-    void ScreenBuffer::SetBufferData(std::vector<RGB_Color> bufferData) {
+    void ScreenBuffer::SetBufferData(std::vector<sf::Uint8> bufferData) {
         this->bufferData = bufferData;
     }
 
-    RGB_Color ScreenBuffer::GetPixelColor(int x, int y) {
-        return bufferData[x + sizeX * y];
-    }
-
     void ScreenBuffer::SetPixelColor(int x, int y, RGB_Color color) {
-        bufferData[x + sizeX * y] = color;
+        bufferData[(x + sizeX * y) * 4] = color.Red();
+        bufferData[(x + sizeX * y) * 4 + 1] = color.Green();
+        bufferData[(x + sizeX * y) * 4 + 2] = color.Blue();
+        bufferData[(x + sizeX * y) * 4 + 3] = 255;
     }
 
     void ScreenBuffer::Draw() {
