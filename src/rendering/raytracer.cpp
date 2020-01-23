@@ -10,7 +10,10 @@ namespace OpenCG::Rendering {
         float aspectratio = imageWidth / float(imageHeight);
         float angle = tan(M_PI * 0.5 * fov / 180.);
 
+        #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
+
+            #pragma omp prallel for schedule(dynamic)
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
@@ -18,6 +21,7 @@ namespace OpenCG::Rendering {
                 rayDir.Normalize();
                 float minDst = 99999999;
                 IntersectData nearestIntersectData;
+
                 for (Tris triangle : triangles) {
                     Ray ray = Ray(camPos, rayDir, 100);
                     IntersectData intersectData = ray.Cast(triangle);
@@ -34,6 +38,7 @@ namespace OpenCG::Rendering {
                     //Ray shadowRay = Ray(nearestIntersectData.intersectPos, Math::Vec3(0, 0, -40).SubtractOther(nearestIntersectData.intersectPos), 100);
                     Ray shadowRay = Ray(nearestIntersectData.intersectPos, nearestIntersectData.intersectPos.SubtractOther(Math::Vec3(90, 60, -40)), 100);
                     bool inShadow = false;
+
                     for (Tris triangle : triangles) {
                         IntersectData intersectData = shadowRay.Cast(triangle);
 
