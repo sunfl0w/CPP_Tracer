@@ -10,37 +10,48 @@ namespace OpenCG::Rendering {
     IntersectData Ray::Cast(Tris triangle) {
         //Möller–Trumbore intersection algorithm
         
-        const float EPSILON = 0.0000001;
         Math::Vec3 vertex0 = triangle.V1().data;
         Math::Vec3 vertex1 = triangle.V2().data;
         Math::Vec3 vertex2 = triangle.V3().data;
-        Math::Vec3 edge1, edge2, h, s, q;
-        float a, f, u, v;
-        edge1 = vertex1.SubtractOther(vertex0);
-        edge2 = vertex2.SubtractOther(vertex0);
-        h = direction.CrossWith(edge2);
-        a = edge1.DotWith(h);
-        if (a > -EPSILON && a < EPSILON)
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));  // This ray is parallel to this triangle.
-        f = 1.0 / a;
-        s = origin.SubtractOther(vertex0);
-        u = s.DotWith(h) * f;
-        if (u < 0.0 || u > 1.0)
+
+        Math::Vec3 edge1 = vertex1.SubtractOther(vertex0);
+        Math::Vec3 edge2 = vertex2.SubtractOther(vertex0);
+        
+        Math::Vec3 pvec = direction.CrossWith(edge2);
+        float det = edge1.DotWith(pvec);
+
+        //float epsilon = std::numeric_limits<float>::epsilon();
+        float epsilon = 0.00001f;
+
+        if(det > epsilon && det < epsilon) {
             return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
-        q = s.CrossWith(edge1);
-        v = direction.DotWith(q) * f;
-        if (v < 0.0 || u + v > 1.0)
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
-        // At this stage we can compute t to find out where the intersection point is on the line.
-        float t = edge2.DotWith(q) * f;
-        if (t > EPSILON && t < 1 - EPSILON)  // ray intersection
-        {
-            Math::Vec3 intersectionPoint = origin.AddOther(direction).MultiplyWith(t);
-            return IntersectData(intersectionPoint, RGB_Color(200, 100, 50));
-        } else {  // This means that there is a line intersection but not a ray intersection.
-            Math::Vec3 intersectionPoint = origin.AddOther(direction).MultiplyWith(t);
-            return IntersectData(intersectionPoint, RGB_Color(200, 100, 50));
-            //return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
         }
+
+        float invDet = 1.0f / det;
+
+        Math::Vec3 tvec = origin.SubtractOther(vertex0);
+
+        float x = tvec.DotWith(pvec) * invDet;
+        if(x < 0.0f || x > 1.0f) {
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+        }
+
+        Math::Vec3 qvec = tvec.CrossWith(edge1);
+        float y = direction.DotWith(qvec) * invDet;
+        if(y < 0.0f || x + y > 1.0f) {
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+        }
+
+        float z = edge2.DotWith(qvec) * invDet;
+
+        float abs = std::abs(z);
+        float dst = std::abs(origin.DistanceTo(direction));
+        Math::Vec3 intersect = vertex0.AddOther(edge2.MultiplyWith(x).AddOther(edge1.MultiplyWith(y)));
+
+        if(z < epsilon) {
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+        }
+
+        return IntersectData(intersect, RGB_Color(100, 100, 100));
     }
 }  // namespace OpenCG::Rendering

@@ -11,6 +11,6 @@ namespace OpenCG::Rendering {
     class Raytracer {
     public:
         Raytracer();
-        ScreenBuffer RenderToBuffer(std::vector<Tris> triangles, int imageWidth, int imageHeight);
+        ScreenBuffer RenderToBuffer(std::vector<Tris> triangles, int imageWidth, int imageHeight, Math::Vec3 camPos);
     };
 }

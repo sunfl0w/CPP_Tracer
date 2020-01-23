@@ -1,12 +1,13 @@
 #include <string.h>
+
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <thread>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
-#include "screenBuffer.hpp"
 #include "mesh.hpp"
 #include "raytracer.hpp"
+#include "screenBuffer.hpp"
 
 using namespace OpenCG;
 using namespace OpenCG::Math;
@@ -31,16 +32,25 @@ int main() {
     sf::Texture texture;
     texture.create(width, height);
     sf::Sprite sprite(texture);
+    Math::Vec3 camPos(0, 0, -50);
 
-    while(window.isOpen()) {
+    while (window.isOpen()) {
         sf::Event event;
-        while(window.pollEvent(event)) {
-            if(event.type == sf::Event::Closed) {
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
                 window.close();
             }
         }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+            camPos = camPos.AddOther(Math::Vec3(-5, 0, 0));
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+            camPos = camPos.AddOther(Math::Vec3(5, 0, 0));
+        }
+
         window.clear(sf::Color::Black);
-        ScreenBuffer buffer = raytracer.RenderToBuffer(mesh.GetData(), width, height);
+        ScreenBuffer buffer = raytracer.RenderToBuffer(mesh.GetData(), width, height, camPos);
         texture.update(buffer.GetBufferData());
         window.draw(sprite);
 
