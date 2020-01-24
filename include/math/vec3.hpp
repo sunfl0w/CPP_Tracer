@@ -1,12 +1,13 @@
 #pragma once
 
-#include <vector>
 #include <math.h>
 
 namespace OpenCG::Math {
     class Vec3 {
-    private:
-        std::vector<float> data;
+    public:
+        float x;
+        float y;
+        float z;
 
     public:
         Vec3();
@@ -16,7 +17,6 @@ namespace OpenCG::Math {
         float Y() const;
         float Z() const;
 
-        void Set(int index, float value);
         float GetMagnitude() const;
         void Normalize();
         void Round();

@@ -24,17 +24,27 @@ int main() {
     int i = 0;*/
     Raytracer raytracer;
 
-    int width = 400;
-    int height = 300;
+    int width = 800;
+    int height = 600;
 
     sf::RenderWindow window(sf::VideoMode(width, height), "CPP_Tracer");
+    sf::Text fpsText;
+    fpsText.setFillColor(sf::Color::White);
+    fpsText.setCharacterSize(16);
+    sf::Font font;
+    font.loadFromFile("./Fonts/SourceCodePro-Bold.ttf");
+    fpsText.setFont(font);
+
+    std::chrono::steady_clock::time_point start;
+    float frameDelta;
 
     sf::Texture texture;
     texture.create(width, height);
     sf::Sprite sprite(texture);
-    Math::Vec3 camPos(0, 0, -50);
+    Math::Vec3 camPos(0, 0, -14);
 
     while (window.isOpen()) {
+        start = std::chrono::steady_clock::now();
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
@@ -42,20 +52,26 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            camPos = camPos.AddOther(Math::Vec3(-5, 0, 0));
+            camPos = camPos.AddOther(Math::Vec3(-0.5f, 0, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            camPos = camPos.AddOther(Math::Vec3(5, 0, 0));
+            camPos = camPos.AddOther(Math::Vec3(0.5f, 0, 0));
         }
 
         window.clear(sf::Color::Black);
+
+
+
         ScreenBuffer buffer = raytracer.RenderToBuffer(mesh.GetData(), width, height, camPos);
         texture.update(buffer.GetBufferData());
-        window.draw(sprite);
+        fpsText.setString("FPS: " + std::to_string(1000.0f / frameDelta));
 
+        window.draw(sprite);
+        window.draw(fpsText);
+
+        frameDelta = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
         window.display();
-        std::cout << "RENDERED!\n";
     }
     return 0;
 }

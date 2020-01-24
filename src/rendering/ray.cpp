@@ -21,10 +21,10 @@ namespace OpenCG::Rendering {
         float det = edge1.DotWith(pvec);
 
         //float epsilon = std::numeric_limits<float>::epsilon();
-        float epsilon = 0.00001f;
+        float epsilon = 0.000000000001f;
 
         if(det > epsilon && det < epsilon) {
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0), false, 0.0f);
         }
 
         float invDet = 1.0f / det;
@@ -33,13 +33,13 @@ namespace OpenCG::Rendering {
 
         float x = tvec.DotWith(pvec) * invDet;
         if(x < 0.0f || x > 1.0f) {
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0), false, 0.0f);
         }
 
         Math::Vec3 qvec = tvec.CrossWith(edge1);
         float y = direction.DotWith(qvec) * invDet;
         if(y < 0.0f || x + y > 1.0f) {
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0), false, 0.0f);
         }
 
         float z = edge2.DotWith(qvec) * invDet;
@@ -49,9 +49,9 @@ namespace OpenCG::Rendering {
         Math::Vec3 intersect = vertex0.AddOther(edge2.MultiplyWith(x).AddOther(edge1.MultiplyWith(y)));
 
         if(z < epsilon) {
-            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0));
+            return IntersectData(Math::Vec3(0, 0, 0), RGB_Color(0, 0, 0), false, 0.0f);
         }
 
-        return IntersectData(intersect, RGB_Color(100, 100, 100));
+        return IntersectData(intersect, RGB_Color(100, 100, 100), true, dst);
     }
 }  // namespace OpenCG::Rendering

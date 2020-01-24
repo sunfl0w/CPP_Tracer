@@ -22,6 +22,12 @@ namespace OpenCG::Rendering {
     }
 
     void Vertex::Set(int index, float value) {
-        data.Set(index, value);
+        if(index == 0) {
+            data.x = value;
+        } else if(index == 1) {
+            data.y = value;
+        } else {
+            data.z = value;
+        }
     }
 }  // namespace OpenCG::Rendering

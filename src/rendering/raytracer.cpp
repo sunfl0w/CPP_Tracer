@@ -20,13 +20,13 @@ namespace OpenCG::Rendering {
                 Math::Vec3 rayDir(xx, yy, 1);
                 rayDir.Normalize();
                 float minDst = 99999999;
-                IntersectData nearestIntersectData;
+                IntersectData nearestIntersectData = IntersectData();
 
                 for (Tris triangle : triangles) {
                     Ray ray = Ray(camPos, rayDir, 100);
                     IntersectData intersectData = ray.Cast(triangle);
 
-                    if (intersectData.intersectPos.X() != 0 && intersectData.intersectPos.Y() != 0 && intersectData.intersectPos.Z() != 0) {
+                    if (intersectData.hit) {
                         float dst = intersectData.intersectPos.DistanceTo(camPos);
                         if (dst < minDst) {
                             nearestIntersectData = intersectData;
@@ -34,16 +34,22 @@ namespace OpenCG::Rendering {
                         }
                     }
                 }
-                if (minDst != 99999999) {
+                if (nearestIntersectData.hit) {
                     //Ray shadowRay = Ray(nearestIntersectData.intersectPos, Math::Vec3(0, 0, -40).SubtractOther(nearestIntersectData.intersectPos), 100);
-                    Ray shadowRay = Ray(nearestIntersectData.intersectPos, nearestIntersectData.intersectPos.SubtractOther(Math::Vec3(90, 60, -40)), 100);
+                    Math::Vec3 lightPos(0, 0, -40);
+                    Math::Vec3 test = nearestIntersectData.intersectPos;
+                    //test.SubtractOther(lightPos);
+                    Ray shadowRay = Ray(test, lightPos.SubtractOther(nearestIntersectData.intersectPos), 100);
                     bool inShadow = false;
 
                     for (Tris triangle : triangles) {
                         IntersectData intersectData = shadowRay.Cast(triangle);
+                        float dst = nearestIntersectData.intersectPos.DistanceTo(intersectData.intersectPos);
+                        float dstToLight = intersectData.intersectPos.DistanceTo(lightPos);
 
-                        if (intersectData.intersectPos.X() != 0 && intersectData.intersectPos.Y() != 0 && intersectData.intersectPos.Z() != 0) {
+                        if (dst > 0 && dst < dstToLight && intersectData.hit) {
                             inShadow = true;
+                            break;
                         }
                     }
                     if (inShadow) {

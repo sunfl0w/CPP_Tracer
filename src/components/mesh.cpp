@@ -28,10 +28,10 @@ namespace OpenCG::Components {
                 for (int i = 0; i < 3; i++) {
                     coordinateStartPos = line.find(" ", coordinateStartPos);
                     if (line[coordinateStartPos + 1] == '-') {
-                        vertex.Set(i, 5 * std::stof(line.substr(coordinateStartPos + 1, 9)));
+                        vertex.Set(i, std::stof(line.substr(coordinateStartPos + 1, 9)));
                         coordinateStartPos += 10;
                     } else {
-                        vertex.Set(i, 5 * std::stof(line.substr(coordinateStartPos + 1, 8)));
+                        vertex.Set(i, std::stof(line.substr(coordinateStartPos + 1, 8)));
                         coordinateStartPos += 9;
                     }
                 }
