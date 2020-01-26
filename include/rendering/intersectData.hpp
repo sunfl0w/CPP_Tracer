@@ -8,17 +8,15 @@ namespace OpenCG::Rendering {
         Math::Vec3 intersectPos;
         RGB_Color color;
         bool hit;
-        float t;
 
         IntersectData() {
             hit = false;
         }
 
-        IntersectData(Math::Vec3 intersectPos, RGB_Color color, bool hit, float t) {
+        IntersectData(Math::Vec3 intersectPos, RGB_Color color, bool hit) {
             this->intersectPos = intersectPos;
             this->color = color;
             this->hit = hit;
-            this->t = t;
         }
     };
 }

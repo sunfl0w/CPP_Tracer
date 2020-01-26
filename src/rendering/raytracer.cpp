@@ -36,7 +36,7 @@ namespace OpenCG::Rendering {
                 }
                 if (nearestIntersectData.hit) {
                     //Ray shadowRay = Ray(nearestIntersectData.intersectPos, Math::Vec3(0, 0, -40).SubtractOther(nearestIntersectData.intersectPos), 100);
-                    Math::Vec3 lightPos(0, 0, -40);
+                    Math::Vec3 lightPos(40, 0, -40);
                     Math::Vec3 test = nearestIntersectData.intersectPos;
                     //test.SubtractOther(lightPos);
                     Ray shadowRay = Ray(test, lightPos.SubtractOther(nearestIntersectData.intersectPos), 100);

@@ -36,7 +36,7 @@ int main() {
     fpsText.setFont(font);
 
     std::chrono::steady_clock::time_point start;
-    float frameDelta;
+    float frameDelta = 0.0f;
 
     sf::Texture texture;
     texture.create(width, height);
