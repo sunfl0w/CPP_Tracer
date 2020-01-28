@@ -16,7 +16,7 @@ using namespace OpenCG::Components;
 
 int main() {
     Mesh mesh;
-    mesh.LoadFromObjectFile("/home/sunfl0w/Cube.obj");
+    mesh.LoadFromObjectFile("./models/Cube.obj");
     std::vector<Tris> triangles;
     triangles.push_back(Tris(Vertex(-5, -5, 5), Vertex(-5, 10, 5), Vertex(10, -5, 5)));
     /*Ray ray = Ray(Math::Vec3(0, 0, 0), Math::Vec3(0, 0, 1), 100);
@@ -32,7 +32,7 @@ int main() {
     fpsText.setFillColor(sf::Color::White);
     fpsText.setCharacterSize(16);
     sf::Font font;
-    font.loadFromFile("./Fonts/SourceCodePro-Bold.ttf");
+    font.loadFromFile("./fonts/SourceCodePro-Bold.ttf");
     fpsText.setFont(font);
 
     std::chrono::steady_clock::time_point start;
