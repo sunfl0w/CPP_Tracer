@@ -17,5 +17,7 @@ namespace OpenCG::Rendering {
         Ray(Math::Vec3 origin, Math::Vec3 direction, int length);
 
         IntersectData Cast(Tris triangle);
+
+        bool IntersectsBoundingBox(float minX, float maxX, float minY, float maxY, float minZ, float maxZ);
     };
 }  // namespace OpenCG::Rendering

@@ -13,6 +13,7 @@ namespace OpenCG::Components {
     private:
         std::vector<Tris> data;
     public:
+        float minX, maxX, minY, maxY, minZ, maxZ;
         Mesh();
         void LoadFromObjectFile(std::string filePath);
         std::vector<Tris> GetData();

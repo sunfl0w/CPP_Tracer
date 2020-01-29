@@ -51,6 +51,28 @@ namespace OpenCG::Components {
             }
         }
         data = triangles;
+
+        for(Vertex vertex : vertecies) {
+            if(vertex.X() > maxX) {
+                maxX = vertex.X();
+            }
+            if(vertex.Y() > maxY) {
+                maxY = vertex.Y();
+            }
+            if(vertex.Z() > maxZ) {
+                maxZ = vertex.Z();
+            }
+
+            if(vertex.X() < minX) {
+                minX = vertex.X();
+            }
+            if(vertex.Y() < minY) {
+                minY = vertex.Y();
+            }
+            if(vertex.Z() < minZ) {
+                minZ = vertex.Z();
+            }
+        }
     }
 
     std::vector<Tris> Mesh::GetData() {

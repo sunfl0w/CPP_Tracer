@@ -17,15 +17,12 @@ using namespace OpenCG::Components;
 int main() {
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Cube.obj");
-    std::vector<Tris> triangles;
-    triangles.push_back(Tris(Vertex(-5, -5, 5), Vertex(-5, 10, 5), Vertex(10, -5, 5)));
-    /*Ray ray = Ray(Math::Vec3(0, 0, 0), Math::Vec3(0, 0, 1), 100);
-    IntersectData intersectData = ray.Cast(triangles[0]);
-    int i = 0;*/
+    std::vector<Mesh> meshes;
+    meshes.push_back(mesh);
     Raytracer raytracer;
 
-    int width = 800;
-    int height = 600;
+    int width = 1920;
+    int height = 1080;
 
     sf::RenderWindow window(sf::VideoMode(width, height), "CPP_Tracer");
     sf::Text fpsText;
@@ -63,7 +60,7 @@ int main() {
 
 
 
-        ScreenBuffer buffer = raytracer.RenderToBuffer(mesh.GetData(), width, height, camPos);
+        ScreenBuffer buffer = raytracer.RenderToBuffer(meshes, width, height, camPos);
         texture.update(buffer.GetBufferData());
         fpsText.setString("FPS: " + std::to_string(1000.0f / frameDelta));
 
