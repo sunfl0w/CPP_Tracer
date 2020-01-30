@@ -7,6 +7,8 @@
 #include "ray.hpp"
 #include "screenBuffer.hpp"
 #include "tris.hpp"
+#include "rgb_Color.hpp"
+#include "hsv_Color.hpp"
 
 namespace Tracer::Rendering {
     class Raytracer {

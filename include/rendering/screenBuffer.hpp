@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-#include "RGB_Color.hpp"
+#include "rgb_Color.hpp"
 
 namespace Tracer::Rendering {
     class ScreenBuffer {

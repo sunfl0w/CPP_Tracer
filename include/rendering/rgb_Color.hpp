@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hsv_Color.hpp"
+
 namespace Tracer::Rendering {
     class RGB_Color {
     public:
@@ -11,8 +13,6 @@ namespace Tracer::Rendering {
         RGB_Color();
         RGB_Color(unsigned int r, unsigned int g, unsigned int b);
 
-        int Red();
-        int Green();
-        int Blue();
+        void FromHSV(unsigned int h, unsigned int s, unsigned int v);
     };
 }  // namespace Tracer::Rendering

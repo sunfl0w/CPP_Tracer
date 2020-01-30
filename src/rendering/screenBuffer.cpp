@@ -23,9 +23,9 @@ namespace Tracer::Rendering {
     }
 
     void ScreenBuffer::SetPixelColor(int x, int y, RGB_Color color) {
-        bufferData[(x + sizeX * y) * 4] = color.Red();
-        bufferData[(x + sizeX * y) * 4 + 1] = color.Green();
-        bufferData[(x + sizeX * y) * 4 + 2] = color.Blue();
+        bufferData[(x + sizeX * y) * 4] = color.r;
+        bufferData[(x + sizeX * y) * 4 + 1] = color.g;
+        bufferData[(x + sizeX * y) * 4 + 2] = color.b;
         bufferData[(x + sizeX * y) * 4 + 3] = 255;
     }
 

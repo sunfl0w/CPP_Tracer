@@ -37,25 +37,46 @@ namespace Tracer::Rendering {
                         }
                     }
                     if (nearestIntersectData.IsHit()) {
+                        RGB_Color color(200, 100, 50);
                         Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), lightPos.Subtract(nearestIntersectData.GetIntersectionPos()), 100);
                         bool inShadow = false;
+                        float dstToLight = nearestIntersectData.GetIntersectionPos().DistanceTo(lightPos);
 
                         for (Math::Tris triangle : mesh.GetData()) {
                             if (mesh.RayIntersects(shadowRay)) {
                                 Math::IntersectionData intersectData = shadowRay.Cast(triangle);
-                                float dst = nearestIntersectData.GetIntersectionPos().DistanceTo(intersectData.GetIntersectionPos());
-                                float dstToLight = intersectData.GetIntersectionPos().DistanceTo(lightPos);
 
-                                if (dst > 0 && dst < dstToLight && intersectData.IsHit()) {
+                                if (intersectData.IsHit()) {
                                     inShadow = true;
                                     break;
                                 }
                             }
                         }
                         if (inShadow) {
-                            screenBuffer.SetPixelColor(x, y, RGB_Color(100, 50, 25));
+                            HSV_Color hsvColor;
+                            hsvColor.FromRGB(color.r, color.g, color.b);
+                            float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 2.66f);
+                            if(modifier < 0.0f) {
+                                modifier = 0.0f;
+                            }
+                            if(modifier > 0.5f) {
+                                modifier = 0.5f;
+                            }
+                            hsvColor.v = hsvColor.v * modifier;
+                            RGB_Color displayedColor;
+                            displayedColor.FromHSV(hsvColor.h, hsvColor.s, hsvColor.v);
+                            screenBuffer.SetPixelColor(x, y, displayedColor);
                         } else {
-                            screenBuffer.SetPixelColor(x, y, RGB_Color(200, 100, 50));
+                            HSV_Color hsvColor;
+                            hsvColor.FromRGB(color.r, color.g, color.b);
+                            float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 2.33f);
+                            if(modifier < 0.0f) {
+                                modifier = 0.0f;
+                            }
+                            hsvColor.v = hsvColor.v * modifier;
+                            RGB_Color displayedColor;
+                            displayedColor.FromHSV(hsvColor.h, hsvColor.s, hsvColor.v);
+                            screenBuffer.SetPixelColor(x, y, displayedColor);
                         }
                     } else {
                         screenBuffer.SetPixelColor(x, y, RGB_Color(0, 0, 0));

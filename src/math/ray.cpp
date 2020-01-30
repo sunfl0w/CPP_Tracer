@@ -60,7 +60,7 @@ namespace Tracer::Math {
 
         Math::Vec3 intersect = vertex0.Add(edge2.Multiply(x).Add(edge1.Multiply(y)));
         Math::Vec3 norm = edge1.Cross(edge2);
-        norm = norm.Multiply(0.01f);
+        norm = norm.Multiply(0.005f);
         intersect = intersect.Add(norm);
 
         if (z < epsilon) {

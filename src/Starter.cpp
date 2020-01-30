@@ -38,8 +38,8 @@ int main() {
     sf::Texture texture;
     texture.create(width, height);
     sf::Sprite sprite(texture);
-    Math::Vec3 camPos(0, 0, -14);
-    Math::Vec3 lightPos(40, 0, -40);
+    Math::Vec3 camPos(-5, 0, -14);
+    Math::Vec3 lightPos(10, 0, -10);
 
     while (window.isOpen()) {
         start = std::chrono::steady_clock::now();
@@ -50,11 +50,13 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            camPos = camPos.Add(Math::Vec3(-0.5f, 0, 0));
+            //camPos = camPos.Add(Math::Vec3(-0.5f, 0, 0));
+            lightPos = lightPos.Add(Math::Vec3(-0.5f, 0, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            camPos = camPos.Add(Math::Vec3(0.5f, 0, 0));
+            //camPos = camPos.Add(Math::Vec3(0.5f, 0, 0));
+            lightPos = lightPos.Add(Math::Vec3(0.5f, 0, 0));
         }
 
         window.clear(sf::Color::Black);
