@@ -45,7 +45,8 @@ namespace Tracer::Components {
                 size_t vertexStartPos = 0;
                 for (int i = 0; i < 3; i++) {
                     vertexStartPos = line.find(" ", vertexStartPos);
-                    triangle.Set(i, vertecies[std::stoi(line.substr(vertexStartPos + 1, 1)) - 1]);
+                    size_t vertexEndPos = line.find(" ", vertexStartPos + 1);
+                    triangle.Set(i, vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1]);
                     vertexStartPos += 2;
                 }
                 triangles.push_back(triangle);

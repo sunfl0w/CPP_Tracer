@@ -34,7 +34,7 @@ namespace Tracer::Math {
         float det = edge1.Dot(pvec);
 
         //float epsilon = std::numeric_limits<float>::epsilon();
-        float epsilon = 0.0001f;
+        float epsilon = 0.0000001f;
 
         if (det < epsilon) {
             return IntersectionData(Math::Vec3(0, 0, 0), false);
@@ -60,7 +60,8 @@ namespace Tracer::Math {
 
         Math::Vec3 intersect = vertex0.Add(edge2.Multiply(x).Add(edge1.Multiply(y)));
         Math::Vec3 norm = edge1.Cross(edge2);
-        norm = norm.Multiply(0.005f);
+        norm.Normalize();
+        norm = norm.Multiply(0.0001f);
         intersect = intersect.Add(norm);
 
         if (z < epsilon) {
@@ -69,4 +70,4 @@ namespace Tracer::Math {
 
         return IntersectionData(intersect, true);
     }
-}  // namespace OpenCG::Rendering
+}  // namespace Tracer::Math

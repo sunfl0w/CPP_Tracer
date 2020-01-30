@@ -16,8 +16,9 @@ using namespace Tracer::Components;
 
 int main() {
     Mesh mesh;
-    mesh.LoadFromObjectFile("./models/Cube.obj");
+    mesh.LoadFromObjectFile("./models/Cyber.obj");
     std::vector<Mesh> meshes;
+    std::cout << mesh.GetData().size() << std::endl;
     meshes.push_back(mesh);
     Raytracer raytracer;
 
@@ -60,8 +61,6 @@ int main() {
         }
 
         window.clear(sf::Color::Black);
-
-
 
         ScreenBuffer buffer = raytracer.RenderToBuffer(meshes, width, height, camPos, lightPos);
         texture.update(buffer.GetBufferData());

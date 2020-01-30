@@ -24,7 +24,7 @@ namespace Tracer::Rendering {
                 for (Components::Mesh mesh : meshes) {
                     for (Math::Tris triangle : mesh.GetData()) {
                         Math::Ray ray = Math::Ray(camPos, rayDir, 100);
-                        if (mesh.RayIntersects(ray)) {
+                        //if (mesh.RayIntersects(ray)) {
                             Math::IntersectionData intersectData = ray.Cast(triangle);
 
                             if (intersectData.IsHit()) {
@@ -34,7 +34,7 @@ namespace Tracer::Rendering {
                                     minDst = dst;
                                 }
                             }
-                        }
+                        //}
                     }
                     if (nearestIntersectData.IsHit()) {
                         RGB_Color color(200, 100, 50);
@@ -43,14 +43,14 @@ namespace Tracer::Rendering {
                         float dstToLight = nearestIntersectData.GetIntersectionPos().DistanceTo(lightPos);
 
                         for (Math::Tris triangle : mesh.GetData()) {
-                            if (mesh.RayIntersects(shadowRay)) {
+                            //if (mesh.RayIntersects(shadowRay)) {
                                 Math::IntersectionData intersectData = shadowRay.Cast(triangle);
 
                                 if (intersectData.IsHit()) {
                                     inShadow = true;
                                     break;
                                 }
-                            }
+                            //}
                         }
                         if (inShadow) {
                             HSV_Color hsvColor;
