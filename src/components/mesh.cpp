@@ -1,8 +1,9 @@
 #include "mesh.hpp"
 
-namespace OpenCG::Components {
+namespace Tracer::Components {
     Mesh::Mesh() {
-        data = std::vector<Tris>();
+        data = std::vector<Math::Tris>();
+        boundingBox = BoundingBox();
     }
 
     void Mesh::LoadFromObjectFile(std::string filePath) {
@@ -16,14 +17,14 @@ namespace OpenCG::Components {
         }
         objectFile.close();
 
-        std::vector<Vertex> vertecies;
-        std::vector<Tris> triangles;
+        std::vector<Math::Vec3> vertecies;
+        std::vector<Math::Tris> triangles;
 
         for (std::string line : lines) {
             size_t pos;
             pos = line.find("v ");
             if (pos != std::string::npos) {
-                Vertex vertex;
+                Math::Vec3 vertex;
                 size_t coordinateStartPos = 0;
                 for (int i = 0; i < 3; i++) {
                     coordinateStartPos = line.find(" ", coordinateStartPos);
@@ -40,7 +41,7 @@ namespace OpenCG::Components {
 
             pos = line.find("f ");
             if (pos != std::string::npos) {
-                Tris triangle;
+                Math::Tris triangle;
                 size_t vertexStartPos = 0;
                 for (int i = 0; i < 3; i++) {
                     vertexStartPos = line.find(" ", vertexStartPos);
@@ -51,31 +52,14 @@ namespace OpenCG::Components {
             }
         }
         data = triangles;
-
-        for(Vertex vertex : vertecies) {
-            if(vertex.X() > maxX) {
-                maxX = vertex.X();
-            }
-            if(vertex.Y() > maxY) {
-                maxY = vertex.Y();
-            }
-            if(vertex.Z() > maxZ) {
-                maxZ = vertex.Z();
-            }
-
-            if(vertex.X() < minX) {
-                minX = vertex.X();
-            }
-            if(vertex.Y() < minY) {
-                minY = vertex.Y();
-            }
-            if(vertex.Z() < minZ) {
-                minZ = vertex.Z();
-            }
-        }
+        boundingBox = BoundingBox(triangles);
     }
 
-    std::vector<Tris> Mesh::GetData() {
+    std::vector<Math::Tris>& Mesh::GetData() {
         return data;
+    }
+
+    bool Mesh::RayIntersects(const Math::Ray& ray) const {
+        return boundingBox.RayIntersects(ray);
     }
 }  // namespace OpenCG::Components

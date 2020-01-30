@@ -5,7 +5,7 @@
 
 #include "RGB_Color.hpp"
 
-namespace OpenCG::Rendering {
+namespace Tracer::Rendering {
     class ScreenBuffer {
     private:
         int sizeX;
@@ -22,4 +22,4 @@ namespace OpenCG::Rendering {
         void SetPixelColor(int x, int y, RGB_Color color);
         void Draw();
     };
-}  // namespace OpenCG
+}  // namespace Tracer::Rendering

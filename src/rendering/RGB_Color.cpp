@@ -1,6 +1,6 @@
 #include "RGB_Color.hpp"
 
-namespace OpenCG::Rendering {
+namespace Tracer::Rendering {
     RGB_Color::RGB_Color() {}
     
     RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) {

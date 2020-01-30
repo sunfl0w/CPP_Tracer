@@ -2,16 +2,16 @@
 
 #include <vector>
 
+#include "intersectionData.hpp"
+#include "mesh.hpp"
+#include "ray.hpp"
 #include "screenBuffer.hpp"
 #include "tris.hpp"
-#include "ray.hpp"
-#include "intersectData.hpp"
-#include "mesh.hpp"
 
-namespace OpenCG::Rendering {
+namespace Tracer::Rendering {
     class Raytracer {
     public:
         Raytracer();
-        ScreenBuffer RenderToBuffer(std::vector<Components::Mesh> meshes, int imageWidth, int imageHeight, Math::Vec3 camPos);
+        ScreenBuffer RenderToBuffer(std::vector<Components::Mesh>& meshes, int imageWidth, int imageHeight, const Math::Vec3& camPos, const Math::Vec3& lightPos);
     };
-}
+}  // namespace Tracer::Rendering

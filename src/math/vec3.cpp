@@ -1,26 +1,43 @@
 #include "vec3.hpp"
 
-namespace OpenCG::Math {
+namespace Tracer::Math {
     Vec3::Vec3() {
         x = 0;
         y = 0;
         z = 0;
     }
+
+    Vec3::Vec3(const Vec3& vec3) {
+        x = vec3.x;
+        y = vec3.y;
+        z = vec3.z;
+    }
+
     Vec3::Vec3(float x, float y, float z) {
         this->x = x;
         this->y = y;
         this->z = z;
     }
 
-    float Vec3::X() const {
+    float Vec3::GetX() const {
         return x;
     }
 
-    float Vec3::Y() const {
+    float Vec3::GetY() const {
         return y;
     }
-    float Vec3::Z() const {
+    float Vec3::GetZ() const {
         return z;
+    }
+
+    void Vec3::Set(int index, float value) {
+        if(index == 0) {
+            x = value;
+        } else if(index == 1) {
+            y = value;
+        } else {
+            z = value;
+        }
     }
 
     float Vec3::GetMagnitude() const {
@@ -40,23 +57,23 @@ namespace OpenCG::Math {
         z = std::round(z);
     }
 
-    Vec3 Vec3::AddOther(const Vec3& otherVec3) const {
+    Vec3 Vec3::Add(const Vec3& otherVec3) const {
         return Vec3(x + otherVec3.x, y + otherVec3.y, z + otherVec3.z);
     }
 
-    Vec3 Vec3::SubtractOther(const Vec3& otherVec3) const {
+    Vec3 Vec3::Subtract(const Vec3& otherVec3) const {
         return Vec3(x - otherVec3.x, y - otherVec3.y, z - otherVec3.z);
     }
 
-    float Vec3::DotWith(const Vec3& otherVec3) const {
+    float Vec3::Dot(const Vec3& otherVec3) const {
         return x * otherVec3.x + y * otherVec3.y + z * otherVec3.z;
     }
 
-    Vec3 Vec3::MultiplyWith(float num) const {
+    Vec3 Vec3::Multiply(float num) const {
         return Vec3(x * num, y * num, z * num);
     }
 
-    Vec3 Vec3::CrossWith(const Vec3& otherVec3) const {
+    Vec3 Vec3::Cross(const Vec3& otherVec3) const {
         return Vec3(y * otherVec3.z - z * otherVec3.y,
                     z * otherVec3.x - x * otherVec3.z,
                     x * otherVec3.y - y * otherVec3.x);

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace OpenCG::Rendering {
+namespace Tracer::Rendering {
     class RGB_Color {
     public:
         unsigned int r;
@@ -15,4 +15,4 @@ namespace OpenCG::Rendering {
         int Green();
         int Blue();
     };
-}  // namespace OpenCG
+}  // namespace Tracer::Rendering

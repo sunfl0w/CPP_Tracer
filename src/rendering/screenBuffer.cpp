@@ -1,6 +1,6 @@
 #include "screenBuffer.hpp"
 
-namespace OpenCG::Rendering {
+namespace Tracer::Rendering {
     ScreenBuffer::ScreenBuffer(int sizeX, int sizeY) {
         this->sizeX = sizeX;
         this->sizeY = sizeY;

@@ -9,10 +9,10 @@
 #include "raytracer.hpp"
 #include "screenBuffer.hpp"
 
-using namespace OpenCG;
-using namespace OpenCG::Math;
-using namespace OpenCG::Rendering;
-using namespace OpenCG::Components;
+using namespace Tracer;
+using namespace Tracer::Math;
+using namespace Tracer::Rendering;
+using namespace Tracer::Components;
 
 int main() {
     Mesh mesh;
@@ -39,6 +39,7 @@ int main() {
     texture.create(width, height);
     sf::Sprite sprite(texture);
     Math::Vec3 camPos(0, 0, -14);
+    Math::Vec3 lightPos(40, 0, -40);
 
     while (window.isOpen()) {
         start = std::chrono::steady_clock::now();
@@ -49,18 +50,18 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            camPos = camPos.AddOther(Math::Vec3(-0.5f, 0, 0));
+            camPos = camPos.Add(Math::Vec3(-0.5f, 0, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            camPos = camPos.AddOther(Math::Vec3(0.5f, 0, 0));
+            camPos = camPos.Add(Math::Vec3(0.5f, 0, 0));
         }
 
         window.clear(sf::Color::Black);
 
 
 
-        ScreenBuffer buffer = raytracer.RenderToBuffer(meshes, width, height, camPos);
+        ScreenBuffer buffer = raytracer.RenderToBuffer(meshes, width, height, camPos, lightPos);
         texture.update(buffer.GetBufferData());
         fpsText.setString("FPS: " + std::to_string(1000.0f / frameDelta));
 

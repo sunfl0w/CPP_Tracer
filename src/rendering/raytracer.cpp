@@ -1,9 +1,9 @@
 #include "raytracer.hpp"
 
-namespace OpenCG::Rendering {
+namespace Tracer::Rendering {
     Raytracer::Raytracer() {}
 
-    ScreenBuffer Raytracer::RenderToBuffer(std::vector<Components::Mesh> meshes, int imageWidth, int imageHeight, Math::Vec3 camPos) {
+    ScreenBuffer Raytracer::RenderToBuffer(std::vector<Components::Mesh>& meshes, int imageWidth, int imageHeight, const Math::Vec3& camPos, const Math::Vec3& lightPos) {
         ScreenBuffer screenBuffer(imageWidth, imageHeight);
         float invWidth = 1 / float(imageWidth), invHeight = 1 / float(imageHeight);
         float fov = 30;
@@ -19,16 +19,16 @@ namespace OpenCG::Rendering {
                 Math::Vec3 rayDir(xx, yy, 1);
                 rayDir.Normalize();
                 float minDst = 99999999;
-                IntersectData nearestIntersectData = IntersectData();
+                Math::IntersectionData nearestIntersectData = Math::IntersectionData();
 
                 for (Components::Mesh mesh : meshes) {
-                    for (Tris triangle : mesh.GetData()) {
-                        Ray ray = Ray(camPos, rayDir, 100);
-                        if (ray.IntersectsBoundingBox(mesh.minX, mesh.maxX, mesh.minY, mesh.maxY, mesh.minZ, mesh.maxZ)) {
-                            IntersectData intersectData = ray.Cast(triangle);
+                    for (Math::Tris triangle : mesh.GetData()) {
+                        Math::Ray ray = Math::Ray(camPos, rayDir, 100);
+                        if (mesh.RayIntersects(ray)) {
+                            Math::IntersectionData intersectData = ray.Cast(triangle);
 
-                            if (intersectData.hit) {
-                                float dst = intersectData.intersectPos.DistanceTo(camPos);
+                            if (intersectData.IsHit()) {
+                                float dst = intersectData.GetIntersectionPos().DistanceTo(camPos);
                                 if (dst < minDst) {
                                     nearestIntersectData = intersectData;
                                     minDst = dst;
@@ -36,21 +36,17 @@ namespace OpenCG::Rendering {
                             }
                         }
                     }
-                    if (nearestIntersectData.hit) {
-                        //Ray shadowRay = Ray(nearestIntersectData.intersectPos, Math::Vec3(0, 0, -40).SubtractOther(nearestIntersectData.intersectPos), 100);
-                        Math::Vec3 lightPos(40, 0, -40);
-                        Math::Vec3 test = nearestIntersectData.intersectPos;
-                        //test.SubtractOther(lightPos);
-                        Ray shadowRay = Ray(test, lightPos.SubtractOther(nearestIntersectData.intersectPos), 100);
+                    if (nearestIntersectData.IsHit()) {
+                        Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), lightPos.Subtract(nearestIntersectData.GetIntersectionPos()), 100);
                         bool inShadow = false;
 
-                        for (Tris triangle : mesh.GetData()) {
-                            if (shadowRay.IntersectsBoundingBox(mesh.minX, mesh.maxX, mesh.minY, mesh.maxY, mesh.minZ, mesh.maxZ)) {
-                                IntersectData intersectData = shadowRay.Cast(triangle);
-                                float dst = nearestIntersectData.intersectPos.DistanceTo(intersectData.intersectPos);
-                                float dstToLight = intersectData.intersectPos.DistanceTo(lightPos);
+                        for (Math::Tris triangle : mesh.GetData()) {
+                            if (mesh.RayIntersects(shadowRay)) {
+                                Math::IntersectionData intersectData = shadowRay.Cast(triangle);
+                                float dst = nearestIntersectData.GetIntersectionPos().DistanceTo(intersectData.GetIntersectionPos());
+                                float dstToLight = intersectData.GetIntersectionPos().DistanceTo(lightPos);
 
-                                if (dst > 0 && dst < dstToLight && intersectData.hit) {
+                                if (dst > 0 && dst < dstToLight && intersectData.IsHit()) {
                                     inShadow = true;
                                     break;
                                 }
@@ -58,7 +54,6 @@ namespace OpenCG::Rendering {
                         }
                         if (inShadow) {
                             screenBuffer.SetPixelColor(x, y, RGB_Color(100, 50, 25));
-                            //screenBuffer.SetPixelColor(x, y, RGB_Color(200, 100, 50));
                         } else {
                             screenBuffer.SetPixelColor(x, y, RGB_Color(200, 100, 50));
                         }

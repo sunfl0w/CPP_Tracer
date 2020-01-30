@@ -5,17 +5,21 @@
 #include <vector>
 
 #include "tris.hpp"
+#include "boundingBox.hpp"
 
-using namespace OpenCG::Rendering;
-
-namespace OpenCG::Components {
+namespace Tracer::Components {
     class Mesh {
     private:
-        std::vector<Tris> data;
+        std::vector<Math::Tris> data;
+        BoundingBox boundingBox;
+
     public:
-        float minX, maxX, minY, maxY, minZ, maxZ;
         Mesh();
+
         void LoadFromObjectFile(std::string filePath);
-        std::vector<Tris> GetData();
+
+        std::vector<Math::Tris>& GetData();
+
+        bool RayIntersects(const Math::Ray& ray) const;
     };
 }  // namespace Components

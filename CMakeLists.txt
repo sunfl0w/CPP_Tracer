@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(OpenCG)
+project(CPP_Tracer)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
@@ -17,8 +17,8 @@ file(STRINGS "includelist.cmake" includes)
 include_directories(${includes})
 include(sourcelist.cmake)
 
-add_executable(OpenCG_Starter ${sources})
+add_executable(CPP_Tracer_Starter ${sources})
 
 if (SFML_FOUND)
-    target_link_libraries(OpenCG_Starter sfml-graphics)
+    target_link_libraries(CPP_Tracer_Starter sfml-graphics)
 endif (SFML_FOUND)

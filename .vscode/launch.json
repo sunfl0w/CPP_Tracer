@@ -8,7 +8,7 @@
             "name": "RunDebug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/OpenCG_Starter",
+            "program": "${workspaceFolder}/bin/CPP_Tracer_Starter",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
