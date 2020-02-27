@@ -16,9 +16,9 @@ using namespace Tracer::Components;
 
 int main() {
     Mesh mesh;
-    mesh.LoadFromObjectFile("./models/Cyber.obj");
+    mesh.LoadFromObjectFile("./models/Sphere.obj");
     std::vector<Mesh> meshes;
-    std::cout << mesh.GetData().size() << std::endl;
+    std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
     meshes.push_back(mesh);
     Raytracer raytracer;
 
@@ -51,13 +51,15 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            //camPos = camPos.Add(Math::Vec3(-0.5f, 0, 0));
-            lightPos = lightPos.Add(Math::Vec3(-0.5f, 0, 0));
+            camPos = camPos.Add(Math::Vec3(-0.5f, 0, 0));
+            //std::cout << "Left" << std::endl;
+            //lightPos = lightPos.Add(Math::Vec3(-0.5f, 0, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            //camPos = camPos.Add(Math::Vec3(0.5f, 0, 0));
-            lightPos = lightPos.Add(Math::Vec3(0.5f, 0, 0));
+            camPos = camPos.Add(Math::Vec3(0.5f, 0, 0));
+            //std::cout << "Right" << std::endl;
+            //lightPos = lightPos.Add(Math::Vec3(0.5f, 0, 0));
         }
 
         window.clear(sf::Color::Black);
