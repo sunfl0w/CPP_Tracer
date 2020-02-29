@@ -23,5 +23,7 @@ namespace Tracer::Math {
         const std::array<Vec3, 3>& GetVertecies() const;
 
         void Set(int index, const Vec3& vertex);
+
+        const Math::Vec3 GetNormal();
     };
 }  // namespace OpenCG::Renderer

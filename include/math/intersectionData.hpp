@@ -1,19 +1,23 @@
 #pragma once
 
 #include "vec3.hpp"
+#include "tris.hpp"
 
 namespace Tracer::Math {
     class IntersectionData {
     private:
+        Tris intersectionTriangle;
         Vec3 intersectionPos;
         bool hit;
 
     public:
         IntersectionData();
 
-        IntersectionData(const Vec3& intersectionPos, bool hit);
+        IntersectionData(const Vec3& intersectionPos, const Tris& intersectionTriangle, bool hit);
 
-        const Vec3& GetIntersectionPos();
+        Tris& GetIntersectionTriangle();
+
+        Vec3& GetIntersectionPos();
 
         bool IsHit() const;
     };

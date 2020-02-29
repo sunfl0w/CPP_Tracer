@@ -5,12 +5,17 @@ namespace Tracer::Math {
         hit = false;
     }
 
-    IntersectionData::IntersectionData(const Vec3& intersectionPos, bool hit) {
+    IntersectionData::IntersectionData(const Vec3& intersectionPos, const Tris& intersectionTriangle, bool hit) {
+        this->intersectionTriangle = intersectionTriangle;
         this->intersectionPos = intersectionPos;
         this->hit = hit;
     }
 
-    const Vec3& IntersectionData::GetIntersectionPos() {
+    Tris& IntersectionData::GetIntersectionTriangle() {
+        return intersectionTriangle;
+    }
+
+    Vec3& IntersectionData::GetIntersectionPos() {
         return intersectionPos;
     }
 

@@ -25,4 +25,8 @@ namespace Tracer::Math {
     void Tris::Set(int index, const Vec3& vertex) {
         vertecies[index] = vertex;
     }
+
+    const Vec3 Tris::GetNormal() {
+        return (vertecies[1].Subtract(vertecies[0])).Cross((vertecies[2].Subtract(vertecies[0])));
+    }
 }  // namespace OpenCG::Renderer

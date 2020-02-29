@@ -37,7 +37,7 @@ namespace Tracer::Math {
         float epsilon = 0.0000001f;
 
         if (det < epsilon) {
-            return IntersectionData(Math::Vec3(0, 0, 0), false);
+            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
         }
 
         float invDet = 1.0f / det;
@@ -46,14 +46,14 @@ namespace Tracer::Math {
 
         float x = tvec.Dot(pvec) * invDet;
         if (x < 0.0f || x > 1.0f) {
-            return IntersectionData(Math::Vec3(0, 0, 0), false);
+            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
         }
 
         Math::Vec3 qvec = tvec.Cross(edge1);
         //qvec.Normalize();
         float y = direction.Dot(qvec) * invDet;
         if (y < 0.0f || x + y > 1.0f) {
-            return IntersectionData(Math::Vec3(0, 0, 0), false);
+            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
         }
 
         float z = edge2.Dot(qvec) * invDet;
@@ -65,9 +65,9 @@ namespace Tracer::Math {
         intersect = intersect.Add(norm);
 
         if (z < epsilon) {
-            return IntersectionData(Math::Vec3(0, 0, 0), false);
+            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
         }
 
-        return IntersectionData(intersect, true);
+        return IntersectionData(intersect, triangle, true);
     }
 }  // namespace Tracer::Math

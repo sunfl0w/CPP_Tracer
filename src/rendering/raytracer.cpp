@@ -41,6 +41,14 @@ namespace Tracer::Rendering {
                         Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), lightPos.Subtract(nearestIntersectData.GetIntersectionPos()), 100);
                         bool inShadow = false;
                         float dstToLight = nearestIntersectData.GetIntersectionPos().DistanceTo(lightPos);
+                        Math::Vec3 shadowRayVector = lightPos.Subtract(nearestIntersectData.GetIntersectionPos());
+                        shadowRayVector.Normalize();
+                        Math::Vec3 triangleNormal = nearestIntersectData.GetIntersectionTriangle().GetNormal();
+                        triangleNormal.Normalize();
+                        float test = shadowRayVector.Dot(triangleNormal);
+                        float angleToLight = std::acos(test) * 180.0f / M_PI;
+                        //std::cout << shadowRayVector.Dot(rayDir) << std::endl;
+                        std::cout << angleToLight << std::endl;
 
                         for (Math::Tris triangle : mesh.GetData()) {
                             //if (mesh.RayIntersects(shadowRay)) {
@@ -55,7 +63,7 @@ namespace Tracer::Rendering {
                         if (inShadow) {
                             HSV_Color hsvColor;
                             hsvColor.FromRGB(color.r, color.g, color.b);
-                            float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 2.66f);
+                            float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 3.0f);
                             if(modifier < 0.0f) {
                                 modifier = 0.0f;
                             }
@@ -69,7 +77,8 @@ namespace Tracer::Rendering {
                         } else {
                             HSV_Color hsvColor;
                             hsvColor.FromRGB(color.r, color.g, color.b);
-                            float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 2.33f);
+                            float modifier = ((1 / ((angleToLight + 300) * 0.001f)) - 2.33f);
+                            //float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 2.33f);
                             if(modifier < 0.0f) {
                                 modifier = 0.0f;
                             }
