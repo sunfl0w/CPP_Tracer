@@ -1,5 +1,7 @@
 #include "raytracer.hpp"
 
+using namespace Tracer::Components::Color;
+
 namespace Tracer::Rendering {
     Raytracer::Raytracer() {}
 

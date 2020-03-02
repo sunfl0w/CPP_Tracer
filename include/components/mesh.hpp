@@ -6,9 +6,10 @@
 
 #include "tris.hpp"
 #include "boundingBox.hpp"
+#include "component.hpp"
 
 namespace Tracer::Components {
-    class Mesh {
+    class Mesh : public Component {
     private:
         std::vector<Math::Tris> data;
         BoundingBox boundingBox;

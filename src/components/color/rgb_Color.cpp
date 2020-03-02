@@ -1,6 +1,6 @@
 #include "rgb_Color.hpp"
 
-namespace Tracer::Rendering {
+namespace Tracer::Components::Color {
     RGB_Color::RGB_Color() {}
 
     RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) {
@@ -9,54 +9,54 @@ namespace Tracer::Rendering {
         this->b = b;
     }
 
-    void RGB_Color::FromHSV(unsigned int h, unsigned int s, unsigned int v) {
+    RGB_Color::RGB_Color(const HSV_Color& hsvColor) {
         unsigned char region, remainder, p, q, t;
 
-        if (s == 0) {
-            r = v;
-            g = v;
-            b = v;
+        if (hsvColor.s == 0) {
+            r = hsvColor.v;
+            g = hsvColor.v;
+            b = hsvColor.v;
             return;
         }
 
-        region = h / 43;
-        remainder = (h - (region * 43)) * 6;
+        region = hsvColor.h / 43;
+        remainder = (hsvColor.h - (region * 43)) * 6;
 
-        p = (v * (255 - s)) >> 8;
-        q = (v * (255 - ((s * remainder) >> 8))) >> 8;
-        t = (v * (255 - ((s * (255 - remainder)) >> 8))) >> 8;
+        p = (hsvColor.v * (255 - hsvColor.s)) >> 8;
+        q = (hsvColor.v * (255 - ((hsvColor.s * remainder) >> 8))) >> 8;
+        t = (hsvColor.v * (255 - ((hsvColor.s * (255 - remainder)) >> 8))) >> 8;
 
         switch (region) {
             case 0:
-                r = v;
+                r = hsvColor.v;
                 g = t;
                 b = p;
                 break;
             case 1:
                 r = q;
-                g = v;
+                g = hsvColor.v;
                 b = p;
                 break;
             case 2:
                 r = p;
-                g = v;
+                g = hsvColor.v;
                 b = t;
                 break;
             case 3:
                 r = p;
                 g = q;
-                b = v;
+                b = hsvColor.v;
                 break;
             case 4:
                 r = t;
                 g = p;
-                b = v;
+                b = hsvColor.v;
                 break;
             default:
-                r = v;
+                r = hsvColor.v;
                 g = p;
                 b = q;
                 break;
         }
     }
-}  // namespace Tracer::Rendering
+}  // namespace Tracer::Components::Color
