@@ -1,6 +1,6 @@
 #include "rgb_Color.hpp"
 
-namespace Tracer::Components::Color {
+namespace Tracer::Components::ColorComponents {
     RGB_Color::RGB_Color() {}
 
     RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) {

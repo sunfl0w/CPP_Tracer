@@ -1,6 +1,6 @@
 #include "hsv_Color.hpp"
 
-namespace Tracer::Components::Color {
+namespace Tracer::Components::ColorComponents {
     HSV_Color::HSV_Color() {}
 
     HSV_Color::HSV_Color(unsigned int h, unsigned int s, unsigned int v) {

@@ -3,7 +3,7 @@
 #include "rgb_Color.hpp"
 #include "component.hpp"
 
-namespace Tracer::Components::Color {
+namespace Tracer::Components::ColorComponents {
     class HSV_Color : public Component {
     public:
         unsigned int h;

@@ -4,7 +4,7 @@
 #include "hsv_Color.hpp"
 #include "rgb_Color.hpp"
 
-namespace Tracer::Components::Color {
+namespace Tracer::Components::ColorComponents {
     class Color : public Component {
     private:
         RGB_Color rgbColor;
