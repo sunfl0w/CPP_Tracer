@@ -9,7 +9,7 @@ using namespace Tracer::Math;
 namespace Tracer::Components::Positioning {
     class Transform : public Component {
     private:
-        Mat4 transform;
+        Mat4 transformMatrix;
 
     public:
         Transform(const Vec3& position);

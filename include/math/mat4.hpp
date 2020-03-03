@@ -12,6 +12,8 @@ namespace Tracer::Math {
 
         Mat4(const std::array<float, 16>& data);
 
+        float& operator[](std::size_t index);
+
         void ToIdentity();
 
         Mat4 MultiplyWith(const Mat4& other);

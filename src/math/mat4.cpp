@@ -9,6 +9,13 @@ namespace Tracer::Math {
         this->data = data;
     }
 
+    float& Mat4::operator[](std::size_t index) {
+        if(index > 15) {
+            throw "Index out of bounds";
+        }
+        return data[index];
+    }
+
     void Mat4::ToIdentity() {
         data = std::array<float, 16>();
         data[0] = 1;
@@ -18,6 +25,16 @@ namespace Tracer::Math {
     }
 
     Mat4 Mat4::MultiplyWith(const Mat4& other) {
-        
+        Mat4 result = Mat4();
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                float sum = 0.0f;
+                for (int z = 0; z < 4; z++) {
+                    sum += data[y * 4 + z] * other.data[x + z * 4];
+                }
+                result.data[x + y * 4] = sum;
+            }
+        }
+        return result;
     }
 }  // namespace Tracer::Math
