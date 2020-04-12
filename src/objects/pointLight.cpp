@@ -1,11 +1,15 @@
 #include "pointLight.hpp"
 
 namespace Tracer::Objects {
-    PointLight::PointLight() : Object("PointLight") {}
-
-    PointLight::PointLight(Math::Vec3 position, float intensity) : Object("PointLight") {
-        Components::Positioning::Transform transform(position);
-        AddComponent(transform);
+    PointLight::PointLight(const Math::Vec3& position, float intensity) : transform(position) {
         this->intensity = intensity;
+    }
+
+    Components::Position::Transform& PointLight::GetTransform() {
+        return transform;
+    }
+
+    float PointLight::GetIntensity() {
+        return intensity;
     }
 }

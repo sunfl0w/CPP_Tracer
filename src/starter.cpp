@@ -16,25 +16,24 @@ using namespace Tracer::Rendering;
 using namespace Tracer::Components;
 
 int main() {
-    Scene scene = Scene();
-    
-    Objects::Object model = Objects::Object("Model");
+    std::vector<Objects::RenderableObject> renderableObjects;
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Sphere.obj");
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
-    model.AddComponent(mesh);
-    model.AddComponent(Components::Positioning::Transform(Math::Vec3(0, 0, 0)));
-    scene.AddObject(model);
+    Objects::RenderableObject model = Objects::RenderableObject(Math::Vec3(0, 0, 0), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::Color(100, 200, 50)));
+    renderableObjects.push_back(model);
 
-    Objects::Camera camera = Objects::Camera(Math::Vec3(-5, 0, -15), Math::Vec3(0, 0, 0));
-    scene.AddObject(camera);
+    std::vector<Objects::PointLight> pointLights;
     Objects::PointLight light = Objects::PointLight(Math::Vec3(10, 0, -10), 1.0f);
-    scene.AddObject(light);
+    pointLights.push_back(light);
+
+    Objects::Camera camera = Objects::Camera(Math::Vec3(-5, 0, -15), Math::Vec3(10, 0, -10));
+    Scene scene = Scene(renderableObjects, pointLights, camera);
 
     Raytracer raytracer;
 
-    int width = 1920;
-    int height = 1080;
+    int width = 600;
+    int height = 400;
 
     sf::RenderWindow window(sf::VideoMode(width, height), "CPP_Tracer");
     sf::Text fpsText;
@@ -49,6 +48,7 @@ int main() {
 
     sf::Texture texture;
     texture.create(width, height);
+    sf::Sprite sprite(texture);
 
     while (window.isOpen()) {
         start = std::chrono::steady_clock::now();
@@ -59,20 +59,20 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            camera.GetComponent("TransformComponent") = camPos.Add(Math::Vec3(-0.5f, 0, 0));
+            scene.GetCamera().GetTransform().Translate(Math::Vec3(-0.5f, 0, 0));
             //std::cout << "Left" << std::endl;
             //lightPos = lightPos.Add(Math::Vec3(-0.5f, 0, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            camPos = camPos.Add(Math::Vec3(0.5f, 0, 0));
+            scene.GetCamera().GetTransform().Translate(Math::Vec3(0.5f, 0, 0));
             //std::cout << "Right" << std::endl;
             //lightPos = lightPos.Add(Math::Vec3(0.5f, 0, 0));
         }
 
         window.clear(sf::Color::Black);
 
-        ScreenBuffer buffer = raytracer.RenderToBuffer(meshes, width, height, camPos, lightPos);
+        ScreenBuffer buffer = raytracer.RenderSceneToBuffer(scene, width, height);
         texture.update(buffer.GetBufferData());
         fpsText.setString("FPS: " + std::to_string(1000.0f / frameDelta));
 

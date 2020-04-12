@@ -1,17 +1,16 @@
 #pragma once
 
-#include "object.hpp"
-#include "component.hpp"
 #include "vec3.hpp"
 #include "transform.hpp"
 
 namespace Tracer::Objects {
-    class Camera : public Object {
+    class Camera {
     private:
+        Components::Position::Transform transform;
 
     public:
-        Camera();
-        
-        Camera(Math::Vec3 position, Math::Vec3 direction);
+        Camera(const Math::Vec3& position, const Math::Vec3& angles);
+
+        Components::Position::Transform& GetTransform();
     };
 }  // namespace Tracer::Objects

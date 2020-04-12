@@ -1,4 +1,5 @@
 #pragma once
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -6,10 +7,9 @@
 
 #include "tris.hpp"
 #include "boundingBox.hpp"
-#include "component.hpp"
 
 namespace Tracer::Components {
-    class Mesh : public Component {
+    class Mesh {
     private:
         std::vector<Math::Tris> data;
         BoundingBox boundingBox;

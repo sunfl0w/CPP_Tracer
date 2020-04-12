@@ -1,16 +1,15 @@
 #include "material.hpp"
 
-namespace Tracer::Components::MaterialComponents {
-    Material::Material(MaterialType type, Color color) : color(0, 0, 0), Component("MaterialComponent") {
+namespace Tracer::Components::Material {
+    Material::Material(MaterialType type, Color::Color color) : color(color) {
         this->type = type;
-        this->color = color;
     }
 
     MaterialType Material::GetType() {
         return type;
     }
 
-    Color& Material::GetColor() {
+    Color::Color& Material::GetColor() {
         return color;
     }
 
@@ -18,7 +17,7 @@ namespace Tracer::Components::MaterialComponents {
         type = materialType;
     }
 
-    void Material::SetColor(Color color) {
+    void Material::SetColor(Color::Color color) {
         this->color = color;
     }
 }  // namespace Tracer::Components::MaterialComponents

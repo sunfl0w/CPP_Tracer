@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Tracer::Components::MaterialComponents {
+namespace Tracer::Components::Material {
     enum class MaterialType {
         Diffuse,
         Reflective,

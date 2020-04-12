@@ -1,10 +1,9 @@
 #pragma once
 
 #include "hsv_Color.hpp"
-#include "component.hpp"
 
-namespace Tracer::Components::ColorComponents {
-    class RGB_Color : public Component {
+namespace Tracer::Components::Color {
+    class RGB_Color {
     public:
         unsigned int r;
         unsigned int g;
@@ -13,6 +12,7 @@ namespace Tracer::Components::ColorComponents {
     public:
         RGB_Color();
         RGB_Color(unsigned int r, unsigned int g, unsigned int b);
-        RGB_Color(const HSV_Color& hsvColor);
+
+        void FromHSV(unsigned int h, unsigned int s, unsigned int v);
     };
 }  // namespace Tracer::Rendering

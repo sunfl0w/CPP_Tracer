@@ -1,11 +1,10 @@
 #pragma once
 
-#include "component.hpp"
 #include "hsv_Color.hpp"
 #include "rgb_Color.hpp"
 
-namespace Tracer::Components::ColorComponents {
-    class Color : public Component {
+namespace Tracer::Components::Color {
+    class Color {
     private:
         RGB_Color rgbColor;
 

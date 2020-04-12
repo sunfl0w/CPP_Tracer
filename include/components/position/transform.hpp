@@ -2,16 +2,15 @@
 
 #include <cmath>
 
-#include "component.hpp"
 #include "vec3.hpp"
-#include "mat4.hpp"
 
 using namespace Tracer::Math;
 
-namespace Tracer::Components::Positioning {
-    class Transform : public Component {
+namespace Tracer::Components::Position {
+    class Transform {
     private:
-        Mat4 transformMatrix;
+        Vec3 position;
+        Vec3 rotation;
 
     public:
         Transform(const Vec3& position);

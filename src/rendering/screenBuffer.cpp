@@ -22,7 +22,7 @@ namespace Tracer::Rendering {
         this->bufferData = bufferData;
     }
 
-    void ScreenBuffer::SetPixelColor(int x, int y, RGB_Color color) {
+    void ScreenBuffer::SetPixelColor(int x, int y, Components::Color::RGB_Color color) {
         bufferData[(x + sizeX * y) * 4] = color.r;
         bufferData[(x + sizeX * y) * 4 + 1] = color.g;
         bufferData[(x + sizeX * y) * 4 + 2] = color.b;

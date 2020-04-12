@@ -1,7 +1,7 @@
 #include "mesh.hpp"
 
 namespace Tracer::Components {
-    Mesh::Mesh() : Component("MeshComponent") {
+    Mesh::Mesh() {
         data = std::vector<Math::Tris>();
         boundingBox = BoundingBox();
     }

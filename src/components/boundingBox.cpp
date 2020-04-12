@@ -1,9 +1,9 @@
 #include "boundingBox.hpp"
 
 namespace Tracer::Components {
-    BoundingBox::BoundingBox() : Component("BoundingBoxComponent") {}
+    BoundingBox::BoundingBox() {}
 
-    BoundingBox::BoundingBox(const std::vector<Math::Tris>& meshData) : Component("BoundingBoxComponent") {
+    BoundingBox::BoundingBox(const std::vector<Math::Tris>& meshData) {
         for (Math::Tris triangle : meshData) {
             for (Math::Vec3 vertex : triangle.GetVertecies()) {
                 if (vertex.GetX() < minX) {

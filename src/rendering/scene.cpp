@@ -1,30 +1,21 @@
 #include "scene.hpp"
 
 namespace Tracer::Rendering {
-    Scene::Scene() {
-        objects = std::vector<std::unique_ptr<Objects::Object>>();
+    Scene::Scene(const std::vector<Objects::RenderableObject>& renderableObjects, const std::vector<Objects::PointLight>& pointLights, const Objects::Camera& camera) : camera(Math::Vec3(0, 0, 0), Math::Vec3(0, 0, 0)) {
+        this->renderableObjects = renderableObjects;
+        this->pointLights = pointLights;
+        this->camera = camera;
     }
 
-    std::vector<std::unique_ptr<Objects::Object>> Scene::GetSceneObjects() const {
-        return objects;
+    std::vector<Objects::RenderableObject>& Scene::GetRenderableObjects() {
+        return renderableObjects;
     }
 
-    void Scene::AddObject(Objects::Object object) {
-        bool isTagPresent = false;
-        for(int i = 0; i < objects.size(); i++) {
-            if(objects[i]->GetTag() == object.GetTag()) {
-                return;
-            }
-        }
-        objects.push_back(std::unique_ptr<Objects::Object>(new Objects::Object(object)));
+    std::vector<Objects::PointLight>& Scene::GetLightObjects() {
+        return pointLights;
     }
 
-    void Scene::RemoveObject(std::string tag) {
-        for(int i = 0; i < objects.size(); i++) {
-            if(objects[i]->GetTag() == tag) {
-                objects.erase(objects.begin() + i);
-                break;
-            }
-        }
+    Objects::Camera& Scene::GetCamera() {
+        return camera;
     }
 }  // namespace Tracer::Rendering

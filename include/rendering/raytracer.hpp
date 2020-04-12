@@ -19,7 +19,9 @@ namespace Tracer::Rendering {
     class Raytracer {
     public:
         Raytracer();
-        ScreenBuffer RenderSceneToBuffer(const Scene& scene) const;
-        ScreenBuffer RenderMeshesToBuffer(std::vector<Components::Mesh>& meshes, int imageWidth, int imageHeight, Objects::Camera* camera, Objects::PointLight* pointLight) const;
+
+        ScreenBuffer RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
+
+        ScreenBuffer RenderMeshesToBuffer(std::vector<Objects::RenderableObject>& renderableObjects, int imageWidth, int imageHeight, Objects::Camera& camera, std::vector<Objects::PointLight>& pointLights) const;
     };
 }  // namespace Tracer::Rendering

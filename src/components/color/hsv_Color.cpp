@@ -1,19 +1,19 @@
 #include "hsv_Color.hpp"
 
-namespace Tracer::Components::ColorComponents {
-    HSV_Color::HSV_Color() : Component("HSV_ColorComponent") {}
+namespace Tracer::Components::Color {
+    HSV_Color::HSV_Color() {}
 
-    HSV_Color::HSV_Color(unsigned int h, unsigned int s, unsigned int v) : Component("HSV_ColorComponent") {
+    HSV_Color::HSV_Color(unsigned int h, unsigned int s, unsigned int v) {
         this->h = h;
         this->s = s;
         this->v = v;
     }
 
-    HSV_Color::HSV_Color(const RGB_Color& rgbColor) : Component("HSV_ColorComponent") {
+    void HSV_Color::FromRGB(unsigned int r, unsigned int g, unsigned int b) {
         unsigned char rgbMin, rgbMax;
 
-        rgbMin = rgbColor.r < rgbColor.g ? (rgbColor.r < rgbColor.b ? rgbColor.r : rgbColor.b) : (rgbColor.g < rgbColor.b ? rgbColor.g : rgbColor.b);
-        rgbMax = rgbColor.r > rgbColor.g ? (rgbColor.r > rgbColor.b ? rgbColor.r : rgbColor.b) : (rgbColor.g > rgbColor.b ? rgbColor.g : rgbColor.b);
+        rgbMin = r < g ? (r < b ? r : b) : (g < b ? g : b);
+        rgbMax = r > g ? (r > b ? r : b) : (g > b ? g : b);
 
         v = rgbMax;
         if (v == 0) {
@@ -28,12 +28,12 @@ namespace Tracer::Components::ColorComponents {
             return;
         }
 
-        if (rgbMax == rgbColor.r) {
-            h = 0 + 43 * (rgbColor.g - rgbColor.b) / (rgbMax - rgbMin);
-        } else if (rgbMax == rgbColor.g) {
-            h = 85 + 43 * (rgbColor.b - rgbColor.r) / (rgbMax - rgbMin);
+        if (rgbMax == r) {
+            h = 0 + 43 * (g - b) / (rgbMax - rgbMin);
+        } else if (rgbMax == g) {
+            h = 85 + 43 * (b - r) / (rgbMax - rgbMin);
         } else {
-            h = 171 + 43 * (rgbColor.r - rgbColor.g) / (rgbMax - rgbMin);
+            h = 171 + 43 * (r - g) / (rgbMax - rgbMin);
         }
     }
 }  // namespace Tracer::Components::Color

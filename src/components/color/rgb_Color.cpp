@@ -1,59 +1,59 @@
 #include "rgb_Color.hpp"
 
-namespace Tracer::Components::ColorComponents {
-    RGB_Color::RGB_Color() : Component("RGB_ColorComponent") {}
+namespace Tracer::Components::Color {
+    RGB_Color::RGB_Color() {}
 
-    RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) : Component("RGB_ColorComponent") {
+    RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) {
         this->r = r;
         this->g = g;
         this->b = b;
     }
 
-    RGB_Color::RGB_Color(const HSV_Color& hsvColor) : Component("RGB_ColorComponent") {
+    void RGB_Color::FromHSV(unsigned int h, unsigned int s, unsigned int v) {
         unsigned char region, remainder, p, q, t;
 
-        if (hsvColor.s == 0) {
-            r = hsvColor.v;
-            g = hsvColor.v;
-            b = hsvColor.v;
+        if (s == 0) {
+            r = v;
+            g = v;
+            b = v;
             return;
         }
 
-        region = hsvColor.h / 43;
-        remainder = (hsvColor.h - (region * 43)) * 6;
+        region = h / 43;
+        remainder = (h - (region * 43)) * 6;
 
-        p = (hsvColor.v * (255 - hsvColor.s)) >> 8;
-        q = (hsvColor.v * (255 - ((hsvColor.s * remainder) >> 8))) >> 8;
-        t = (hsvColor.v * (255 - ((hsvColor.s * (255 - remainder)) >> 8))) >> 8;
+        p = (v * (255 - s)) >> 8;
+        q = (v * (255 - ((s * remainder) >> 8))) >> 8;
+        t = (v * (255 - ((s * (255 - remainder)) >> 8))) >> 8;
 
         switch (region) {
             case 0:
-                r = hsvColor.v;
+                r = v;
                 g = t;
                 b = p;
                 break;
             case 1:
                 r = q;
-                g = hsvColor.v;
+                g = v;
                 b = p;
                 break;
             case 2:
                 r = p;
-                g = hsvColor.v;
+                g = v;
                 b = t;
                 break;
             case 3:
                 r = p;
                 g = q;
-                b = hsvColor.v;
+                b = v;
                 break;
             case 4:
                 r = t;
                 g = p;
-                b = hsvColor.v;
+                b = v;
                 break;
             default:
-                r = hsvColor.v;
+                r = v;
                 g = p;
                 b = q;
                 break;

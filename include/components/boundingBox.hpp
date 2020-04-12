@@ -2,12 +2,11 @@
 
 #include <vector>
 
-#include "component.hpp"
 #include "tris.hpp"
 #include "ray.hpp"
 
 namespace Tracer::Components {
-    class BoundingBox : public Component {
+    class BoundingBox {
     private:
         float minX, maxX, minY, maxY, minZ, maxZ;
 

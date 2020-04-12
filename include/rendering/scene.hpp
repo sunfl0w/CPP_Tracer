@@ -3,20 +3,24 @@
 #include <memory>
 #include <vector>
 
-#include "object.hpp"
+#include "renderableObject.hpp"
+#include "pointLight.hpp"
+#include "camera.hpp"
 
 namespace Tracer::Rendering {
     class Scene {
     private:
-        std::vector<std::unique_ptr<Objects::Object>> objects;
+        std::vector<Objects::RenderableObject> renderableObjects;
+        std::vector<Objects::PointLight> pointLights;
+        Objects::Camera camera;
 
     public:
-        Scene();
+        Scene(const std::vector<Objects::RenderableObject>& renderableObjects, const std::vector<Objects::PointLight>& pointLights, const Objects::Camera& camera);
 
-        std::vector<std::unique_ptr<Objects::Object>> GetSceneObjects() const;
+        std::vector<Objects::RenderableObject>& GetRenderableObjects();
 
-        void AddObject(Objects::Object object);
+        std::vector<Objects::PointLight>& GetLightObjects();
 
-        void RemoveObject(std::string tag);
+        Objects::Camera& GetCamera();
     };
 }  // namespace Tracer::Rendering

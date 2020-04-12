@@ -19,7 +19,7 @@ namespace Tracer::Rendering {
         int Height();
         sf::Uint8* GetBufferData();
         void SetBufferData(std::vector<sf::Uint8> bufferData);
-        void SetPixelColor(int x, int y, RGB_Color color);
+        void SetPixelColor(int x, int y, Components::Color::RGB_Color color);
         void Draw();
     };
 }  // namespace Tracer::Rendering

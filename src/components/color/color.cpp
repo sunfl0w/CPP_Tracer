@@ -1,7 +1,7 @@
 #include "color.hpp"
 
-namespace Tracer::Components::ColorComponents {
-    Color::Color(int r, int g, int b) : Component("ColorComponent") {
+namespace Tracer::Components::Color {
+    Color::Color(int r, int g, int b) {
         rgbColor = RGB_Color(r, g, b);
     }
 
@@ -10,7 +10,9 @@ namespace Tracer::Components::ColorComponents {
     }
 
     HSV_Color Color::GetHSV() {
-        return HSV_Color(rgbColor);
+        HSV_Color hsvColor;
+        hsvColor.FromRGB(rgbColor.r, rgbColor.g, rgbColor.b);
+        return hsvColor;
     }
 
     void Color::Set(RGB_Color color) {
@@ -18,6 +20,6 @@ namespace Tracer::Components::ColorComponents {
     }
 
     void Color::Set(HSV_Color color) {
-        rgbColor = RGB_Color(color);
+        rgbColor.FromHSV(color.h, color.s, color.v);
     }
 }  // namespace Tracer::Components::Color
