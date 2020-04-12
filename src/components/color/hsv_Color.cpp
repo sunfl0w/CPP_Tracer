@@ -1,15 +1,15 @@
 #include "hsv_Color.hpp"
 
 namespace Tracer::Components::ColorComponents {
-    HSV_Color::HSV_Color() {}
+    HSV_Color::HSV_Color() : Component("HSV_ColorComponent") {}
 
-    HSV_Color::HSV_Color(unsigned int h, unsigned int s, unsigned int v) {
+    HSV_Color::HSV_Color(unsigned int h, unsigned int s, unsigned int v) : Component("HSV_ColorComponent") {
         this->h = h;
         this->s = s;
         this->v = v;
     }
 
-    HSV_Color::HSV_Color(const RGB_Color& rgbColor) {
+    HSV_Color::HSV_Color(const RGB_Color& rgbColor) : Component("HSV_ColorComponent") {
         unsigned char rgbMin, rgbMax;
 
         rgbMin = rgbColor.r < rgbColor.g ? (rgbColor.r < rgbColor.b ? rgbColor.r : rgbColor.b) : (rgbColor.g < rgbColor.b ? rgbColor.g : rgbColor.b);

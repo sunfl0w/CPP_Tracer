@@ -1,7 +1,7 @@
 #include "material.hpp"
 
 namespace Tracer::Components::MaterialComponents {
-    Material::Material(MaterialType type, Color color) : color(0, 0, 0) {
+    Material::Material(MaterialType type, Color color) : color(0, 0, 0), Component("MaterialComponent") {
         this->type = type;
         this->color = color;
     }

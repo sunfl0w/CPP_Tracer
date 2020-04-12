@@ -1,28 +1,28 @@
 #include "boundingBox.hpp"
 
 namespace Tracer::Components {
-    BoundingBox::BoundingBox() {}
+    BoundingBox::BoundingBox() : Component("BoundingBoxComponent") {}
 
-    BoundingBox::BoundingBox(const std::vector<Math::Tris>& meshData) {
-        for(Math::Tris triangle : meshData) {
-            for(Math::Vec3 vertex : triangle.GetVertecies()) {
-                if(vertex.GetX() < minX) {
+    BoundingBox::BoundingBox(const std::vector<Math::Tris>& meshData) : Component("BoundingBoxComponent") {
+        for (Math::Tris triangle : meshData) {
+            for (Math::Vec3 vertex : triangle.GetVertecies()) {
+                if (vertex.GetX() < minX) {
                     minX = vertex.GetX();
                 }
-                if(vertex.GetY() < minY) {
+                if (vertex.GetY() < minY) {
                     minY = vertex.GetY();
                 }
-                if(vertex.GetZ() < minZ) {
+                if (vertex.GetZ() < minZ) {
                     minZ = vertex.GetZ();
                 }
 
-                if(vertex.GetX() > maxX) {
+                if (vertex.GetX() > maxX) {
                     maxX = vertex.GetX();
                 }
-                if(vertex.GetY() > maxY) {
+                if (vertex.GetY() > maxY) {
                     maxY = vertex.GetY();
                 }
-                if(vertex.GetZ() > maxZ) {
+                if (vertex.GetZ() > maxZ) {
                     maxZ = vertex.GetZ();
                 }
             }
@@ -74,4 +74,4 @@ namespace Tracer::Components {
         }
         return true;
     }
-}
+}  // namespace Tracer::Components

@@ -7,8 +7,10 @@ namespace Tracer::Components {
         std::string tag;
 
     public:
-        void SetTag(std::string tag);
+    Component(std::string tag);
+
+    void SetTag(std::string tag);
         
-        std::string GetTag();
+    std::string GetTag() const;
     };
 }  // namespace Tracer::Components

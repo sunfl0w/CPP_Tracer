@@ -8,6 +8,7 @@
 #include "mesh.hpp"
 #include "raytracer.hpp"
 #include "screenBuffer.hpp"
+#include "scene.hpp"
 
 using namespace Tracer;
 using namespace Tracer::Math;
@@ -15,11 +16,21 @@ using namespace Tracer::Rendering;
 using namespace Tracer::Components;
 
 int main() {
+    Scene scene = Scene();
+    
+    Objects::Object model = Objects::Object("Model");
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Sphere.obj");
-    std::vector<Mesh> meshes;
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
-    meshes.push_back(mesh);
+    model.AddComponent(mesh);
+    model.AddComponent(Components::Positioning::Transform(Math::Vec3(0, 0, 0)));
+    scene.AddObject(model);
+
+    Objects::Camera camera = Objects::Camera(Math::Vec3(-5, 0, -15), Math::Vec3(0, 0, 0));
+    scene.AddObject(camera);
+    Objects::PointLight light = Objects::PointLight(Math::Vec3(10, 0, -10), 1.0f);
+    scene.AddObject(light);
+
     Raytracer raytracer;
 
     int width = 1920;
@@ -38,9 +49,6 @@ int main() {
 
     sf::Texture texture;
     texture.create(width, height);
-    sf::Sprite sprite(texture);
-    Math::Vec3 camPos(-5, 0, -14);
-    Math::Vec3 lightPos(10, 0, -10);
 
     while (window.isOpen()) {
         start = std::chrono::steady_clock::now();
@@ -51,7 +59,7 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            camPos = camPos.Add(Math::Vec3(-0.5f, 0, 0));
+            camera.GetComponent("TransformComponent") = camPos.Add(Math::Vec3(-0.5f, 0, 0));
             //std::cout << "Left" << std::endl;
             //lightPos = lightPos.Add(Math::Vec3(-0.5f, 0, 0));
         }

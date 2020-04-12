@@ -1,15 +1,15 @@
 #include "rgb_Color.hpp"
 
 namespace Tracer::Components::ColorComponents {
-    RGB_Color::RGB_Color() {}
+    RGB_Color::RGB_Color() : Component("RGB_ColorComponent") {}
 
-    RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) {
+    RGB_Color::RGB_Color(unsigned int r, unsigned int g, unsigned int b) : Component("RGB_ColorComponent") {
         this->r = r;
         this->g = g;
         this->b = b;
     }
 
-    RGB_Color::RGB_Color(const HSV_Color& hsvColor) {
+    RGB_Color::RGB_Color(const HSV_Color& hsvColor) : Component("RGB_ColorComponent") {
         unsigned char region, remainder, p, q, t;
 
         if (hsvColor.s == 0) {
