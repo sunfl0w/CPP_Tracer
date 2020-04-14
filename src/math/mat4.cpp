@@ -10,7 +10,7 @@ namespace Tracer::Math {
     }
 
     float& Mat4::operator[](std::size_t index) {
-        if(index > 15) {
+        if (index > 15 || index < 0) {
             throw "Index out of bounds";
         }
         return data[index];
@@ -34,6 +34,18 @@ namespace Tracer::Math {
                 }
                 result.data[x + y * 4] = sum;
             }
+        }
+        return result;
+    }
+
+    Vec4 Mat4::MultiplyWith(const Vec4& other) {
+        Vec4 result = Vec4();
+        for (int y = 0; y < 4; y++) {
+            float sum = 0.0f;
+            for (int z = 0; z < 4; z++) {
+                sum += data[y * 4 + z] * other.Get(z);
+            }
+            result.Set(y, sum);
         }
         return result;
     }

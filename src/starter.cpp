@@ -59,13 +59,13 @@ int main() {
             }
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-            scene.GetCamera().GetTransform().Translate(Math::Vec3(-0.5f, 0, 0));
+            scene.GetCamera().GetTransform().Translate(Math::Vec3(-0.05f, 0, 0));
             //std::cout << "Left" << std::endl;
             //lightPos = lightPos.Add(Math::Vec3(-0.5f, 0, 0));
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-            scene.GetCamera().GetTransform().Translate(Math::Vec3(0.5f, 0, 0));
+            scene.GetCamera().GetTransform().Translate(Math::Vec3(0.05f, 0, 0));
             //std::cout << "Right" << std::endl;
             //lightPos = lightPos.Add(Math::Vec3(0.5f, 0, 0));
         }

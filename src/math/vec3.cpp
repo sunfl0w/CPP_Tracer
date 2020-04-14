@@ -30,6 +30,16 @@ namespace Tracer::Math {
         return z;
     }
 
+    float Vec3::Get(int index) const {
+        if(index == 0) {
+            return x;
+        } else if(index == 1) {
+            return y;
+        } else {
+           return z;
+        }
+    }
+
     void Vec3::Set(int index, float value) {
         if(index == 0) {
             x = value;

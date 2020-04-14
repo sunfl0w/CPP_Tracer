@@ -18,6 +18,7 @@ namespace Tracer::Math {
         float GetY() const;
         float GetZ() const;
 
+        float Get(int index) const;
         void Set(int index, float value);
 
         float GetMagnitude() const;

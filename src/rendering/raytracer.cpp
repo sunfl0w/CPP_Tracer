@@ -27,11 +27,12 @@ namespace Tracer::Rendering {
                 float minDst = 99999999;
                 Math::IntersectionData nearestIntersectData = Math::IntersectionData();
 
-                for (Objects::RenderableObject renderableObjects : renderableObjects) {
-                    for (Math::Tris triangle : renderableObjects.GetMesh().GetData()) {
+                for (Objects::RenderableObject renderableObject : renderableObjects) {
+                    for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+                        Tris trisPos = renderableObject.GetTransform().TransformTris(triangle);
                         Math::Ray ray = Math::Ray(camera.GetTransform().GetPosition(), rayDir, 100);
                         //if (mesh.RayIntersects(ray)) {
-                            Math::IntersectionData intersectData = ray.Cast(triangle);
+                            Math::IntersectionData intersectData = ray.Cast(trisPos);
 
                             if (intersectData.IsHit()) {
                                 float dst = intersectData.GetIntersectionPos().DistanceTo(camera.GetTransform().GetPosition());
@@ -56,9 +57,10 @@ namespace Tracer::Rendering {
                         //std::cout << shadowRayVector.Dot(rayDir) << std::endl;
                         //std::cout << angleToLight << std::endl;
 
-                        for (Math::Tris triangle : renderableObjects.GetMesh().GetData()) {
+                        for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+                            Tris trisPos = renderableObject.GetTransform().TransformTris(triangle);
                             //if (mesh.RayIntersects(shadowRay)) {
-                                Math::IntersectionData intersectData = shadowRay.Cast(triangle);
+                                Math::IntersectionData intersectData = shadowRay.Cast(trisPos);
 
                                 if (intersectData.IsHit()) {
                                     inShadow = true;

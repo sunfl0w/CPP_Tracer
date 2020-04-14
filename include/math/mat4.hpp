@@ -2,6 +2,8 @@
 
 #include <array>
 
+#include "vec4.hpp"
+
 namespace Tracer::Math {
     class Mat4 {
     private:
@@ -17,5 +19,7 @@ namespace Tracer::Math {
         void ToIdentity();
 
         Mat4 MultiplyWith(const Mat4& other);
+
+        Vec4 MultiplyWith(const Vec4& other);
     };
 }  // namespace Tracer::Math

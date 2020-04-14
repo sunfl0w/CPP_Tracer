@@ -11,6 +11,7 @@ set(sources ${sources}
     src/math/ray.cpp
     src/math/tris.cpp
     src/math/vec3.cpp
+    src/math/vec4.cpp
     src/objects/camera.cpp
     src/objects/pointLight.cpp
     src/objects/renderableObject.cpp

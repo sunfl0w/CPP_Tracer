@@ -1,5 +1,7 @@
 #pragma once
 
+#include <math.h>
+
 namespace Tracer::Math {
     class Vec4 {
     private:
@@ -18,14 +20,15 @@ namespace Tracer::Math {
         float GetZ() const;
         float GetW() const;
 
+        float Get(int index) const;
         void Set(int index, float value);
 
         float GetMagnitude() const;
         void Normalize();
         void Round();
-        Vec4 Add(const Vec4& otherVec3) const;
-        Vec4 Subtract(const Vec4& otherVec3) const;
-        float Dot(const Vec4& otherVec3) const;
+        Vec4 Add(const Vec4& otherVec4) const;
+        Vec4 Subtract(const Vec4& otherVec4) const;
+        float Dot(const Vec4& otherVec4) const;
         Vec4 Multiply(float num) const;
     };
 }
