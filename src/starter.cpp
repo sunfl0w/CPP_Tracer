@@ -23,9 +23,9 @@ int main() {
     Objects::RenderableObject model = Objects::RenderableObject(Math::Vec3(0, 0, 0), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::Color(100, 200, 50)));
     renderableObjects.push_back(model);
 
-    std::vector<Objects::PointLight> pointLights;
+    std::vector<Objects::PointLight*> pointLights;
     Objects::PointLight light = Objects::PointLight(Math::Vec3(10, 0, -10), 1.0f);
-    pointLights.push_back(light);
+    pointLights.push_back(&light);
 
     Objects::Camera camera = Objects::Camera(Math::Vec3(-5, 0, -15), Math::Vec3(10, 0, -10));
     Scene scene = Scene(renderableObjects, pointLights, camera);
@@ -58,6 +58,8 @@ int main() {
                 window.close();
             }
         }
+        //light.GetTransform().Translate(Math::Vec3(-1.1f, 0.0f, 0));
+        light.GetTransform().Rotate(0, 1.0f, 0);
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
             scene.GetCamera().GetTransform().Translate(Math::Vec3(-0.05f, 0, 0));
             //std::cout << "Left" << std::endl;

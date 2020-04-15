@@ -10,7 +10,10 @@ namespace Tracer::Components::Position {
     }
 
     Vec3 Transform::GetPosition() {
-        return Vec3(transformMatrix[3], transformMatrix[7], transformMatrix[11]);
+        Vec3 pos = Vec3(0,0,0);
+        return TransformPosition(pos);
+
+        //return Vec3(transformMatrix[3], transformMatrix[7], transformMatrix[11]);
     }
 
     void Transform::Translate(const Vec3& translation) {
