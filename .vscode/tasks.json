@@ -1,71 +1,19 @@
 {
     "tasks": [
         {
-            "label": "GenerateCMakeConfigs",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-H.",
-                "-Bbuild"
-            ],
-            "dependsOn": "Clean",
-        },
-        {
-            "label": "Clean",
-            "type": "shell",
-            "command": "rm -rf build",
-        },
-        {
-            "label": "CMakeSetDebug",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-DCMAKE_BUILD_TYPE=Debug",
-                "."
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
-            "dependsOn": "GenerateCMakeConfigs",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "CMakeSetRelease",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-DCMAKE_BUILD_TYPE=Release",
-                "."
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
-            "dependsOn": "GenerateCMakeConfigs",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": []
-        },
-        {
             "label": "BuildDebug",
             "type": "shell",
-            "command": "cmake",
+            "command": "python",
             "options": {
-                "cwd": "${workspaceFolder}/build"
+                "cwd": "${workspaceFolder}"
             },
             "args": [
-                "--build",
-                ".",
-                "--",
-                "-j",
+                "CPPBuildAid.py",
+                "-bt",
+                "debug",
+                "-t",
                 "8"
             ],
-            "dependsOn": "CMakeSetDebug",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -75,18 +23,17 @@
         {
             "label": "BuildRelease",
             "type": "shell",
-            "command": "cmake",
+            "command": "python",
             "options": {
-                "cwd": "${workspaceFolder}/build"
+                "cwd": "${workspaceFolder}"
             },
             "args": [
-                "--build",
-                ".",
-                "--",
-                "-j",
+                "CPPBuildAid.py",
+                "-bt",
+                "release",
+                "-t",
                 "8"
             ],
-            "dependsOn": "CMakeSetRelease",
             "group": {
                 "kind": "build",
                 "isDefault": true

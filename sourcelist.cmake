@@ -1,22 +1,20 @@
-set(sources ${sources}
-    src/components/color/color.cpp
-    src/components/color/hsv_Color.cpp
-    src/components/color/rgb_Color.cpp
-    src/components/material/material.cpp
-    src/components/position/transform.cpp
-    src/components/boundingBox.cpp
-    src/components/mesh.cpp
-    src/math/intersectionData.cpp
-    src/math/mat4.cpp
-    src/math/ray.cpp
-    src/math/tris.cpp
-    src/math/vec3.cpp
-    src/math/vec4.cpp
-    src/objects/camera.cpp
-    src/objects/pointLight.cpp
-    src/objects/renderableObject.cpp
-    src/rendering/raytracer.cpp
-    src/rendering/scene.cpp
-    src/rendering/screenBuffer.cpp
-    src/starter.cpp
-)
+src/starter.cpp
+src/components/boundingBox.cpp
+src/components/mesh.cpp
+src/components/color/color.cpp
+src/components/color/hsv_Color.cpp
+src/components/color/rgb_Color.cpp
+src/components/material/material.cpp
+src/components/position/transform.cpp
+src/math/intersectionData.cpp
+src/math/mat4.cpp
+src/math/ray.cpp
+src/math/tris.cpp
+src/math/vec3.cpp
+src/math/vec4.cpp
+src/objects/camera.cpp
+src/objects/pointLight.cpp
+src/objects/renderableObject.cpp
+src/rendering/raytracer.cpp
+src/rendering/scene.cpp
+src/rendering/screenBuffer.cpp

@@ -44,20 +44,38 @@ namespace Tracer::Rendering {
                         //}
                     }
                     if (nearestIntersectData.IsHit()) {
-                        RGB_Color color(200, 100, 50);
-                        Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), pointLights[0]->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos()), 100);
-                        bool inShadow = false;
-                        float dstToLight = nearestIntersectData.GetIntersectionPos().DistanceTo(pointLights[0]->GetTransform().GetPosition());
-                        Math::Vec3 shadowRayVector = pointLights[0]->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos());
-                        shadowRayVector.Normalize();
-                        Math::Vec3 triangleNormal = nearestIntersectData.GetIntersectionTriangle().GetNormal();
-                        triangleNormal.Normalize();
-                        float test = shadowRayVector.Dot(triangleNormal);
-                        float angleToLight = std::acos(test) * 180.0f / M_PI;
-                        //std::cout << shadowRayVector.Dot(rayDir) << std::endl;
-                        //std::cout << angleToLight << std::endl;
+                        RGB_Color diffuseColor(255, 150, 0);
+                        
+                        for(Objects::PointLight* light: pointLights) {
+                            Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), light->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos()), 100);
+                            float diffuseModifier = 1.0f;
+                            for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+                                Math::IntersectionData shadowRayData = shadowRay.Cast(triangle);
+                                if(!shadowRayData.IsHit()) {
+                                    float dst = nearestIntersectData.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
+                                    Math::Vec3 shadowRayVector = light->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos());
+                                    diffuseModifier = shadowRayData.GetIntersectionTriangle().GetNormal().Dot(shadowRayVector);
+                                    double Attenuation = (1 + pow(dst / 34.0, 2.0));
+                                    diffuseModifier /= Attenuation;
+                                    //if(diffuseModifier > 0.001f) {
+                                        diffuseColor = RGB_Color(std::max((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f), std::max((diffuseColor.r + 150 * diffuseModifier) / 2.0f, 0.0f), std::max((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f));
+                                    //}
+                                    int i = 0;
+                                }
+                            }
+                        }
+                        //Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), pointLights[0]->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos()), 100);
+                        //bool inShadow = false;
+                        //float dstToLight = nearestIntersectData.GetIntersectionPos().DistanceTo(pointLights[0]->GetTransform().GetPosition());
+                        //Math::Vec3 shadowRayVector = pointLights[0]->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos());
+                        //shadowRayVector.Normalize();
+                        //Math::Vec3 triangleNormal = nearestIntersectData.GetIntersectionTriangle().GetNormal();
+                        //triangleNormal.Normalize();
+                        //float test = shadowRayVector.Dot(triangleNormal);
+                        //float angleToLight = std::acos(test) * 180.0f / M_PI;
+                        screenBuffer.SetPixelColor(x, y, RGB_Color(diffuseColor.r, diffuseColor.g, diffuseColor.b));
 
-                        for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+                        /*for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
                             Tris trisPos = renderableObject.GetTransform().TransformTris(triangle);
                             //if (mesh.RayIntersects(shadowRay)) {
                                 Math::IntersectionData intersectData = shadowRay.Cast(trisPos);
@@ -97,7 +115,7 @@ namespace Tracer::Rendering {
                             RGB_Color displayedColor;
                             displayedColor.FromHSV(hsvColor.h, hsvColor.s, hsvColor.v);
                             screenBuffer.SetPixelColor(x, y, displayedColor);
-                        }
+                        }*/
                     } else {
                         screenBuffer.SetPixelColor(x, y, RGB_Color(0, 0, 0));
                     }

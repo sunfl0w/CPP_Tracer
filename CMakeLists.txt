@@ -13,9 +13,9 @@ set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
 find_package(SFML 2.5 REQUIRED COMPONENTS graphics window system network audio)
 
 file(STRINGS "includelist.cmake" includes)
+file(STRINGS "sourcelist.cmake" sources)
 
 include_directories(${includes})
-include(sourcelist.cmake)
 
 add_executable(CPP_Tracer_Starter ${sources})
 
