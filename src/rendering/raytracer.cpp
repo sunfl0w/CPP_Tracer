@@ -55,67 +55,12 @@ namespace Tracer::Rendering {
                                     float dst = nearestIntersectData.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
                                     Math::Vec3 shadowRayVector = light->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos());
                                     diffuseModifier = shadowRayData.GetIntersectionTriangle().GetNormal().Dot(shadowRayVector);
-                                    double Attenuation = (1 + pow(dst / 34.0, 2.0));
-                                    diffuseModifier /= Attenuation;
-                                    //if(diffuseModifier > 0.001f) {
-                                        diffuseColor = RGB_Color(std::max((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f), std::max((diffuseColor.r + 150 * diffuseModifier) / 2.0f, 0.0f), std::max((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f));
-                                    //}
-                                    int i = 0;
+                                    diffuseModifier /= 1 + std::pow(dst / 50.0f, 2.0f);
+                                    diffuseColor = RGB_Color(std::clamp((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f, 255.0f), std::clamp((diffuseColor.r + 150 * diffuseModifier) / 2.0f, 0.0f, 255.0f), std::clamp((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f, 255.0f));
                                 }
                             }
                         }
-                        //Math::Ray shadowRay = Math::Ray(nearestIntersectData.GetIntersectionPos(), pointLights[0]->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos()), 100);
-                        //bool inShadow = false;
-                        //float dstToLight = nearestIntersectData.GetIntersectionPos().DistanceTo(pointLights[0]->GetTransform().GetPosition());
-                        //Math::Vec3 shadowRayVector = pointLights[0]->GetTransform().GetPosition().Subtract(nearestIntersectData.GetIntersectionPos());
-                        //shadowRayVector.Normalize();
-                        //Math::Vec3 triangleNormal = nearestIntersectData.GetIntersectionTriangle().GetNormal();
-                        //triangleNormal.Normalize();
-                        //float test = shadowRayVector.Dot(triangleNormal);
-                        //float angleToLight = std::acos(test) * 180.0f / M_PI;
                         screenBuffer.SetPixelColor(x, y, RGB_Color(diffuseColor.r, diffuseColor.g, diffuseColor.b));
-
-                        /*for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
-                            Tris trisPos = renderableObject.GetTransform().TransformTris(triangle);
-                            //if (mesh.RayIntersects(shadowRay)) {
-                                Math::IntersectionData intersectData = shadowRay.Cast(trisPos);
-
-                                if (intersectData.IsHit()) {
-                                    inShadow = true;
-                                    break;
-                                }
-                            //}
-                        }
-                        if (inShadow) {
-                            HSV_Color hsvColor;
-                            hsvColor.FromRGB(color.r, color.g, color.b);
-                            float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 3.0f);
-                            if(modifier < 0.0f) {
-                                modifier = 0.0f;
-                            }
-                            if(modifier > 0.2f) {
-                                modifier = 0.2f;
-                            }
-                            hsvColor.v = hsvColor.v * modifier;
-                            RGB_Color displayedColor;
-                            displayedColor.FromHSV(hsvColor.h, hsvColor.s, hsvColor.v);
-                            screenBuffer.SetPixelColor(x, y, displayedColor);
-                        } else {
-                            HSV_Color hsvColor;
-                            hsvColor.FromRGB(color.r, color.g, color.b);
-                            //float modifier = ((1 / ((angleToLight + 300) * 0.001f)) - 2.33f);
-                            //float modifier = angleToLight / 180.0f;
-                            float modifier = ((1 / (((dstToLight) + 300) * 0.001f)) - 2.33f);
-                            //float modifier = ((1 / ((dstToLight + 300) * 0.001f)) - 2.33f);
-                            
-                            if(modifier < 0.0f) {
-                                modifier = 0.0f;
-                            }
-                            hsvColor.v = hsvColor.v * modifier;
-                            RGB_Color displayedColor;
-                            displayedColor.FromHSV(hsvColor.h, hsvColor.s, hsvColor.v);
-                            screenBuffer.SetPixelColor(x, y, displayedColor);
-                        }*/
                     } else {
                         screenBuffer.SetPixelColor(x, y, RGB_Color(0, 0, 0));
                     }
