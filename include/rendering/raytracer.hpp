@@ -23,6 +23,10 @@ namespace Tracer::Rendering {
 
         ScreenBuffer RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
 
-        ScreenBuffer RenderMeshesToBuffer(std::vector<Objects::RenderableObject>& renderableObjects, int imageWidth, int imageHeight, Objects::Camera& camera, std::vector<Objects::PointLight*> pointLights) const;
+        IntersectionData RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, Math::Vec3& origin, Math::Vec3& dir) const;
+
+        IntersectionData RayCastTris(Math::Tris& triangle, Math::Vec3& origin, Math::Vec3& dir) const;
+
+        RGB_Color Raytrace(Scene& scene, Math::Vec3& origin, Math::Vec3& dir, int depth) const;
     };
 }  // namespace Tracer::Rendering
