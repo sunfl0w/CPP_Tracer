@@ -22,9 +22,8 @@ namespace Tracer::Rendering {
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
                 Math::Vec3 rayDir(xx, yy, 1);
                 rayDir.Normalize();
-                
+
                 screenBuffer.SetPixelColor(x, y, Raytrace(scene, camPos, rayDir, 5));
-                    
             }
         }
         return screenBuffer;
@@ -38,6 +37,7 @@ namespace Tracer::Rendering {
                 IntersectionData intersect = RayCastTris(triangle, origin, dir);
                 if (intersect.IsHit() && intersect.GetIntersectionPos().DistanceTo(origin) < closesIntersectDst) {
                     closesIntersectDst = intersect.GetIntersectionPos().DistanceTo(origin);
+                    closestIntersect = intersect;
                 }
             }
         }
@@ -100,19 +100,21 @@ namespace Tracer::Rendering {
 
         if (intersect.IsHit()) {
             RGB_Color diffuseColor(255, 150, 0);
+            RGB_Color pixelColor(0, 0, 0);
             for (Objects::PointLight* light : scene.GetLightObjects()) {
                 float diffuseModifier = 1.0f;
+
+                float dst = intersect.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
                 Math::Vec3 shadowRayDir = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
+                diffuseModifier = intersect.GetIntersectionTriangle().GetNormal().Dot(shadowRayDir);
+                diffuseModifier /= 1 + std::pow(dst / (50.0f * light->GetIntensity()), 2.0f);
+
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
                 if (!shadowIntersect.IsHit()) {
-                        float dst = intersect.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
-                        Math::Vec3 shadowRayVector = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
-                        diffuseModifier = shadowIntersect.GetIntersectionTriangle().GetNormal().Dot(shadowRayVector);
-                        diffuseModifier /= 1 + std::pow(dst / 50.0f, 2.0f);
-                        diffuseColor = RGB_Color(std::clamp((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f, 255.0f), std::clamp((diffuseColor.r + 150 * diffuseModifier) / 2.0f, 0.0f, 255.0f), std::clamp((diffuseColor.r + 50 * diffuseModifier) / 2.0f, 0.0f, 255.0f));
-                    }
+                    pixelColor = RGB_Color(std::clamp((diffuseColor.r + light->GetColor().GetRGB().r * diffuseModifier), 0.0f, 255.0f), std::clamp((diffuseColor.r + light->GetColor().GetRGB().g * diffuseModifier), 0.0f, 255.0f), std::clamp((diffuseColor.r + light->GetColor().GetRGB().b * diffuseModifier), 0.0f, 255.0f));
+                }
             }
-            return RGB_Color(diffuseColor.r, diffuseColor.g, diffuseColor.b);
+            return pixelColor;
         } else {
             return RGB_Color(0, 0, 0);
         }

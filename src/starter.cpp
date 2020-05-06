@@ -24,7 +24,7 @@ int main() {
     renderableObjects.push_back(model);
 
     std::vector<Objects::PointLight*> pointLights;
-    Objects::PointLight light = Objects::PointLight(Math::Vec3(10, 0, -10), 1.0f, Components::Color::Color(255, 255, 75));
+    Objects::PointLight light = Objects::PointLight(Math::Vec3(10, 0, -10), 0.001f, Components::Color::Color(255, 255, 75));
     pointLights.push_back(&light);
     //Objects::PointLight light2 = Objects::PointLight(Math::Vec3(-10, 0, 10), 1.0f, Components::Color::Color(255, 220, 100));
     //pointLights.push_back(&light2);
