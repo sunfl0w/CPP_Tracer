@@ -107,13 +107,15 @@ namespace Tracer::Rendering {
                 float dst = intersect.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
                 Math::Vec3 shadowRayDir = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
                 shadowRayDir.Normalize();
-                float angleModifier = std::clamp((float)(1 * M_PI * 10.0f / (std::acos(intersect.GetIntersectionTriangle().GetNormal().Dot(shadowRayDir)) * 180.0f)), 0.0f, 1.0f);
-                //float test = dst / (50.0f * light->GetIntensity() * angleModifier);
-                diffuseModifier /= 1 + std::pow(dst / (50.0f * light->GetIntensity() * angleModifier), 2.0f);
+                float lightModifier =  1 + std::pow(dst / (50.0f * light->GetIntensity()), 2.0f);
+                RGB_Color lightColor = RGB_Color(std::clamp(light->GetColor().GetRGB().r * lightModifier, 0.0f, 255.0f), std::clamp(light->GetColor().GetRGB().g * lightModifier, 0.0f, 255.0f), std::clamp(light->GetColor().GetRGB().b * lightModifier, 0.0f, 255.0f));
+
+                //float angleModifier = std::clamp((float)(1 * M_PI * 10.0f / (std::acos(intersect.GetIntersectionTriangle().GetNormal().Dot(shadowRayDir)) * 180.0f)), 0.0f, 1.0f);
+                diffuseModifier = std::max(intersect.GetIntersectionTriangle().GetNormal().Dot(intersect.GetIntersectionPos().Subtract(light->GetTransform().GetPosition())), 0.0f);
 
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
                 if (!shadowIntersect.IsHit()) {
-                    diffuseColor = RGB_Color(std::clamp((diffuseColor.r * (1 - diffuseModifier) + light->GetColor().GetRGB().r * diffuseModifier), 0.0f, 255.0f), std::clamp((diffuseColor.g * (1 - diffuseModifier) + light->GetColor().GetRGB().g * diffuseModifier), 0.0f, 255.0f), std::clamp((diffuseColor.b * (1 - diffuseModifier) + light->GetColor().GetRGB().b * diffuseModifier), 0.0f, 255.0f));
+                    diffuseColor = RGB_Color(std::clamp((diffuseColor.r * diffuseModifier + lightColor.r), 0.0f, 255.0f), std::clamp((diffuseColor.g * diffuseModifier + lightColor.g), 0.0f, 255.0f), std::clamp((diffuseColor.b * diffuseModifier + lightColor.b), 0.0f, 255.0f));
                     lightHits++;
                 }
             }
