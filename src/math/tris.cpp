@@ -27,6 +27,8 @@ namespace Tracer::Math {
     }
 
     const Vec3 Tris::GetNormal() {
-        return (vertecies[1].Subtract(vertecies[0])).Cross((vertecies[2].Subtract(vertecies[0])));
+        Vec3 normal = (vertecies[0].Subtract(vertecies[1])).Cross((vertecies[0].Subtract(vertecies[2])));
+        normal.Normalize();
+        return normal;
     }
 }  // namespace OpenCG::Renderer
