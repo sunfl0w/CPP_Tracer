@@ -99,7 +99,8 @@ namespace Tracer::Rendering {
         Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
 
         if (intersect.IsHit()) {
-            RGB_Color diffuseColor(255, 150, 0);
+            RGB_Color diffuseColor(0, 0, 0);
+            RGB_Color albedo(255, 255, 0);
             int lightHits = 0;
             for (Objects::PointLight* light : scene.GetLightObjects()) {
                 float diffuseModifier = 1.0f;
@@ -108,20 +109,18 @@ namespace Tracer::Rendering {
                 Math::Vec3 shadowRayDir = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
                 shadowRayDir.Normalize();
                 Math::Vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
-                std::cout << std::acos(norm.Dot(shadowRayDir)) * 180.f / M_PI << std::endl;
-                float angle = std::acos(norm.Dot(shadowRayDir)) * 180.f / M_PI;
+                norm.Normalize();
                 float angleModifier = std::clamp((float)(std::acos(norm.Dot(shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
-                //float test = dst / (50.0f * light->GetIntensity() * angleModifier);
                 diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
-                if (angle < 20.0f) {
-                    int i = 0;
-                }
 
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
                 if (!shadowIntersect.IsHit()) {
-                    diffuseColor = RGB_Color(std::clamp(diffuseColor.r * diffuseModifier + light->GetColor().GetRGB().r * (1 - diffuseModifier), 0.0f, 255.0f),
-                                             std::clamp(diffuseColor.g * diffuseModifier + light->GetColor().GetRGB().g * (1 - diffuseModifier), 0.0f, 255.0f),
-                                             std::clamp(diffuseColor.b * diffuseModifier + light->GetColor().GetRGB().b * (1 - diffuseModifier), 0.0f, 255.0f));
+                    RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().GetRGB().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
+                                                                std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().GetRGB().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
+                                                                std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().GetRGB().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
+                    diffuseColor = RGB_Color(std::clamp(diffuseColor.r + singleLightPixelColor.r * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
+                                             std::clamp(diffuseColor.g + singleLightPixelColor.g * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
+                                             std::clamp(diffuseColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));                                        
                     lightHits++;
                 }
             }

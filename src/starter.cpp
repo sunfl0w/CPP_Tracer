@@ -26,8 +26,8 @@ int main() {
     std::vector<Objects::PointLight*> pointLights;
     Objects::PointLight light = Objects::PointLight(Math::Vec3(10, 0, -10), 1.0f, Components::Color::Color(0, 255, 0));
     pointLights.push_back(&light);
-    //Objects::PointLight light2 = Objects::PointLight(Math::Vec3(-10, 0, 10), 1.0f, Components::Color::Color(255, 220, 100));
-    //pointLights.push_back(&light2);
+    Objects::PointLight light2 = Objects::PointLight(Math::Vec3(-10, 0, -10), 1.0f, Components::Color::Color(255, 220, 100));
+    pointLights.push_back(&light2);
 
     Objects::Camera camera = Objects::Camera(Math::Vec3(-5, 0, -15), Math::Vec3(10, 0, -10));
     Scene scene = Scene(renderableObjects, pointLights, camera);
