@@ -8,6 +8,8 @@ from datetime import datetime
 
 
 def generateSourceList():
+    sourceFileLines = 0
+
     sourceFiles = []
     sourcePath = os.path.join(os.getcwd(), "src")
     if (sourcePath):
@@ -16,6 +18,10 @@ def generateSourceList():
                 if(str(filename).endswith('.c') or str(filename).endswith('.cpp')):
                     relativeFilePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
                     sourceFiles.append(relativeFilePath)
+
+                    with open(os.path.join(dirpath, filename), "r") as sourcefile:
+                        sourceFileLines += len(sourcefile.readlines())
+        print("Total source code lines: {}".format(sourceFileLines))
         return sourceFiles
     else:
         print("Unable to find src directory. Terminating")
@@ -23,12 +29,19 @@ def generateSourceList():
 
 
 def generateIncludeList():
+    headerFileLines = 0
+
     headerFileDirectories = []
     includePath = os.path.join(os.getcwd(), "include")
     if (includePath):
         for dirpath, dirs, files in os.walk(includePath):
             relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
             headerFileDirectories.append(relativeDirectoryPath)
+            for filename in files:
+                if(str(filename).endswith('.h') or str(filename).endswith('.hpp')):
+                    with open(os.path.join(dirpath, filename), "r") as headerfile:
+                        headerFileLines += len(headerfile.readlines())
+        print("Total header code lines: {}".format(headerFileLines))
         return headerFileDirectories
     else:
         print("Unable to find include directory. Terminating")
