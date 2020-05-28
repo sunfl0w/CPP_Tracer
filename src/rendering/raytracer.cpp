@@ -5,14 +5,14 @@ using namespace Tracer::Components::Color;
 namespace Tracer::Rendering {
     Raytracer::Raytracer() {}
 
-    ScreenBuffer Raytracer::RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const {
-        ScreenBuffer screenBuffer(imageWidth, imageHeight);
+    std::vector<unsigned char> Raytracer::RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const {
+        std::vector<unsigned char> buffer = std::vector<unsigned char>(imageWidth * 3 * imageHeight);
         float invWidth = 1 / float(imageWidth), invHeight = 1 / float(imageHeight);
         float fov = 30;
         float aspectratio = imageWidth / float(imageHeight);
         float angle = tan(M_PI * 0.5 * fov / 180.);
 
-        Math::Vec3 camPos = scene.GetCamera().GetTransform().GetPosition();
+        glm::vec3 camPos = scene.GetCamera().GetTransform().GetPosition();
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
@@ -20,23 +20,29 @@ namespace Tracer::Rendering {
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
-                Math::Vec3 rayDir(xx, yy, 1);
-                rayDir.Normalize();
+                glm::vec3 rayDir(xx, yy, 1);
+                glm::normalize(rayDir);
 
-                screenBuffer.SetPixelColor(x, y, Raytrace(scene, camPos, rayDir, 5));
+                glm::vec3 pixelColor = Raytrace(scene, camPos, rayDir, 5);
+
+                buffer[(x + y * imageWidth) * 4] = (unsigned char)pixelColor.x;
+                buffer[(x + y * imageWidth) * 4 + 1] = (unsigned char)pixelColor.y;
+                buffer[(x + y * imageWidth) * 4 + 2] = (unsigned char)pixelColor.z;
+                buffer[(x + y * imageWidth) * 4 + 3] = 255;
             }
         }
-        return screenBuffer;
+        return buffer;
     }
 
-    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, Math::Vec3& origin, Math::Vec3& dir) const {
+    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
         IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 999999.9f;
         for (Objects::RenderableObject renderableObject : renderableObjects) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
                 IntersectionData intersect = RayCastTris(triangle, origin, dir);
-                if (intersect.IsHit() && intersect.GetIntersectionPos().DistanceTo(origin) < closesIntersectDst) {
-                    closesIntersectDst = intersect.GetIntersectionPos().DistanceTo(origin);
+                float dst = glm::distance(intersect.GetIntersectionPos(), origin);
+                if (intersect.IsHit() && dst < closesIntersectDst) {
+                    closesIntersectDst = dst;
                     closestIntersect = intersect;
                 }
             }
@@ -44,58 +50,58 @@ namespace Tracer::Rendering {
         return closestIntersect;
     }
 
-    IntersectionData Raytracer::RayCastTris(Math::Tris& triangle, Math::Vec3& origin, Math::Vec3& dir) const {
+    IntersectionData Raytracer::RayCastTris(Math::Tris& triangle, glm::vec3& origin, glm::vec3& dir) const {
         //Möller–Trumbore intersection algorithm
-        Math::Vec3 vertex0 = Math::Vec3(triangle.GetV0());
-        Math::Vec3 vertex1 = Math::Vec3(triangle.GetV1());
-        Math::Vec3 vertex2 = Math::Vec3(triangle.GetV2());
+        glm::vec3 vertex0 = triangle.vert0;
+        glm::vec3 vertex1 = triangle.vert1;
+        glm::vec3 vertex2 = triangle.vert2;
 
-        Math::Vec3 edge1 = vertex1.Subtract(vertex0);
-        Math::Vec3 edge2 = vertex2.Subtract(vertex0);
+        glm::vec3 edge1 = vertex1 - vertex0;
+        glm::vec3 edge2 = vertex2 - vertex0;
 
-        Math::Vec3 pvec = dir.Cross(edge2);
+        glm::vec3 pvec = glm::cross(dir, edge2);
         //pvec.Normalize();
-        float det = edge1.Dot(pvec);
+        float det = glm::dot(edge1, pvec);
 
         //float epsilon = std::numeric_limits<float>::epsilon();
         float epsilon = 0.0000001f;
 
         if (det < epsilon) {
-            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
+            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
         }
 
         float invDet = 1.0f / det;
 
-        Math::Vec3 tvec = origin.Subtract(vertex0);
+        glm::vec3 tvec = origin - vertex0;
 
-        float x = tvec.Dot(pvec) * invDet;
+        float x = glm::dot(tvec, pvec) * invDet;
         if (x < 0.0f || x > 1.0f) {
-            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
+            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
         }
 
-        Math::Vec3 qvec = tvec.Cross(edge1);
+        glm::vec3 qvec = glm::cross(tvec, edge1);
         //qvec.Normalize();
-        float y = dir.Dot(qvec) * invDet;
+        float y = glm::dot(dir, qvec) * invDet;
         if (y < 0.0f || x + y > 1.0f) {
-            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
+            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
         }
 
-        float z = edge2.Dot(qvec) * invDet;
+        float z = glm::dot(edge2, qvec) * invDet;
 
-        Math::Vec3 intersect = vertex0.Add(edge2.Multiply(x).Add(edge1.Multiply(y)));
-        Math::Vec3 norm = edge1.Cross(edge2);
-        norm.Normalize();
-        norm = norm.Multiply(0.0001f);
-        intersect = intersect.Add(norm);
+        glm::vec3 intersect = vertex0 + edge2 * x + edge1 * y;
+        glm::vec3 norm = glm::cross(edge1, edge2);
+        glm::normalize(norm);
+        norm = norm * 0.0001f;
+        intersect = intersect + norm;
 
         if (z < epsilon) {
-            return IntersectionData(Math::Vec3(0, 0, 0), triangle, false);
+            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
         }
 
         return IntersectionData(intersect, triangle, true);
     }
 
-    RGB_Color Raytracer::Raytrace(Scene& scene, Math::Vec3& origin, Math::Vec3& dir, int depth) const {
+    RGB_Color Raytracer::Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const {
         Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
 
         if (intersect.IsHit()) {
@@ -106,11 +112,11 @@ namespace Tracer::Rendering {
                 float diffuseModifier = 1.0f;
 
                 float dst = intersect.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
-                Math::Vec3 shadowRayDir = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
-                shadowRayDir.Normalize();
-                Math::Vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
-                norm.Normalize();
-                float angleModifier = std::clamp((float)(std::acos(norm.Dot(shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
+                glm::vec3 shadowRayDir = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
+                glm::normalize(shadowRayDir);
+                glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
+                glm::normalize(norm);
+                float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir) * 180.0f / M_PI / 360.0f)), 0.0f, 1.0f);
                 diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
 
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);

@@ -5,7 +5,7 @@ namespace Tracer::Math {
         hit = false;
     }
 
-    IntersectionData::IntersectionData(const Vec3& intersectionPos, const Tris& intersectionTriangle, bool hit) {
+    IntersectionData::IntersectionData(const glm::vec3& intersectionPos, const Tris& intersectionTriangle, bool hit) {
         this->intersectionTriangle = intersectionTriangle;
         this->intersectionPos = intersectionPos;
         this->hit = hit;
@@ -15,7 +15,7 @@ namespace Tracer::Math {
         return intersectionTriangle;
     }
 
-    Vec3& IntersectionData::GetIntersectionPos() {
+    glm::vec3& IntersectionData::GetIntersectionPos() {
         return intersectionPos;
     }
 

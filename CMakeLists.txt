@@ -9,16 +9,21 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O3 -fopenmp -march=native -flto -mpopcnt -fwhole-program")
 
-set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
-find_package(SFML 2.5 REQUIRED COMPONENTS graphics window system network audio)
+find_package(SDL2 REQUIRED SDL2)
+set(OpenGL_GL_PREFERENCE GLVND)
+find_package(OpenGL REQUIRED)
 
 file(STRINGS "includelist.cmake" includes)
 file(STRINGS "sourcelist.cmake" sources)
 
-include_directories(${includes})
+include_directories(${includes} ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRs})
 
 add_executable(CPP_Tracer_Starter ${sources})
 
-if (SFML_FOUND)
-    target_link_libraries(CPP_Tracer_Starter sfml-graphics)
-endif (SFML_FOUND)
+if(OpenGL_FOUND)
+    target_link_libraries(Mill_Starter ${OPENGL_LIBRARIES})
+endif(OpenGL_FOUND)
+
+if (SDL2_FOUND)
+    target_link_libraries(Mill_Starter SDL2::SDL2)
+endif (SDL2_FOUND)

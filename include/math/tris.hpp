@@ -1,29 +1,24 @@
 #pragma once
 
 #include <array>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "vec3.hpp"
 
 namespace Tracer::Math {
     class Tris {
-    private:
-        std::array<Vec3, 3> vertecies;
-
     public:
+        glm::vec3 vert0;
+        glm::vec3 vert1;
+        glm::vec3 vert2;
+
+
         Tris();
 
-        Tris(const Vec3& v0, const Vec3& v1, const Vec3& v2);
+        Tris(glm::vec3& vert0, glm::vec3& vert1, glm::vec3& vert2);
 
-        const Vec3& GetV0() const;
-
-        const Vec3& GetV1() const;
-
-        const Vec3& GetV2() const;
-
-        const std::array<Vec3, 3>& GetVertecies() const;
-
-        void Set(int index, const Vec3& vertex);
-
-        const Math::Vec3 GetNormal();
+        const glm::vec3 GetNormal();
     };
-}  // namespace OpenCG::Renderer
+}  // namespace Tracer::Math

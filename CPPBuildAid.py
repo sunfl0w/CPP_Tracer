@@ -19,8 +19,10 @@ def generateSourceList():
                     relativeFilePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
                     sourceFiles.append(relativeFilePath)
 
-                    with open(os.path.join(dirpath, filename), "r") as sourcefile:
-                        sourceFileLines += len(sourcefile.readlines())
+                    # Counting source code lines
+                    if("lib" not in dirpath and "library" not in dirpath):
+                        with open(os.path.join(dirpath, filename), "r") as sourcefile:
+                            sourceFileLines += len(sourcefile.readlines())
         print("Total source code lines: {}".format(sourceFileLines))
         return sourceFiles
     else:
@@ -37,10 +39,13 @@ def generateIncludeList():
         for dirpath, dirs, files in os.walk(includePath):
             relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
             headerFileDirectories.append(relativeDirectoryPath)
-            for filename in files:
-                if(str(filename).endswith('.h') or str(filename).endswith('.hpp')):
-                    with open(os.path.join(dirpath, filename), "r") as headerfile:
-                        headerFileLines += len(headerfile.readlines())
+
+            # Counting headerfile lines of code
+            if("lib" not in dirpath and "library" not in dirpath):
+                for filename in files:
+                    if(str(filename).endswith('.h') or str(filename).endswith('.hpp')):
+                        with open(os.path.join(dirpath, filename), "r") as headerfile:
+                            headerFileLines += len(headerfile.readlines())
         print("Total header code lines: {}".format(headerFileLines))
         return headerFileDirectories
     else:
