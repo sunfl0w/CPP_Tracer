@@ -1,6 +1,9 @@
 #pragma once
 
-#include "vec3.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "transform.hpp"
 
 namespace Tracer::Objects {
@@ -9,7 +12,7 @@ namespace Tracer::Objects {
         Components::Position::Transform transform;
 
     public:
-        Camera(const Math::Vec3& position, const Math::Vec3& angles);
+        Camera(glm::vec3 position, glm::vec3 rotation);
 
         Components::Position::Transform& GetTransform();
     };

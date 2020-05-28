@@ -1,8 +1,8 @@
 #include "camera.hpp"
 
 namespace Tracer::Objects {
-    Camera::Camera(const Math::Vec3& position, const Math::Vec3& angles) : transform(position) {
-        transform.Rotate(angles.GetX(), angles.GetY(), angles.GetZ());
+    Camera::Camera(glm::vec3 position, glm::vec3 rotation) {
+        transform = Components::Position::Transform(position, rotation, glm::vec3(0.0f, 0.0f, 0.0f));
     }
 
     Components::Position::Transform& Camera::GetTransform() {

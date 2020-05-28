@@ -1,23 +1,26 @@
 #pragma once
 
-#include "vec3.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "rgb_Color.hpp"
 #include "transform.hpp"
-#include "color.hpp"
 
 namespace Tracer::Objects {
     class PointLight {
     private:
         Components::Position::Transform transform;
         float intensity;
-        Components::Color::Color color;
+        Components::Color::RGB_Color color;
 
     public:
-        PointLight(const Math::Vec3& position, float intensity, const Components::Color::Color& color);
+        PointLight(glm::vec3 position, float intensity, Components::Color::RGB_Color color);
 
         Components::Position::Transform& GetTransform();
 
         float GetIntensity();
 
-        Components::Color::Color& GetColor();
+        Components::Color::RGB_Color& GetColor();
     };
 }

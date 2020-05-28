@@ -1,51 +1,39 @@
 #include "transform.hpp"
 
 namespace Tracer::Components::Position {
-    Transform::Transform(const Vec3& position) {
-        this->transformMatrix = Mat4();
-        transformMatrix.ToIdentity();
-        transformMatrix[3] = position.GetX();
-        transformMatrix[7] = position.GetY();
-        transformMatrix[11] = position.GetZ();
+    Transform::Transform() {}
+    
+    Transform::Transform(const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale) {
+        this->position = position;
+        this->rotation = rotation;
+        this->scale = scale;
     }
 
-    Vec3 Transform::GetPosition() {
-        Vec3 pos = Vec3(0,0,0);
-        return TransformPosition(pos);
-
-        //return Vec3(transformMatrix[3], transformMatrix[7], transformMatrix[11]);
+    glm::vec3& Transform::GetPosition() {
+        return position;
     }
 
-    void Transform::Translate(const Vec3& translation) {
-        Mat4 translationMatrix = Mat4();
-        translationMatrix.ToIdentity();
-        translationMatrix[3] = translation.GetX();
-        translationMatrix[7] = translation.GetY();
-        translationMatrix[11] = translation.GetZ();
-        transformMatrix = translationMatrix.MultiplyWith(transformMatrix);
+    void Transform::SetPosition(const glm::vec3& position) {
+        this->position = position;
     }
 
-    void Transform::Rotate(float x, float y, float z) {
-        float xRotationRad = x * M_PI / 180.0;
-        float yRotationRad = y * M_PI / 180.0;
-        float zRotationRad = z * M_PI / 180.0;
-
-        Mat4 rotationMatrixY = Mat4();
-        rotationMatrixY.ToIdentity();
-        rotationMatrixY[0] = std::cos(yRotationRad);
-        rotationMatrixY[2] = std::sin(yRotationRad);
-        rotationMatrixY[8] = -std::sin(yRotationRad);
-        rotationMatrixY[10] = std::cos(yRotationRad);
-
-        transformMatrix = rotationMatrixY.MultiplyWith(transformMatrix);
+    void Transform::Translate(const glm::vec3& translation) {
+        position = position + translation;
     }
 
-    Vec3 Transform::TransformPosition(const Vec3& position) {
-        Vec4 result = transformMatrix.MultiplyWith(Vec4(position.GetX(), position.GetY(), position.GetZ(), 1));
-        return Vec3(result.GetX(), result.GetY(), result.GetZ());
+    glm::vec3& Transform::GetRotation() {
+        return rotation;
     }
 
-    Tris Transform::TransformTris(const Tris& tris) {
-        return Tris(TransformPosition(tris.GetV0()), TransformPosition(tris.GetV1()), TransformPosition(tris.GetV2()));
+    void Transform::SetRotation(const glm::vec3& rotation) {
+        this->rotation = rotation;
+    }
+
+    void Transform::Rotate(const glm::vec3& rotation) {
+        this->rotation = this->rotation + rotation;
+    }
+
+    void Transform::SetScale(const glm::vec3& scale) {
+        this->scale = scale;
     }
 }  // namespace Tracer::Components::Positioning

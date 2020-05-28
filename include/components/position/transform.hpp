@@ -1,9 +1,9 @@
 #pragma once
 
-#include <cmath>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-#include "mat4.hpp"
-#include "vec3.hpp"
 #include "tris.hpp"
 
 using namespace Tracer::Math;
@@ -11,19 +11,27 @@ using namespace Tracer::Math;
 namespace Tracer::Components::Position {
     class Transform {
     private:
-        Mat4 transformMatrix;
+        glm::vec3 position;
+        glm::vec3 rotation;
+        glm::vec3 scale;
 
     public:
-        Transform(const Vec3& position);
+        Transform();
 
-        Vec3 GetPosition();
+        Transform(const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale);
 
-        void Translate(const Vec3& translation);
+        glm::vec3& GetPosition();
 
-        void Rotate(float x, float y, float z);
+        void SetPosition(const glm::vec3& position);
 
-        Vec3 TransformPosition(const Vec3& position);
+        void Translate(const glm::vec3& translation);
 
-        Tris TransformTris(const Tris& tris);
+        glm::vec3& GetRotation();
+
+        void SetRotation(const glm::vec3& rotation);
+
+        void Rotate(const glm::vec3& rotation);
+
+        void SetScale(const glm::vec3& scale);
     };
 }  // namespace Tracer::Components::Positioning

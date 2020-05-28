@@ -1,7 +1,8 @@
 #include "renderableObject.hpp"
 
 namespace Tracer::Objects {
-    RenderableObject::RenderableObject(const Math::Vec3& position, const Components::Mesh& mesh, const Components::Material::Material& material) : transform(position), material(material) {
+    RenderableObject::RenderableObject(glm::vec3 position, Components::Mesh mesh, Components::Material::Material material) : material(material) {
+        this->transform = Components::Position::Transform(position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
         this->mesh = mesh;
     }
 

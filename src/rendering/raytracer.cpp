@@ -23,11 +23,11 @@ namespace Tracer::Rendering {
                 glm::vec3 rayDir(xx, yy, 1);
                 glm::normalize(rayDir);
 
-                glm::vec3 pixelColor = Raytrace(scene, camPos, rayDir, 5);
+                RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 5);
 
-                buffer[(x + y * imageWidth) * 4] = (unsigned char)pixelColor.x;
-                buffer[(x + y * imageWidth) * 4 + 1] = (unsigned char)pixelColor.y;
-                buffer[(x + y * imageWidth) * 4 + 2] = (unsigned char)pixelColor.z;
+                buffer[(x + y * imageWidth) * 4] = (unsigned char)pixelColor.r;
+                buffer[(x + y * imageWidth) * 4 + 1] = (unsigned char)pixelColor.g;
+                buffer[(x + y * imageWidth) * 4 + 2] = (unsigned char)pixelColor.b;
                 buffer[(x + y * imageWidth) * 4 + 3] = 255;
             }
         }
@@ -110,9 +110,9 @@ namespace Tracer::Rendering {
             int lightHits = 0;
             for (Objects::PointLight* light : scene.GetLightObjects()) {
                 float diffuseModifier = 1.0f;
-
-                float dst = intersect.GetIntersectionPos().DistanceTo(light->GetTransform().GetPosition());
-                glm::vec3 shadowRayDir = light->GetTransform().GetPosition().Subtract(intersect.GetIntersectionPos());
+                
+                float dst = glm::distance(intersect.GetIntersectionPos(), light->GetTransform().GetPosition());
+                glm::vec3 shadowRayDir = light->GetTransform().GetPosition() - intersect.GetIntersectionPos();
                 glm::normalize(shadowRayDir);
                 glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
                 glm::normalize(norm);
@@ -121,9 +121,9 @@ namespace Tracer::Rendering {
 
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
                 if (!shadowIntersect.IsHit()) {
-                    RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().GetRGB().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
-                                                                std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().GetRGB().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
-                                                                std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().GetRGB().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
+                    RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
+                                                                std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
+                                                                std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
                     diffuseColor = RGB_Color(std::clamp(diffuseColor.r + singleLightPixelColor.r * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
                                              std::clamp(diffuseColor.g + singleLightPixelColor.g * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
                                              std::clamp(diffuseColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));                                        

@@ -1,7 +1,8 @@
 #include "pointLight.hpp"
 
 namespace Tracer::Objects {
-    PointLight::PointLight(const Math::Vec3& position, float intensity, const Components::Color::Color& color) : transform(position), color(0, 0, 0) {
+    PointLight::PointLight(glm::vec3 position, float intensity, Components::Color::RGB_Color color) {
+        this->transform = Components::Position::Transform(position, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f));
         this->intensity = intensity;
         this->color = color;
     }
@@ -14,7 +15,7 @@ namespace Tracer::Objects {
         return intensity;
     }
 
-    Components::Color::Color& PointLight::GetColor() {
+    Components::Color::RGB_Color& PointLight::GetColor() {
         return color;
     }   
 }

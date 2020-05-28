@@ -1,9 +1,12 @@
 #pragma once
 
-#include "transform.hpp"
-#include "mesh.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "material.hpp"
-#include "vec3.hpp"
+#include "mesh.hpp"
+#include "transform.hpp"
 
 namespace Tracer::Objects {
     class RenderableObject {
@@ -13,7 +16,7 @@ namespace Tracer::Objects {
         Components::Material::Material material;
 
     public:
-        RenderableObject(const Math::Vec3& position, const Components::Mesh& mesh, const Components::Material::Material& material);
+        RenderableObject(glm::vec3 position, Components::Mesh mesh, Components::Material::Material material);
 
         Components::Position::Transform& GetTransform();
 
@@ -21,4 +24,4 @@ namespace Tracer::Objects {
 
         Components::Material::Material& GetMaterial();
     };
-}
+}  // namespace Tracer::Objects
