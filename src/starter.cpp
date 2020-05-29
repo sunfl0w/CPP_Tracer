@@ -155,7 +155,7 @@ int main() {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 #endif
 
-    window = SDL_CreateWindow("Mill", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_OPENGL);
+    window = SDL_CreateWindow("CPP_Tracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_OPENGL);
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
 
     if (!gladLoadGL()) {
@@ -270,7 +270,7 @@ int main() {
         glBindVertexArray(0);
 
         frameDelta = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
-        //std::cout << "FPS: " << std::to_string(1000.0f / delta) << "\n";
+        //std::cout << "FPS: " << std::to_string(1000.0f / frameDelta) << "\n";
 
         SDL_GL_SwapWindow(window);
     }

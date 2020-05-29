@@ -21,7 +21,7 @@ namespace Tracer::Rendering {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
                 glm::vec3 rayDir(xx, yy, 1);
-                glm::normalize(rayDir);
+                rayDir = glm::normalize(rayDir);
 
                 RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 2);
 
@@ -95,7 +95,7 @@ namespace Tracer::Rendering {
 
         glm::vec3 intersect = vertex0 + edge2 * x + edge1 * y;
         glm::vec3 norm = glm::cross(edge1, edge2);
-        glm::normalize(norm);
+        norm = glm::normalize(norm);
         norm = norm * 0.0001f;
         intersect = intersect + norm;
 
@@ -118,10 +118,10 @@ namespace Tracer::Rendering {
                 
                 float dst = glm::distance(intersect.GetIntersectionPos(), light->GetTransform().GetPosition());
                 glm::vec3 shadowRayDir = light->GetTransform().GetPosition() - intersect.GetIntersectionPos();
-                glm::normalize(shadowRayDir);
+                shadowRayDir = glm::normalize(shadowRayDir);
                 glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
-                glm::normalize(norm);
-                float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir) * 180.0f / M_PI / 360.0f)), 0.0f, 1.0f);
+                norm = glm::normalize(norm);
+                float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
                 diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
 
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
