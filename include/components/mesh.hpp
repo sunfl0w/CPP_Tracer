@@ -1,18 +1,19 @@
 #pragma once
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 
 #include "tris.hpp"
-#include "boundingBox.hpp"
 
 namespace Tracer::Components {
     class Mesh {
     private:
         std::vector<Math::Tris> data;
-        BoundingBox boundingBox;
 
     public:
         Mesh();
@@ -20,7 +21,5 @@ namespace Tracer::Components {
         void LoadFromObjectFile(std::string filePath);
 
         std::vector<Math::Tris>& GetData();
-
-        bool RayIntersects(const Math::Ray& ray) const;
     };
-}  // namespace Components
+}  // namespace Tracer::Components

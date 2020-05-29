@@ -3,7 +3,6 @@
 namespace Tracer::Components {
     Mesh::Mesh() {
         data = std::vector<Math::Tris>();
-        boundingBox = BoundingBox();
     }
 
     void Mesh::LoadFromObjectFile(std::string filePath) {
@@ -17,23 +16,35 @@ namespace Tracer::Components {
         }
         objectFile.close();
 
-        std::vector<Math::Vec3> vertecies;
+        std::vector<glm::vec3> vertecies;
         std::vector<Math::Tris> triangles;
 
         for (std::string line : lines) {
             size_t pos;
             pos = line.find("v ");
             if (pos != std::string::npos) {
-                Math::Vec3 vertex;
+                glm::vec3 vertex;
                 size_t coordinateStartPos = 0;
                 for (int i = 0; i < 3; i++) {
                     coordinateStartPos = line.find(" ", coordinateStartPos);
                     if (line[coordinateStartPos + 1] == '-') {
-                        vertex.Set(i, std::stof(line.substr(coordinateStartPos + 1, 9)));
+                        if(i == 0) {
+                            vertex.x = std::stof(line.substr(coordinateStartPos + 1, 9));
+                        } else if(i == 1) {
+                            vertex.y = std::stof(line.substr(coordinateStartPos + 1, 9));
+                        } else if(i == 2) {
+                            vertex.z = std::stof(line.substr(coordinateStartPos + 1, 9));
+                        }
                         coordinateStartPos += 10;
                     } else {
-                        vertex.Set(i, std::stof(line.substr(coordinateStartPos + 1, 8)));
-                        coordinateStartPos += 9;
+                        if(i == 0) {
+                            vertex.x = std::stof(line.substr(coordinateStartPos + 1, 8));
+                        } else if(i == 1) {
+                            vertex.y = std::stof(line.substr(coordinateStartPos + 1, 8));
+                        } else if(i == 2) {
+                            vertex.z = std::stof(line.substr(coordinateStartPos + 1, 8));
+                        }
+                        coordinateStartPos += 8;
                     }
                 }
                 vertecies.push_back(vertex);
@@ -46,21 +57,22 @@ namespace Tracer::Components {
                 for (int i = 0; i < 3; i++) {
                     vertexStartPos = line.find(" ", vertexStartPos);
                     size_t vertexEndPos = line.find(" ", vertexStartPos + 1);
-                    triangle.Set(i, vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1]);
+                    if(i == 0) {
+                        triangle.vert0 = vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1];
+                    } else if(i == 1) {
+                        triangle.vert1 = vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1];
+                    } else if(i == 2) {
+                        triangle.vert2 = vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1];
+                    }
                     vertexStartPos += 2;
                 }
                 triangles.push_back(triangle);
             }
         }
         data = triangles;
-        boundingBox = BoundingBox(triangles);
     }
 
     std::vector<Math::Tris>& Mesh::GetData() {
         return data;
-    }
-
-    bool Mesh::RayIntersects(const Math::Ray& ray) const {
-        return boundingBox.RayIntersects(ray);
     }
 }  // namespace OpenCG::Components

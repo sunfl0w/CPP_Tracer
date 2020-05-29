@@ -23,12 +23,17 @@ namespace Tracer::Rendering {
                 glm::vec3 rayDir(xx, yy, 1);
                 glm::normalize(rayDir);
 
-                RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 5);
+                RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 2);
 
-                buffer[(x + y * imageWidth) * 4] = (unsigned char)pixelColor.r;
-                buffer[(x + y * imageWidth) * 4 + 1] = (unsigned char)pixelColor.g;
-                buffer[(x + y * imageWidth) * 4 + 2] = (unsigned char)pixelColor.b;
-                buffer[(x + y * imageWidth) * 4 + 3] = 255;
+                buffer[(x + y * imageWidth) * 3] = (unsigned char)pixelColor.r;
+                //buffer[(x + y * imageWidth) * 3] = (unsigned char)255;
+                buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)pixelColor.g;
+                buffer[(x + y * imageWidth) * 3 + 2] = (unsigned char)pixelColor.b;
+
+
+                //buffer[(x + y * imageWidth) * 3] = 255;
+                //buffer[(x + y * imageWidth) * 3 + 1] = 255;
+                //buffer[(x + y * imageWidth) * 3 + 2] = 255;
             }
         }
         return buffer;

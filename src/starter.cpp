@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <glad/glad.h>
+#include <stb_image.h>
 #include <string.h>
 
 #include <glm/glm.hpp>
@@ -13,7 +14,7 @@
 #include "raytracer.hpp"
 #include "rgb_Color.hpp"
 #include "scene.hpp"
-#include "screenBuffer.hpp"
+#include "shader.hpp"
 
 using namespace Tracer;
 using namespace Tracer::Math;
@@ -21,103 +22,105 @@ using namespace Tracer::Rendering;
 using namespace Tracer::Components;
 
 void APIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* data) {
-        std::string sourceType;
-        std::string errorType;
-        std::string severityType;
+    std::string sourceType;
+    std::string errorType;
+    std::string severityType;
 
-        switch (source) {
-            case GL_DEBUG_SOURCE_API:
-                sourceType = "API";
-                break;
+    switch (source) {
+        case GL_DEBUG_SOURCE_API:
+            sourceType = "API";
+            break;
 
-            case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
-                sourceType = "WINDOW SYSTEM";
-                break;
+        case GL_DEBUG_SOURCE_WINDOW_SYSTEM:
+            sourceType = "WINDOW SYSTEM";
+            break;
 
-            case GL_DEBUG_SOURCE_SHADER_COMPILER:
-                sourceType = "SHADER COMPILER";
-                break;
+        case GL_DEBUG_SOURCE_SHADER_COMPILER:
+            sourceType = "SHADER COMPILER";
+            break;
 
-            case GL_DEBUG_SOURCE_THIRD_PARTY:
-                sourceType = "THIRD PARTY";
-                break;
+        case GL_DEBUG_SOURCE_THIRD_PARTY:
+            sourceType = "THIRD PARTY";
+            break;
 
-            case GL_DEBUG_SOURCE_APPLICATION:
-                sourceType = "APPLICATION";
-                break;
+        case GL_DEBUG_SOURCE_APPLICATION:
+            sourceType = "APPLICATION";
+            break;
 
-            case GL_DEBUG_SOURCE_OTHER:
-                sourceType = "UNKNOWN";
-                break;
+        case GL_DEBUG_SOURCE_OTHER:
+            sourceType = "UNKNOWN";
+            break;
 
-            default:
-                sourceType = "UNKNOWN";
-                break;
-        }
-
-        switch (type) {
-            case GL_DEBUG_TYPE_ERROR:
-                errorType = "ERROR";
-                break;
-
-            case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-                errorType = "DEPRECATED BEHAVIOR";
-                break;
-
-            case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-                errorType = "UDEFINED BEHAVIOR";
-                break;
-
-            case GL_DEBUG_TYPE_PORTABILITY:
-                errorType = "PORTABILITY";
-                break;
-
-            case GL_DEBUG_TYPE_PERFORMANCE:
-                errorType = "PERFORMANCE";
-                break;
-
-            case GL_DEBUG_TYPE_OTHER:
-                errorType = "OTHER";
-                break;
-
-            case GL_DEBUG_TYPE_MARKER:
-                errorType = "MARKER";
-                break;
-
-            default:
-                errorType = "UNKNOWN";
-                break;
-        }
-
-        switch (severity) {
-            case GL_DEBUG_SEVERITY_HIGH:
-                severityType = "HIGH";
-                break;
-
-            case GL_DEBUG_SEVERITY_MEDIUM:
-                severityType = "MEDIUM";
-                break;
-
-            case GL_DEBUG_SEVERITY_LOW:
-                severityType = "LOW";
-                break;
-
-            case GL_DEBUG_SEVERITY_NOTIFICATION:
-                severityType = "NOTIFICATION";
-                break;
-
-            default:
-                severityType = "UNKNOWN";
-                break;
-        }
-        std::cout << "Error/Notification" << "\n";
-        std::cout << "ID: " << id << "\n";
-        std::cout << "Type: " << errorType << "\n";
-        std::cout << "Severity: " << severityType << "\n";
-        std::cout << "Origin: " << source << "\n";
-        std::cout << "Message: " << message << "\n";
-        std::cout << "------------------" << "\n";
+        default:
+            sourceType = "UNKNOWN";
+            break;
     }
+
+    switch (type) {
+        case GL_DEBUG_TYPE_ERROR:
+            errorType = "ERROR";
+            break;
+
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+            errorType = "DEPRECATED BEHAVIOR";
+            break;
+
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+            errorType = "UDEFINED BEHAVIOR";
+            break;
+
+        case GL_DEBUG_TYPE_PORTABILITY:
+            errorType = "PORTABILITY";
+            break;
+
+        case GL_DEBUG_TYPE_PERFORMANCE:
+            errorType = "PERFORMANCE";
+            break;
+
+        case GL_DEBUG_TYPE_OTHER:
+            errorType = "OTHER";
+            break;
+
+        case GL_DEBUG_TYPE_MARKER:
+            errorType = "MARKER";
+            break;
+
+        default:
+            errorType = "UNKNOWN";
+            break;
+    }
+
+    switch (severity) {
+        case GL_DEBUG_SEVERITY_HIGH:
+            severityType = "HIGH";
+            break;
+
+        case GL_DEBUG_SEVERITY_MEDIUM:
+            severityType = "MEDIUM";
+            break;
+
+        case GL_DEBUG_SEVERITY_LOW:
+            severityType = "LOW";
+            break;
+
+        case GL_DEBUG_SEVERITY_NOTIFICATION:
+            severityType = "NOTIFICATION";
+            break;
+
+        default:
+            severityType = "UNKNOWN";
+            break;
+    }
+    std::cout << "Error/Notification"
+              << "\n";
+    std::cout << "ID: " << id << "\n";
+    std::cout << "Type: " << errorType << "\n";
+    std::cout << "Severity: " << severityType << "\n";
+    std::cout << "Origin: " << source << "\n";
+    std::cout << "Message: " << message << "\n";
+    std::cout << "------------------"
+              << "\n";
+}
 
 int main() {
     std::vector<Objects::RenderableObject> renderableObjects;
@@ -165,14 +168,81 @@ int main() {
     glDebugMessageCallback(GLDebugMessageCallback, 0);
 #endif
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    //OpenGL setup for rendering a texture
+    unsigned int VAO, VBO, EBO, texture;
+    float vertices[] = {
+        1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 1.0f};
+
+    unsigned int indices[] = {
+        0, 1, 3,
+        1, 2, 3};
+
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glBindVertexArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    //Texture
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    std::vector<unsigned char> emptyData(600 * 400 * 3, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 400, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyData.data());
+
+    /*stbi_set_flip_vertically_on_load(true);
+
+    int width, height, channelCount;
+    unsigned char* data = stbi_load("resources/textures/awesomeface.png", &width, &height, &channelCount, 0);
+    if (data) {
+        if (channelCount == 3) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        } else if (channelCount == 4) {
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+    } else {
+        std::cout << "Failed to load texture\n";
+    }
+    stbi_image_free(data);*/
+
+    //Shader
+    Shader shader = Shader("resources/shaders/texture.vs", "resources/shaders/texture.fs");
+
     std::chrono::steady_clock::time_point start;
     float frameDelta = 0.0f;
 
     bool close = false;
     while (!close) {
         start = std::chrono::steady_clock::now();
-
-        std::vector<sf::Event> events = std::vector<sf::Event>();
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -185,11 +255,19 @@ int main() {
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        int width = 0;
-        int height = 0;
-        SDL_GetWindowSize(window, &width, &height);
+        std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, 600, 400);
 
-        std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, width, height);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        shader.Activate();
+        shader.SetInt("tex", 0);
+
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         frameDelta = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
         //std::cout << "FPS: " << std::to_string(1000.0f / delta) << "\n";

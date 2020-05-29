@@ -5,8 +5,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "vec3.hpp"
-
 namespace Tracer::Math {
     class Tris {
     public:

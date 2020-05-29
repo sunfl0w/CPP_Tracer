@@ -1,7 +1,7 @@
 #include "scene.hpp"
 
 namespace Tracer::Rendering {
-    Scene::Scene(const std::vector<Objects::RenderableObject>& renderableObjects, const std::vector<Objects::PointLight*> pointLights, const Objects::Camera& camera) : camera(Math::Vec3(0, 0, 0), Math::Vec3(0, 0, 0)) {
+    Scene::Scene(const std::vector<Objects::RenderableObject>& renderableObjects, const std::vector<Objects::PointLight*> pointLights, const Objects::Camera& camera) : camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)) {
         this->renderableObjects = renderableObjects;
         this->pointLights = pointLights;
         this->camera = camera;

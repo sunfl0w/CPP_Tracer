@@ -11,7 +11,6 @@
 #include "intersectionData.hpp"
 #include "mesh.hpp"
 #include "pointLight.hpp"
-#include "ray.hpp"
 #include "scene.hpp"
 #include "transform.hpp"
 #include "tris.hpp"

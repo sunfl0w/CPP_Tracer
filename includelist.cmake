@@ -3,6 +3,16 @@ include/components
 include/components/color
 include/components/material
 include/components/position
+include/lib
+include/lib/glad
+include/lib/glm
+include/lib/glm/detail
+include/lib/glm/ext
+include/lib/glm/gtc
+include/lib/glm/gtx
+include/lib/glm/simd
+include/lib/KHR
+include/lib/stb
 include/math
 include/objects
 include/rendering
