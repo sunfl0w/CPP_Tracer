@@ -2,6 +2,7 @@
     "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools",
     "C_Cpp.configurationWarnings": "Disabled",
     "files.associations": {
+        "*.i": "plaintext",
         "cctype": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
@@ -90,6 +91,9 @@
         "locale": "cpp",
         "queue": "cpp",
         "stack": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "concepts": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp"
     }
 }

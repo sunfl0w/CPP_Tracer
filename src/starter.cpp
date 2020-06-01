@@ -207,34 +207,12 @@ int main() {
     //Texture
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 400, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    std::vector<unsigned char> emptyData(600 * 400 * 3, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 400, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyData.data());
-
-    /*stbi_set_flip_vertically_on_load(true);
-
-    int width, height, channelCount;
-    unsigned char* data = stbi_load("resources/textures/awesomeface.png", &width, &height, &channelCount, 0);
-    if (data) {
-        if (channelCount == 3) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        } else if (channelCount == 4) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
-    } else {
-        std::cout << "Failed to load texture\n";
-    }
-    stbi_image_free(data);*/
-
-    //Shader
+    //Shaders
     Shader shader = Shader("resources/shaders/texture.vs", "resources/shaders/texture.fs");
 
     std::chrono::steady_clock::time_point start;
@@ -264,15 +242,14 @@ int main() {
         shader.SetInt("tex", 0);
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
-        glGenerateMipmap(GL_TEXTURE_2D);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
-        frameDelta = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
-        //std::cout << "FPS: " << std::to_string(1000.0f / frameDelta) << "\n";
-
         SDL_GL_SwapWindow(window);
+
+        frameDelta = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+        std::cout << "FPS: " << std::to_string(1000.0f / frameDelta) << "\n";
     }
     return 0;
 }

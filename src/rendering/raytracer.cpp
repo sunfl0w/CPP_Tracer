@@ -16,7 +16,7 @@ namespace Tracer::Rendering {
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
-            //#pragma omp prallel for schedule(dynamic)
+            #pragma omp prallel for schedule(dynamic)
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
