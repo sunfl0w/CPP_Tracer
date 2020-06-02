@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 
 namespace Tracer::Rendering {
     class Shader {
@@ -17,7 +18,9 @@ namespace Tracer::Rendering {
     public:
         Shader();
 
-        Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
+        Shader(std::string shaderPath, GLenum shaderType);
+
+        Shader(std::string shaderPath0, GLenum shaderType0, std::string shaderPath1, GLenum shaderType1);
 
         void Activate();
 
@@ -28,5 +31,10 @@ namespace Tracer::Rendering {
         void SetVec4(std::string name, glm::vec4 vector);
 
         void SetMat4(std::string name, glm::mat4 matrix);
+
+    private:
+        unsigned int CompileShaderFromFile(std::string shaderPath, GLenum shaderType);
+
+        void LinkShaderProgram(std::vector<unsigned int> shaderIDs);
     };
 }  // namespace Tracer::Rendering

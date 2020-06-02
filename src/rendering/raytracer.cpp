@@ -10,13 +10,13 @@ namespace Tracer::Rendering {
         float invWidth = 1 / float(imageWidth), invHeight = 1 / float(imageHeight);
         float fov = 30;
         float aspectratio = imageWidth / float(imageHeight);
-        float angle = tan(M_PI * 0.5 * fov / 180.);
+        float angle = tan(M_PI * 0.5 * fov / 180.0f);
 
         glm::vec3 camPos = scene.GetCamera().GetTransform().GetPosition();
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
-            #pragma omp prallel for schedule(dynamic)
+#pragma omp prallel for schedule(dynamic)
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
@@ -26,29 +26,29 @@ namespace Tracer::Rendering {
                 RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 2);
 
                 buffer[(x + y * imageWidth) * 3] = (unsigned char)pixelColor.r;
-                //buffer[(x + y * imageWidth) * 3] = (unsigned char)255;
                 buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)pixelColor.g;
                 buffer[(x + y * imageWidth) * 3 + 2] = (unsigned char)pixelColor.b;
-
-
-                //buffer[(x + y * imageWidth) * 3] = 255;
-                //buffer[(x + y * imageWidth) * 3 + 1] = 255;
-                //buffer[(x + y * imageWidth) * 3 + 2] = 255;
             }
         }
         return buffer;
     }
 
-    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
+    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir, RGB_Color& albedo) const {
         IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 999999.9f;
         for (Objects::RenderableObject renderableObject : renderableObjects) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
-                IntersectionData intersect = RayCastTris(triangle, origin, dir);
+                Math::Tris transformedTris;
+                transformedTris.vert0 = renderableObject.GetTransform().TranformPosition(triangle.vert0);
+                transformedTris.vert1 = renderableObject.GetTransform().TranformPosition(triangle.vert1);
+                transformedTris.vert2 = renderableObject.GetTransform().TranformPosition(triangle.vert2);
+
+                IntersectionData intersect = RayCastTris(transformedTris, origin, dir);
                 float dst = glm::distance(intersect.GetIntersectionPos(), origin);
                 if (intersect.IsHit() && dst < closesIntersectDst) {
                     closesIntersectDst = dst;
                     closestIntersect = intersect;
+                    albedo = renderableObject.GetMaterial().GetColor();
                 }
             }
         }
@@ -107,15 +107,16 @@ namespace Tracer::Rendering {
     }
 
     RGB_Color Raytracer::Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const {
-        Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
+        RGB_Color albedo(0, 0, 0);
+        Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir, albedo);
 
         if (intersect.IsHit()) {
             RGB_Color diffuseColor(0, 0, 0);
-            RGB_Color albedo(255, 255, 0);
+
             int lightHits = 0;
             for (Objects::PointLight* light : scene.GetLightObjects()) {
                 float diffuseModifier = 1.0f;
-                
+
                 float dst = glm::distance(intersect.GetIntersectionPos(), light->GetTransform().GetPosition());
                 glm::vec3 shadowRayDir = light->GetTransform().GetPosition() - intersect.GetIntersectionPos();
                 shadowRayDir = glm::normalize(shadowRayDir);
@@ -124,14 +125,15 @@ namespace Tracer::Rendering {
                 float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
                 diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
 
-                Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
+                RGB_Color shadowAlbedo;
+                Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir, shadowAlbedo);
                 if (!shadowIntersect.IsHit()) {
                     RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                                 std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                                 std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
                     diffuseColor = RGB_Color(std::clamp(diffuseColor.r + singleLightPixelColor.r * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
                                              std::clamp(diffuseColor.g + singleLightPixelColor.g * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
-                                             std::clamp(diffuseColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));                                        
+                                             std::clamp(diffuseColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));
                     lightHits++;
                 }
             }

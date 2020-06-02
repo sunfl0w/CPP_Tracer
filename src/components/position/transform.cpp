@@ -9,6 +9,23 @@ namespace Tracer::Components::Position {
         this->scale = scale;
     }
 
+    glm::vec3 Transform::TranformPosition(glm::vec3 pos) {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, position);
+
+        //Translate mid of sprite to origin for rotation
+        model = glm::translate(model, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.5f * scale.z));
+        model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::translate(model, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, -0.5f * scale.z));
+
+        model = glm::scale(model, scale);
+
+        glm::vec3 transformedPos = model * glm::vec4(pos, 1.0f);
+        return transformedPos;
+    }
+
     glm::vec3& Transform::GetPosition() {
         return position;
     }

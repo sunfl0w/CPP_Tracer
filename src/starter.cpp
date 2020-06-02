@@ -127,8 +127,10 @@ int main() {
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Sphere.obj");
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
-    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::Color(100, 200, 50)));
+    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(100, 200, 50)));
     renderableObjects.push_back(model);
+    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(0.0f, 3.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(200, 100, 50)));
+    renderableObjects.push_back(model2);
 
     std::vector<Objects::PointLight*> pointLights;
     Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(0, 255, 0));
@@ -136,10 +138,8 @@ int main() {
     Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(255, 220, 100));
     pointLights.push_back(&light2);
 
-    Objects::Camera camera = Objects::Camera(glm::vec3(-5.0f, 0.0f, -15.0f), glm::vec3(10.0f, 0.0f, -10.0f));
+    Objects::Camera camera = Objects::Camera(glm::vec3(0.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     Scene scene = Scene(renderableObjects, pointLights, camera);
-
-    Raytracer raytracer;
 
     SDL_Window* window;
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -158,18 +158,19 @@ int main() {
     window = SDL_CreateWindow("CPP_Tracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_OPENGL);
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
 
+    SDL_GL_SetSwapInterval(0);
+
     if (!gladLoadGL()) {
         std::cout << "Unable to load OpenGL\n";
     }
+
+    Raytracer raytracer;
 
 #ifdef ENABLE_OPENGL_DEBUG
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(GLDebugMessageCallback, 0);
 #endif
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //OpenGL setup for rendering a texture
     unsigned int VAO, VBO, EBO, texture;
@@ -207,13 +208,14 @@ int main() {
     //Texture
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 600, 400, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 600, 400, 0, GL_RGBA, GL_FLOAT, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     //Shaders
-    Shader shader = Shader("resources/shaders/texture.vs", "resources/shaders/texture.fs");
+    Shader shader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
 
     std::chrono::steady_clock::time_point start;
     float frameDelta = 0.0f;
@@ -226,30 +228,27 @@ int main() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 close = true;
-            } else if (event.type == SDL_WINDOWEVENT_RESIZED) {
-                //glViewport(0, 0, event.window.data1, event.window.data2);
             }
         }
+
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, 600, 400);
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-
         shader.Activate();
         shader.SetInt("tex", 0);
 
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
         glBindVertexArray(VAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
         SDL_GL_SwapWindow(window);
 
-        frameDelta = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
-        std::cout << "FPS: " << std::to_string(1000.0f / frameDelta) << "\n";
+        frameDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
+        std::cout << "FPS: " << std::to_string(std::pow(10.0, 9) / frameDelta) << "\n";
     }
     return 0;
 }

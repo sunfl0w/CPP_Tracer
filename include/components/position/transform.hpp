@@ -20,6 +20,8 @@ namespace Tracer::Components::Position {
 
         Transform(const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale);
 
+        glm::vec3 TranformPosition(glm::vec3 position);
+
         glm::vec3& GetPosition();
 
         void SetPosition(const glm::vec3& position);

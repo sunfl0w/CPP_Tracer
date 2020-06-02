@@ -12,17 +12,19 @@
 #include "mesh.hpp"
 #include "pointLight.hpp"
 #include "scene.hpp"
+#include "shader.hpp"
 #include "transform.hpp"
 #include "tris.hpp"
 
 namespace Tracer::Rendering {
     class Raytracer {
+
     public:
         Raytracer();
 
         std::vector<unsigned char> RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
 
-        IntersectionData RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const;
+        IntersectionData RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir, RGB_Color& albedo) const;
 
         IntersectionData RayCastTris(Math::Tris& triangle, glm::vec3& origin, glm::vec3& dir) const;
 

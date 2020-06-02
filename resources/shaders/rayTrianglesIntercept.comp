@@ -23,7 +23,7 @@ vec3 raytrace(vec3 origin, vec3 rayDir);
 IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir);
 
 void main() {
-    vec4 pixelColor = vec4(1.0, 0.0, 0.0, 1.0);
+    vec4 pixelColor = vec4(0.0, 0.0, 0.0, 1.0);
 
     //Constants and definitions
     const float pi = 3.14159f;
@@ -40,8 +40,7 @@ void main() {
     vec3 rayDir = vec3(xx, yy, 1);
     rayDir = normalize(rayDir);
 
-    //pixelColor.xyz = raytrace(cameraPosition, rayDir);
-    //pixelColor = pixelColor / 255.0f;
+    pixelColor.xyz = raytrace(cameraPosition, rayDir);
 
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
     imageStore(img_output, pixel_coords, pixelColor);
