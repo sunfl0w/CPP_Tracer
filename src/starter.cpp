@@ -135,8 +135,8 @@ int main() {
     std::vector<Objects::PointLight*> pointLights;
     Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(0, 255, 0));
     pointLights.push_back(&light);
-    Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(255, 220, 100));
-    pointLights.push_back(&light2);
+    //Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(255, 220, 100));
+    //pointLights.push_back(&light2);
 
     Objects::Camera camera = Objects::Camera(glm::vec3(0.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f));
     Scene scene = Scene(renderableObjects, pointLights, camera);
@@ -212,10 +212,12 @@ int main() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 600, 400, 0, GL_RGBA, GL_FLOAT, NULL);
+    glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     //Shaders
     Shader shader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
+    Shader computeShader = Shader("resources/shaders/raytracing.comp", GL_COMPUTE_SHADER);
 
     std::chrono::steady_clock::time_point start;
     float frameDelta = 0.0f;
@@ -230,15 +232,19 @@ int main() {
                 close = true;
             }
         }
+        computeShader.Activate();
+        raytracer.RenderSceneToImage(scene, 600, 400);
+        glDispatchCompute(600, 400, 1);
+        glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, 600, 400);
+        //std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, 600, 400);
         shader.Activate();
         shader.SetInt("tex", 0);
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
+        //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);

@@ -1,4 +1,5 @@
 #pragma once
+#include <glad/glad.h>
 
 #include <algorithm>
 #include <glm/glm.hpp>
@@ -17,10 +18,21 @@
 #include "tris.hpp"
 
 namespace Tracer::Rendering {
+    struct ShaderData {
+        glm::vec4 vertexData[512];
+        glm::vec4 lightPositionData[64];
+        glm::vec4 lightColorData[64];
+        float lightIntensity[64];
+        glm::vec4 cameraPosition;
+        int numTris;
+        int numLights;
+    };
+    
     class Raytracer {
-
     public:
         Raytracer();
+
+        void RenderSceneToImage(Scene& scene, int imageWidth, int imageHeight) const;
 
         std::vector<unsigned char> RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
 

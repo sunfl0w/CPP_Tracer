@@ -5,6 +5,41 @@ using namespace Tracer::Components::Color;
 namespace Tracer::Rendering {
     Raytracer::Raytracer() {}
 
+    void Raytracer::RenderSceneToImage(Scene& scene, int imageWidth, int imageHeight) const {
+        ShaderData shaderData;
+
+        int vertexIndex = 0;
+        for (Objects::RenderableObject renderableObject : scene.GetRenderableObjects()) {
+            for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+                //shaderData.vertexData[0] = glm::vec4(1, 0, 1, 1);
+                //shaderData.vertexData[1] = glm::vec4(1, 0, 1, 1);
+                //shaderData.vertexData[2] = glm::vec4(1, 0, 1, 1);
+                shaderData.vertexData[vertexIndex] = glm::vec4(triangle.vert0, 1);
+                shaderData.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1);
+                shaderData.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1);
+                vertexIndex+=3;
+            }
+        }
+        shaderData.numTris = vertexIndex / 3;
+        
+        int lightIndex = 0;
+        for(Objects::PointLight* light : scene.GetLightObjects()) {
+            shaderData.lightPositionData[lightIndex] = glm::vec4(light->GetTransform().GetPosition(), 0);
+            shaderData.lightColorData[lightIndex] = glm::vec4(light->GetColor().r, light->GetColor().g, light->GetColor().b, 0);
+            shaderData.lightIntensity[lightIndex] = light->GetIntensity();
+            lightIndex++;
+        }
+        shaderData.numLights = lightIndex;
+        shaderData.cameraPosition = glm::vec4(scene.GetCamera().GetTransform().GetPosition(), 0);
+
+        unsigned int ssbo;
+        glGenBuffers(1, &ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shaderData), &shaderData, GL_DYNAMIC_COPY);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    }
+
     std::vector<unsigned char> Raytracer::RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const {
         std::vector<unsigned char> buffer = std::vector<unsigned char>(imageWidth * 3 * imageHeight);
         float invWidth = 1 / float(imageWidth), invHeight = 1 / float(imageHeight);
@@ -16,7 +51,6 @@ namespace Tracer::Rendering {
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
-#pragma omp prallel for schedule(dynamic)
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;

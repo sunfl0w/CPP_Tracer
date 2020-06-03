@@ -6,14 +6,14 @@ struct IntersectionData {
     vec3 tris[3];
 };
 
-layout(local_size_x = 4, local_size_y = 4) in;
+layout(local_size_x = 1, local_size_y = 1) in;
 layout(rgba32f, binding = 0) uniform image2D img_output;
 layout(std430, binding = 1) buffer shaderData {
-    vec3 vertexData[512];
-    vec3 lightPositionData[64];
-    vec3 lightColorData[64];
+    vec4 vertexData[512];
+    vec4 lightPositionData[64];
+    vec4 lightColorData[64];
     float lightIntensity[64];
-    vec3 cameraPosition;
+    vec4 cameraPosition;
     int numTris;
     int numLights;
 };
@@ -24,6 +24,7 @@ IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir);
 
 void main() {
     vec4 pixelColor = vec4(1.0, 0.0, 0.0, 1.0);
+    //pixelColor = vertexData[0];
 
     //Constants and definitions
     const float pi = 3.14159f;
@@ -40,8 +41,10 @@ void main() {
     vec3 rayDir = vec3(xx, yy, 1);
     rayDir = normalize(rayDir);
 
-    //pixelColor.xyz = raytrace(cameraPosition, rayDir);
-    //pixelColor = pixelColor / 255.0f;
+    pixelColor.xyz = raytrace(cameraPosition.xyz, rayDir);
+    //pixelColor = pixelColor * 0.1f;
+    pixelColor = pixelColor / 255.0f;
+    //pixelColor.w = 1.0f;
 
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
     imageStore(img_output, pixel_coords, pixelColor);
@@ -58,17 +61,17 @@ vec3 raytrace(vec3 origin, vec3 rayDir) {
         for (int i = 0; i < numLights; i++) {
             float diffuseModifier = 1.0f;
 
-            float dst = distance(intersect.position, lightPositionData[i]);
-            vec3 shadowRayDir = lightPositionData[i] - intersect.position;
+            float dst = distance(intersect.position, lightPositionData[i].xyz);
+            vec3 shadowRayDir = lightPositionData[i].xyz - intersect.position;
             shadowRayDir = normalize(shadowRayDir);
             vec3 norm = cross(intersect.tris[0] - intersect.tris[1], intersect.tris[0] - intersect.tris[2]);
             norm = normalize(norm);
-            float angleModifier = clamp(acos(dot(norm, shadowRayDir) * 180.0f / pi / 360.0f), 0.0f, 1.0f);
-            diffuseModifier /= 1 + pow(dst / (100.0f * lightIntensity[i] * angleModifier), 2.0f);
+            float angleModifier = clamp((acos(dot(norm, shadowRayDir)) * 180.0f / pi / 360.0f), 0.0f, 1.0f);
+            diffuseModifier = diffuseModifier / (1 + pow(dst / (100.0f * lightIntensity[i] * angleModifier), 2.0f));
 
             IntersectionData shadowIntersect = rayCastTriangles(intersect.position, shadowRayDir);
             if (!shadowIntersect.hit) {
-                vec3 lightColor = lightColorData[i];
+                vec3 lightColor = lightColorData[i].xyz;
                 vec3 singleLightPixelColor = vec3(clamp(albedo.r * (1 - diffuseModifier) + lightColor.r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                   clamp(albedo.g * (1 - diffuseModifier) + lightColor.g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                   clamp(albedo.b * (1 - diffuseModifier) + lightColor.b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
@@ -98,9 +101,9 @@ IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir) {
 
     for (int i = 0; i < numTris; i += 3) {
         //Möller–Trumbore intersection algorithm
-        vec3 vertex0 = vertexData[i];
-        vec3 vertex1 = vertexData[i + 1];
-        vec3 vertex2 = vertexData[i + 2];
+        vec3 vertex0 = vertexData[i].xyz;
+        vec3 vertex1 = vertexData[i + 1].xyz;
+        vec3 vertex2 = vertexData[i + 2].xyz;
 
         vec3 edge1 = vertex1 - vertex0;
         vec3 edge2 = vertex2 - vertex0;
