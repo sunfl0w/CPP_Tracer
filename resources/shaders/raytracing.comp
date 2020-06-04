@@ -10,9 +10,9 @@ layout(local_size_x = 1, local_size_y = 1) in;
 layout(rgba32f, binding = 0) uniform image2D img_output;
 layout(std430, binding = 1) buffer shaderData {
     vec4 vertexData[512];
-    vec4 lightPositionData[64];
-    vec4 lightColorData[64];
-    float lightIntensity[64];
+    vec4 lightPositionData[4];
+    vec4 lightColorData[4];
+    float lightIntensity[4];
     vec4 cameraPosition;
     int numTris;
     int numLights;
@@ -97,9 +97,9 @@ IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir) {
     IntersectionData closestIntersect;
     closestIntersect.hit = false;
     closestIntersect.position = vec3(0, 0, 0);
-    float dst = 99999.0f;
+    float dst = 9999999.0f;
 
-    for (int i = 0; i < numTris; i += 3) {
+    for (int i = 0; i < numTris * 3; i += 3) {
         //Möller–Trumbore intersection algorithm
         vec3 vertex0 = vertexData[i].xyz;
         vec3 vertex1 = vertexData[i + 1].xyz;
@@ -137,7 +137,7 @@ IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir) {
         vec3 intersect = vertex0 + edge2 * x + edge1 * y;
         vec3 norm = cross(edge1, edge2);
         norm = normalize(norm);
-        norm = norm * 0.0001f;
+        norm = norm * 0.00001f;
         intersect = intersect + norm;
 
         if (z < epsilon) {

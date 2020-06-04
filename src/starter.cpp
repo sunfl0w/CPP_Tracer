@@ -129,8 +129,8 @@ int main() {
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
     Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(100, 200, 50)));
     renderableObjects.push_back(model);
-    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(0.0f, 3.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(200, 100, 50)));
-    renderableObjects.push_back(model2);
+    //Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(0.0f, 3.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(200, 100, 50)));
+    //renderableObjects.push_back(model2);
 
     std::vector<Objects::PointLight*> pointLights;
     Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(0, 255, 0));

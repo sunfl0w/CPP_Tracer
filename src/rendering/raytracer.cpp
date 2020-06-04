@@ -9,6 +9,7 @@ namespace Tracer::Rendering {
         ShaderData shaderData;
 
         int vertexIndex = 0;
+        int triangleCount = 0;
         for (Objects::RenderableObject renderableObject : scene.GetRenderableObjects()) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
                 //shaderData.vertexData[0] = glm::vec4(1, 0, 1, 1);
@@ -18,9 +19,10 @@ namespace Tracer::Rendering {
                 shaderData.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1);
                 shaderData.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1);
                 vertexIndex+=3;
+                triangleCount++;
             }
         }
-        shaderData.numTris = vertexIndex / 3;
+        shaderData.numTris = triangleCount;
         
         int lightIndex = 0;
         for(Objects::PointLight* light : scene.GetLightObjects()) {
@@ -72,12 +74,13 @@ namespace Tracer::Rendering {
         float closesIntersectDst = 999999.9f;
         for (Objects::RenderableObject renderableObject : renderableObjects) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
-                Math::Tris transformedTris;
+                /*Math::Tris transformedTris;
                 transformedTris.vert0 = renderableObject.GetTransform().TranformPosition(triangle.vert0);
                 transformedTris.vert1 = renderableObject.GetTransform().TranformPosition(triangle.vert1);
                 transformedTris.vert2 = renderableObject.GetTransform().TranformPosition(triangle.vert2);
+                IntersectionData intersect = RayCastTris(transformedTris, origin, dir);*/
 
-                IntersectionData intersect = RayCastTris(transformedTris, origin, dir);
+                IntersectionData intersect = RayCastTris(triangle, origin, dir);
                 float dst = glm::distance(intersect.GetIntersectionPos(), origin);
                 if (intersect.IsHit() && dst < closesIntersectDst) {
                     closesIntersectDst = dst;
