@@ -37,7 +37,7 @@ void main() {
     float aspectratio = imageWidth / float(imageHeight);
     float angle = tan(pi * 0.5 * fov / 180.0f);
     float xx = (2 * ((gl_GlobalInvocationID.x + 0.5) * invWidth) - 1) * angle * aspectratio;
-    float yy = (1 - 2 * ((gl_GlobalInvocationID.y + 0.5) * invHeight)) * angle;
+    float yy = -(1 - 2 * ((gl_GlobalInvocationID.y + 0.5) * invHeight)) * angle;//Y-Axis is flipped
     vec3 rayDir = vec3(xx, yy, 1);
     rayDir = normalize(rayDir);
 

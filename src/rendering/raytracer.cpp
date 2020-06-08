@@ -12,12 +12,9 @@ namespace Tracer::Rendering {
         int triangleCount = 0;
         for (Objects::RenderableObject renderableObject : scene.GetRenderableObjects()) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
-                //shaderData.vertexData[0] = glm::vec4(1, 0, 1, 1);
-                //shaderData.vertexData[1] = glm::vec4(1, 0, 1, 1);
-                //shaderData.vertexData[2] = glm::vec4(1, 0, 1, 1);
-                shaderData.vertexData[vertexIndex] = glm::vec4(triangle.vert0, 1);
-                shaderData.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1);
-                shaderData.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1);
+                shaderData.vertexData[vertexIndex] = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert0, 1.0f);
+                shaderData.vertexData[vertexIndex + 1] = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert1, 1.0f);
+                shaderData.vertexData[vertexIndex + 2] = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert2, 1.0f);
                 vertexIndex+=3;
                 triangleCount++;
             }
@@ -55,7 +52,7 @@ namespace Tracer::Rendering {
         for (int x = 0; x < imageWidth; x++) {
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
-                float yy = (1 - 2 * ((y + 0.5) * invHeight)) * angle;
+                float yy = -(1 - 2 * ((y + 0.5) * invHeight)) * angle;//Y-Axis is flipped
                 glm::vec3 rayDir(xx, yy, 1);
                 rayDir = glm::normalize(rayDir);
 
@@ -74,13 +71,11 @@ namespace Tracer::Rendering {
         float closesIntersectDst = 999999.9f;
         for (Objects::RenderableObject renderableObject : renderableObjects) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
-                /*Math::Tris transformedTris;
-                transformedTris.vert0 = renderableObject.GetTransform().TranformPosition(triangle.vert0);
-                transformedTris.vert1 = renderableObject.GetTransform().TranformPosition(triangle.vert1);
-                transformedTris.vert2 = renderableObject.GetTransform().TranformPosition(triangle.vert2);
-                IntersectionData intersect = RayCastTris(transformedTris, origin, dir);*/
-
-                IntersectionData intersect = RayCastTris(triangle, origin, dir);
+                Math::Tris transformedTriangle;
+                transformedTriangle.vert0 = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert0, 1.0f);
+                transformedTriangle.vert1 = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert1, 1.0f);
+                transformedTriangle.vert2 = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert2, 1.0f);
+                IntersectionData intersect = RayCastTris(transformedTriangle, origin, dir);
                 float dst = glm::distance(intersect.GetIntersectionPos(), origin);
                 if (intersect.IsHit() && dst < closesIntersectDst) {
                     closesIntersectDst = dst;

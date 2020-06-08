@@ -15,25 +15,30 @@ namespace Tracer::Components::Position {
         glm::vec3 rotation;
         glm::vec3 scale;
 
+        glm::mat4 modelMatrix;
+
     public:
         Transform();
 
         Transform(const glm::vec3 position, const glm::vec3 rotation, const glm::vec3 scale);
 
-        glm::vec3 TranformPosition(glm::vec3 position);
+        glm::mat4& GetTransformMatrix();
 
-        glm::vec3& GetPosition();
+        const glm::vec3& GetPosition();
 
         void SetPosition(const glm::vec3& position);
 
         void Translate(const glm::vec3& translation);
 
-        glm::vec3& GetRotation();
+        const glm::vec3& GetRotation();
 
         void SetRotation(const glm::vec3& rotation);
 
         void Rotate(const glm::vec3& rotation);
 
         void SetScale(const glm::vec3& scale);
+
+    private:
+        void UpdateModelMatrix();
     };
 }  // namespace Tracer::Components::Positioning
