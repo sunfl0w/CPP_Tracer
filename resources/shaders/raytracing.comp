@@ -6,16 +6,22 @@ struct IntersectionData {
     vec3 tris[3];
 };
 
+struct Model {
+    vec4 vertexData[512];
+    mat4 modelMatrix;
+    int numTris;
+};
+
 layout(local_size_x = 1, local_size_y = 1) in;
 layout(rgba32f, binding = 0) uniform image2D img_output;
 layout(std430, binding = 1) buffer shaderData {
-    vec4 vertexData[512];
+    Model models[16];
     vec4 lightPositionData[4];
     vec4 lightColorData[4];
     float lightIntensity[4];
     vec4 cameraPosition;
-    int numTris;
     int numLights;
+    int numModels;
 };
 
 vec3 raytrace(vec3 origin, vec3 rayDir);
@@ -23,7 +29,7 @@ vec3 raytrace(vec3 origin, vec3 rayDir);
 IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir);
 
 void main() {
-    vec4 pixelColor = vec4(1.0, 0.0, 0.0, 1.0);
+    vec4 pixelColor = vec4(0.0, 0.0, 0.0, 1.0);
     //pixelColor = vertexData[0];
 
     //Constants and definitions
@@ -37,14 +43,15 @@ void main() {
     float aspectratio = imageWidth / float(imageHeight);
     float angle = tan(pi * 0.5 * fov / 180.0f);
     float xx = (2 * ((gl_GlobalInvocationID.x + 0.5) * invWidth) - 1) * angle * aspectratio;
-    float yy = -(1 - 2 * ((gl_GlobalInvocationID.y + 0.5) * invHeight)) * angle;//Y-Axis is flipped
+    float yy = -(1 - 2 * ((gl_GlobalInvocationID.y + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
     vec3 rayDir = vec3(xx, yy, 1);
     rayDir = normalize(rayDir);
 
     pixelColor.xyz = raytrace(cameraPosition.xyz, rayDir);
     //pixelColor = pixelColor * 0.1f;
-    pixelColor = pixelColor / 255.0f;
+    pixelColor.xyz = pixelColor.xyz / 255.0f;
     //pixelColor.w = 1.0f;
+    //pixelColor.xyz = models[0].vertexData[34].xyz;
 
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
     imageStore(img_output, pixel_coords, pixelColor);
@@ -99,59 +106,65 @@ IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir) {
     closestIntersect.position = vec3(0, 0, 0);
     float dst = 9999999.0f;
 
-    for (int i = 0; i < numTris * 3; i += 3) {
-        //Möller–Trumbore intersection algorithm
-        vec3 vertex0 = vertexData[i].xyz;
-        vec3 vertex1 = vertexData[i + 1].xyz;
-        vec3 vertex2 = vertexData[i + 2].xyz;
+    //for (int m = 0; m < numModels; m++) {
+        for (int i = 0; i < models[0].numTris * 3; i += 3) {
+            //Möller–Trumbore intersection algorithm
+            //vec4 vertex0 = models[m].modelMatrix * models[m].vertexData[i];
+            //vec4 vertex1 = models[m].modelMatrix * models[m].vertexData[i + 1];
+            //vec4 vertex2 = models[m].modelMatrix * models[m].vertexData[i + 2];
 
-        vec3 edge1 = vertex1 - vertex0;
-        vec3 edge2 = vertex2 - vertex0;
+            vec3 vertex0 = models[0].vertexData[i].xyz;
+            vec3 vertex1 = models[0].vertexData[i + 1].xyz;
+            vec3 vertex2 = models[0].vertexData[i + 2].xyz;
 
-        vec3 pvec = cross(rayDir, edge2);
+            vec3 edge1 = vertex1 - vertex0;
+            vec3 edge2 = vertex2 - vertex0;
 
-        float det = dot(edge1, pvec);
-        float epsilon = 0.0000001f;
+            vec3 pvec = cross(rayDir, edge2);
 
-        if (det < epsilon) {
-            continue;
+            float det = dot(edge1, pvec);
+            float epsilon = 0.0000001f;
+
+            if (det < epsilon) {
+                continue;
+            }
+
+            float invDet = 1.0f / det;
+
+            vec3 tvec = origin - vertex0;
+
+            float x = dot(tvec, pvec) * invDet;
+            if (x < 0.0f || x > 1.0f) {
+                continue;
+            }
+
+            vec3 qvec = cross(tvec, edge1);
+            float y = dot(rayDir, qvec) * invDet;
+            if (y < 0.0f || x + y > 1.0f) {
+                continue;
+            }
+
+            float z = dot(edge2, qvec) * invDet;
+
+            vec3 intersect = vertex0 + edge2 * x + edge1 * y;
+            vec3 norm = cross(edge1, edge2);
+            norm = normalize(norm);
+            norm = norm * 0.00001f;
+            intersect = intersect + norm;
+
+            if (z < epsilon) {
+                continue;
+            }
+
+            if (distance(intersect, origin) < dst) {
+                dst = distance(intersect, origin);
+                vec3 tris[3];
+                tris[0] = vertex0;
+                tris[1] = vertex1;
+                tris[2] = vertex2;
+                closestIntersect = IntersectionData(true, intersect, tris);
+            }
         }
-
-        float invDet = 1.0f / det;
-
-        vec3 tvec = origin - vertex0;
-
-        float x = dot(tvec, pvec) * invDet;
-        if (x < 0.0f || x > 1.0f) {
-            continue;
-        }
-
-        vec3 qvec = cross(tvec, edge1);
-        float y = dot(rayDir, qvec) * invDet;
-        if (y < 0.0f || x + y > 1.0f) {
-            continue;
-        }
-
-        float z = dot(edge2, qvec) * invDet;
-
-        vec3 intersect = vertex0 + edge2 * x + edge1 * y;
-        vec3 norm = cross(edge1, edge2);
-        norm = normalize(norm);
-        norm = norm * 0.00001f;
-        intersect = intersect + norm;
-
-        if (z < epsilon) {
-            continue;
-        }
-
-        if (distance(intersect, origin) < dst) {
-            dst = distance(intersect, origin);
-            vec3 tris[3];
-            tris[0] = vertex0;
-            tris[1] = vertex1;
-            tris[2] = vertex2;
-            closestIntersect = IntersectionData(true, intersect, tris);
-        }
-    }
+    //}
     return closestIntersect;
 }

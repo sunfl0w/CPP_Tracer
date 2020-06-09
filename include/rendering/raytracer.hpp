@@ -18,14 +18,20 @@
 #include "tris.hpp"
 
 namespace Tracer::Rendering {
-    struct ShaderData {
+    struct Model {
         glm::vec4 vertexData[512];
+        glm::mat4 modelMatrix;
+        int numTris;
+    };
+
+    struct ShaderData {
+        Model models[16];
         glm::vec4 lightPositionData[4];
         glm::vec4 lightColorData[4];
         float lightIntensity[4];
         glm::vec4 cameraPosition;
-        int numTris;
         int numLights;
+        int numModels;
     };
     
     class Raytracer {

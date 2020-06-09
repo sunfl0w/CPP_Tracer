@@ -8,18 +8,24 @@ namespace Tracer::Rendering {
     void Raytracer::RenderSceneToImage(Scene& scene, int imageWidth, int imageHeight) const {
         ShaderData shaderData;
 
-        int vertexIndex = 0;
-        int triangleCount = 0;
+        int modelIndex = 0;
         for (Objects::RenderableObject renderableObject : scene.GetRenderableObjects()) {
+            Model model;
+            int vertexIndex = 0;
+            int triangleCount = 0;
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
-                shaderData.vertexData[vertexIndex] = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert0, 1.0f);
-                shaderData.vertexData[vertexIndex + 1] = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert1, 1.0f);
-                shaderData.vertexData[vertexIndex + 2] = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert2, 1.0f);
+                model.vertexData[vertexIndex] = glm::vec4(triangle.vert0, 1.0f);
+                model.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1.0f);
+                model.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1.0f);
                 vertexIndex+=3;
                 triangleCount++;
             }
+            model.modelMatrix = renderableObject.GetTransform().GetTransformMatrix();
+            model.numTris = triangleCount;
+            shaderData.models[modelIndex] = model;
+            modelIndex++;
         }
-        shaderData.numTris = triangleCount;
+        shaderData.numModels = modelIndex;
         
         int lightIndex = 0;
         for(Objects::PointLight* light : scene.GetLightObjects()) {
