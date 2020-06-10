@@ -20,28 +20,30 @@ namespace Tracer::Rendering {
                 vertexIndex+=3;
                 triangleCount++;
             }
-            model.modelMatrix = renderableObject.GetTransform().GetTransformMatrix();
-            model.numTris = triangleCount;
+            model.modelMatrix = glm::mat4(renderableObject.GetTransform().GetTransformMatrix());
+            model.numTris = glm::vec4(triangleCount, 0, 0, 0);
             shaderData.models[modelIndex] = model;
             modelIndex++;
         }
         shaderData.numModels = modelIndex;
         
         int lightIndex = 0;
-        for(Objects::PointLight* light : scene.GetLightObjects()) {
-            shaderData.lightPositionData[lightIndex] = glm::vec4(light->GetTransform().GetPosition(), 0);
-            shaderData.lightColorData[lightIndex] = glm::vec4(light->GetColor().r, light->GetColor().g, light->GetColor().b, 0);
-            shaderData.lightIntensity[lightIndex] = light->GetIntensity();
+        for(Objects::PointLight* pointLight : scene.GetLightObjects()) {
+            Light light;
+            light.position = glm::vec4(pointLight->GetTransform().GetPosition(), 0);
+            light.color = glm::vec4(pointLight->GetColor().r, pointLight->GetColor().g, pointLight->GetColor().b, pointLight->GetIntensity());
+            shaderData.lights[lightIndex] = light;
             lightIndex++;
         }
         shaderData.numLights = lightIndex;
         shaderData.cameraPosition = glm::vec4(scene.GetCamera().GetTransform().GetPosition(), 0);
 
-        unsigned int ssbo;
-        glGenBuffers(1, &ssbo);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shaderData), &shaderData, GL_DYNAMIC_COPY);
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
+        unsigned int shaderDataBuffer;
+        glGenBuffers(1, &shaderDataBuffer);
+
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderDataBuffer);
+        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shaderData), &shaderData, GL_DYNAMIC_DRAW);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderDataBuffer);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     }
 

@@ -19,16 +19,19 @@
 
 namespace Tracer::Rendering {
     struct Model {
-        glm::vec4 vertexData[512];
+        glm::vec4 vertexData[1024];
         glm::mat4 modelMatrix;
-        int numTris;
+        glm::vec4 numTris;
+    };
+
+    struct Light {
+        glm::vec4 position;
+        glm::vec4 color;
     };
 
     struct ShaderData {
-        Model models[16];
-        glm::vec4 lightPositionData[4];
-        glm::vec4 lightColorData[4];
-        float lightIntensity[4];
+        Model models[4];
+        Light lights[4];
         glm::vec4 cameraPosition;
         int numLights;
         int numModels;
