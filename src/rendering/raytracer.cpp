@@ -66,9 +66,9 @@ namespace Tracer::Rendering {
 
                 RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 2);
 
-                buffer[(x + y * imageWidth) * 3] = (unsigned char)pixelColor.r;
-                buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)pixelColor.g;
-                buffer[(x + y * imageWidth) * 3 + 2] = (unsigned char)pixelColor.b;
+                buffer[(x + y * imageWidth) * 3] = (unsigned char)(pixelColor.r * 255.0f);
+                buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)(pixelColor.g * 255.0f);
+                buffer[(x + y * imageWidth) * 3 + 2] = (unsigned char)(pixelColor.b * 255.0f);
             }
         }
         return buffer;
@@ -109,7 +109,7 @@ namespace Tracer::Rendering {
         float det = glm::dot(edge1, pvec);
 
         //float epsilon = std::numeric_limits<float>::epsilon();
-        float epsilon = 0.0000001f;
+        float epsilon = 0.000001f;
 
         if (det < epsilon) {
             return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
@@ -136,7 +136,7 @@ namespace Tracer::Rendering {
         glm::vec3 intersect = vertex0 + edge2 * x + edge1 * y;
         glm::vec3 norm = glm::cross(edge1, edge2);
         norm = glm::normalize(norm);
-        norm = norm * 0.0001f;
+        norm = norm * 0.00001f;
         intersect = intersect + norm;
 
         if (z < epsilon) {
@@ -151,7 +151,9 @@ namespace Tracer::Rendering {
         Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir, albedo);
 
         if (intersect.IsHit()) {
-            RGB_Color diffuseColor(0, 0, 0);
+            glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
+            glm::vec3 emissionColor = glm::vec3(1, 0, 0);
+            //RGB_Color surfaceColor(0, 0, 0);
 
             int lightHits = 0;
             for (Objects::PointLight* light : scene.GetLightObjects()) {
@@ -168,17 +170,18 @@ namespace Tracer::Rendering {
                 RGB_Color shadowAlbedo;
                 Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir, shadowAlbedo);
                 if (!shadowIntersect.IsHit()) {
-                    RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
+                    surfaceColor += glm::vec3(albedo.r, albedo.g, albedo.b) * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * glm::vec3(light->GetColor().r, light->GetColor().g, light->GetColor().b) * light->GetIntensity();
+                    /*RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                                 std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                                 std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
-                    diffuseColor = RGB_Color(std::clamp(diffuseColor.r + singleLightPixelColor.r * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
-                                             std::clamp(diffuseColor.g + singleLightPixelColor.g * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
-                                             std::clamp(diffuseColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));
+                    surfaceColor = RGB_Color(std::clamp(surfaceColor.r + singleLightPixelColor.r * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
+                                             std::clamp(surfaceColor.g + singleLightPixelColor.g * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
+                                             std::clamp(surfaceColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));*/
                     lightHits++;
                 }
             }
             if (lightHits > 0) {
-                return diffuseColor;
+                return RGB_Color(surfaceColor.r, surfaceColor.g, surfaceColor.b);
             } else {
                 return RGB_Color(0, 0, 0);
             }

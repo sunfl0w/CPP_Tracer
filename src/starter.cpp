@@ -127,13 +127,13 @@ int main() {
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Sphere.obj");
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
-    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(100, 200, 50)));
+    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(0.1f, 0.1f, 0.9f)));
     renderableObjects.push_back(model);
-    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(3.0f, 3.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(200, 100, 50)));
+    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(3.0f, 3.0f, 0.0f), mesh, Material::Material(Material::MaterialType::Refractive, Tracer::Components::Color::RGB_Color(0.8f, 0.4f, 0.2f)));
     renderableObjects.push_back(model2);
 
     std::vector<Objects::PointLight*> pointLights;
-    Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(0, 255, 0));
+    Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(1.0f, 1.0f, 0.4f));
     pointLights.push_back(&light);
     //Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, -10.0f), 1.0f, Components::Color::RGB_Color(255, 220, 100));
     //pointLights.push_back(&light2);
@@ -232,19 +232,19 @@ int main() {
                 close = true;
             }
         }
-        computeShader.Activate();
-        raytracer.RenderSceneToImage(scene, 600, 400);
-        glDispatchCompute(600, 400, 1);
-        glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+        //computeShader.Activate();
+        //raytracer.RenderSceneToImage(scene, 600, 400);
+        //glDispatchCompute(600, 400, 1);
+        //glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, 600, 400);
+        std::vector<unsigned char> screenBuffer = raytracer.RenderSceneToBuffer(scene, 600, 400);
         shader.Activate();
         shader.SetInt("tex", 0);
 
-        //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, screenBuffer.data());
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);

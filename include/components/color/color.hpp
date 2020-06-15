@@ -12,9 +12,5 @@ namespace Tracer::Components::Color {
         Color(int r, int g, int b);
 
         RGB_Color GetRGB();
-        HSV_Color GetHSV();
-
-        void Set(RGB_Color color);
-        void Set(HSV_Color color);
     };
 }  // namespace Tracer::Components::Color
