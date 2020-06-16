@@ -126,15 +126,15 @@ int main() {
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Sphere.obj");
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
-    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material(glm::vec3(0.1f, 0.1f, 0.9f), 0.0f, 0.0f));
+    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material(glm::vec3(0.3f, 0.5f, 0.9f), 0.0f, 0.0f));
     renderableObjects.push_back(model);
-    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(3.0f, 3.0f, 0.0f), mesh, Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f));
+    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(2.0f, 1.0f, 0.0f), mesh, Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f));
     renderableObjects.push_back(model2);
 
     std::vector<Objects::PointLight*> pointLights;
-    Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
-    pointLights.push_back(&light);
-    Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 0.4f, 0.0f), 1.0f);
+    //Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
+    //pointLights.push_back(&light);
+    Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, 0.0f), glm::vec3(0.8f, 0.8f, 0.8f), 1.0f);
     pointLights.push_back(&light2);
 
     Objects::Camera camera = Objects::Camera(glm::vec3(0.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -218,8 +218,11 @@ int main() {
     Shader shader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
     Shader computeShader = Shader("resources/shaders/raytracing.comp", GL_COMPUTE_SHADER);
 
+    float radius = 20.0f;
+
     std::chrono::steady_clock::time_point start;
     float frameDelta = 0.0f;
+    float delta = 0.0f;
 
     bool close = false;
     while (!close) {
@@ -231,6 +234,13 @@ int main() {
                 close = true;
             }
         }
+        //scene.GetCamera().GetTransform().RotateAround(glm::vec3(0,0,0), glm::vec3(0, 1, 0), 10 * delta);
+        //glm::vec3 pos = glm::vec3(std::sin(delta) * radius, 0.0f, 0.0f);
+        //glm::vec3 pos = glm::vec3(0.0f, 0.0f, std::cos(delta) * radius);
+        //scene.GetCamera().GetTransform().SetPosition(pos);
+        //scene.GetCamera().GetTransform().Rotate(glm::vec3(0, std::acos(delta), 0));
+
+        //std::cout << scene.GetCamera().GetTransform().GetPosition().x << std::endl;
         //computeShader.Activate();
         //raytracer.RenderSceneToImage(scene, 600, 400);
         //glDispatchCompute(600, 400, 1);
@@ -254,6 +264,7 @@ int main() {
 
         frameDelta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
         std::cout << "FPS: " << std::to_string(std::pow(10.0, 9) / frameDelta) << "\n";
+        delta = frameDelta / std::pow(10.0, 9);
     }
     return 0;
 }

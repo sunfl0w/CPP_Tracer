@@ -15,7 +15,7 @@ namespace Tracer::Rendering {
                 model.vertexData[vertexIndex] = glm::vec4(triangle.vert0, 1.0f);
                 model.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1.0f);
                 model.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1.0f);
-                vertexIndex+=3;
+                vertexIndex += 3;
                 triangleCount++;
             }
             model.modelMatrix = glm::mat4(renderableObject.GetTransform().GetTransformMatrix());
@@ -24,9 +24,9 @@ namespace Tracer::Rendering {
             modelIndex++;
         }
         shaderData.numModels = modelIndex;
-        
+
         int lightIndex = 0;
-        for(Objects::PointLight* pointLight : scene.GetLightObjects()) {
+        for (Objects::PointLight* pointLight : scene.GetLightObjects()) {
             Light light;
             light.position = glm::vec4(pointLight->GetTransform().GetPosition(), 0);
             light.color = glm::vec4(pointLight->GetColor().r, pointLight->GetColor().g, pointLight->GetColor().b, pointLight->GetIntensity());
@@ -53,16 +53,21 @@ namespace Tracer::Rendering {
         float angle = tan(M_PI * 0.5 * fov / 180.0f);
 
         glm::vec3 camPos = scene.GetCamera().GetTransform().GetPosition();
+        glm::mat4 rayMatrix = glm::mat4(1.0f);
+        rayMatrix = glm::rotate(rayMatrix, -glm::radians(scene.GetCamera().GetTransform().GetRotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
+        rayMatrix = glm::rotate(rayMatrix, glm::radians(scene.GetCamera().GetTransform().GetRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
-                float yy = -(1 - 2 * ((y + 0.5) * invHeight)) * angle;//Y-Axis is flipped
-                glm::vec3 rayDir(xx, yy, 1);
-                rayDir = glm::normalize(rayDir);
+                float yy = -(1 - 2 * ((y + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
+                glm::vec3 rayDirBase = glm::vec3(xx, yy, 1);
+                glm::vec4 rayDirBaseV4 = rayMatrix * glm::vec4(rayDirBase.x, rayDirBase.y, rayDirBase.z, 1);
 
-                glm::vec3 pixelColor = Raytrace(scene, camPos, rayDir, 2);
+                glm::vec3 rayDir = glm::vec3(rayDirBaseV4.x, rayDirBaseV4.y, rayDirBaseV4.z);
+
+                glm::vec3 pixelColor = Raytrace(scene, camPos, rayDir, 0);
 
                 buffer[(x + y * imageWidth) * 3] = (unsigned char)(pixelColor.r * 255.0f);
                 buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)(pixelColor.g * 255.0f);
@@ -146,41 +151,73 @@ namespace Tracer::Rendering {
 
     glm::vec3 Raytracer::Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const {
         Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
-
+        glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
         if (intersect.IsHit()) {
-            glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
-
-            int lightHits = 0;
-            for (Objects::PointLight* light : scene.GetLightObjects()) {
-                float diffuseModifier = 1.0f;
-
-                float dst = glm::distance(intersect.GetIntersectionPos(), light->GetTransform().GetPosition());
-                glm::vec3 shadowRayDir = light->GetTransform().GetPosition() - intersect.GetIntersectionPos();
-                shadowRayDir = glm::normalize(shadowRayDir);
+            if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
+                //Reflective and refractive color computation
+                glm::vec3 intersectPos = intersect.GetIntersectionPos();
+                bool inObject = false;
                 glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
                 norm = glm::normalize(norm);
-                //float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
-                //diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
+                if (glm::dot(dir, norm) > 0) {
+                    norm = -norm;
+                    inObject = true;
+                }
 
-                Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
-                if (!shadowIntersect.IsHit()) {
-                    surfaceColor += intersect.GetMaterial().GetColor() * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * light->GetColor() * light->GetIntensity();
-                    /*RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
-                                                                std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
-                                                                std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
-                    surfaceColor = RGB_Color(std::clamp(surfaceColor.r + singleLightPixelColor.r * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
-                                             std::clamp(surfaceColor.g + singleLightPixelColor.g * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f),
-                                             std::clamp(surfaceColor.b + singleLightPixelColor.b * (1.0f / scene.GetLightObjects().size()), 0.0f, 255.0f));*/
-                    lightHits++;
+                float facingRatio = -glm::dot(dir, norm);
+                float fresnel = glm::mix((float)std::pow(1 - facingRatio, 3), 1.0f, 0.1f);
+
+                glm::vec3 reflectionDir = dir - norm * 2.0f * glm::dot(dir, norm);
+                reflectionDir = glm::normalize(reflectionDir);
+
+                glm::vec3 newRayOrigin = intersectPos + norm * 0.0001f;
+                glm::vec3 reflectionColor = Raytrace(scene, newRayOrigin, reflectionDir, depth + 1);
+                if (depth == 0) {
+                    int i = 0;
+                }
+                glm::vec3 refractionColor = glm::vec3(0, 0, 0);
+
+                if (intersect.GetMaterial().GetTransparency() > 0.0f) {
+                    float ior = 1.1f;
+                    float eta = ior;
+                    if (!inObject) {
+                        eta = 1.0f / ior;
+                    }
+                    float cosi = -glm::dot(dir, norm);
+                    float k = 1 - eta * eta * (1 - cosi * cosi);
+                    glm::vec3 refractionDir = dir * eta + norm * (eta * cosi - std::sqrt(k));
+                    refractionDir = glm::normalize(refractionDir);
+                    newRayOrigin = intersectPos - norm * 0.0001f;
+                    refractionColor = Raytrace(scene, newRayOrigin, refractionDir, depth + 1);
+                }
+
+                surfaceColor = (reflectionColor * fresnel + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
+                int i = 0;
+            } else {
+                //Diffuse color computation
+                for (Objects::PointLight* light : scene.GetLightObjects()) {
+                    float dst = glm::distance(intersect.GetIntersectionPos(), light->GetTransform().GetPosition());
+                    if (dst < 1.0f) {
+                        dst = 1.0f;
+                    }
+
+                    glm::vec3 shadowRayDir = light->GetTransform().GetPosition() - intersect.GetIntersectionPos();
+                    shadowRayDir = glm::normalize(shadowRayDir);
+                    glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
+                    norm = glm::normalize(norm);
+
+                    glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.1f;
+                    Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), newRayOrigin, shadowRayDir);
+                    if (!shadowIntersect.IsHit()) {
+                        //Diffuse color calculation. Light intensity uses the inverse square law
+                        surfaceColor += intersect.GetMaterial().GetColor() * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * light->GetColor() * light->GetIntensity() * 1.0f / std::pow(dst, 0.01f);
+                    }
                 }
             }
-            if (lightHits > 0) {
-                return surfaceColor;
-            } else {
-                return glm::vec3(0, 0, 0);
+            if (surfaceColor.r > 1.0f || surfaceColor.g > 1.0f || surfaceColor.b > 1.0f) {
+                surfaceColor = glm::normalize(surfaceColor);
             }
-        } else {
-            return glm::vec3(0, 0, 0);
         }
+        return surfaceColor;
     }
 }  // namespace Tracer::Rendering
