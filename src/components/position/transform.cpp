@@ -39,6 +39,7 @@ namespace Tracer::Components::Position {
 
     void Transform::Rotate(const glm::vec3& rotation) {
         this->rotation = this->rotation + rotation;
+        UpdateModelMatrix();
     }
 
     void Transform::SetScale(const glm::vec3& scale) {
@@ -55,5 +56,11 @@ namespace Tracer::Components::Position {
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
         modelMatrix = glm::translate(modelMatrix, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, -0.5f * scale.z));
         modelMatrix = glm::scale(modelMatrix, scale);
+    }
+
+    void Transform::RotateAroundOrigin(const glm::vec3& axis, float angle) {
+        glm::mat4 rotationMatrix = glm::mat4(1.0f);
+        rotationMatrix = glm::rotate(rotationMatrix, glm::radians(angle), axis);
+        modelMatrix = rotationMatrix * modelMatrix;
     }
 }  // namespace Tracer::Components::Positioning

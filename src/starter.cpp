@@ -234,11 +234,7 @@ int main() {
                 close = true;
             }
         }
-        //scene.GetCamera().GetTransform().RotateAround(glm::vec3(0,0,0), glm::vec3(0, 1, 0), 10 * delta);
-        //glm::vec3 pos = glm::vec3(std::sin(delta) * radius, 0.0f, 0.0f);
-        //glm::vec3 pos = glm::vec3(0.0f, 0.0f, std::cos(delta) * radius);
-        //scene.GetCamera().GetTransform().SetPosition(pos);
-        //scene.GetCamera().GetTransform().Rotate(glm::vec3(0, std::acos(delta), 0));
+        scene.GetCamera().GetTransform().RotateAroundOrigin(glm::vec3(0, 1, 0), delta * 20);
 
         //std::cout << scene.GetCamera().GetTransform().GetPosition().x << std::endl;
         //computeShader.Activate();

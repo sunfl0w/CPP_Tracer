@@ -38,6 +38,8 @@ namespace Tracer::Components::Position {
 
         void SetScale(const glm::vec3& scale);
 
+        void RotateAroundOrigin(const glm::vec3& axis, float angle);
+
     private:
         void UpdateModelMatrix();
     };

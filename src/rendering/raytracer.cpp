@@ -52,22 +52,22 @@ namespace Tracer::Rendering {
         float aspectratio = imageWidth / float(imageHeight);
         float angle = tan(M_PI * 0.5 * fov / 180.0f);
 
-        glm::vec3 camPos = scene.GetCamera().GetTransform().GetPosition();
-        glm::mat4 rayMatrix = glm::mat4(1.0f);
-        rayMatrix = glm::rotate(rayMatrix, -glm::radians(scene.GetCamera().GetTransform().GetRotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
-        rayMatrix = glm::rotate(rayMatrix, glm::radians(scene.GetCamera().GetTransform().GetRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::vec4 camPosWorld = scene.GetCamera().GetTransform().GetTransformMatrix() * glm::vec4(0, 0, 0, 1);
+        //glm::mat4 rayMatrix = glm::mat4(1.0f);
+        //rayMatrix = glm::rotate(rayMatrix, -glm::radians(scene.GetCamera().GetTransform().GetRotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
+        //rayMatrix = glm::rotate(rayMatrix, glm::radians(scene.GetCamera().GetTransform().GetRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
             for (int y = 0; y < imageHeight; y++) {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = -(1 - 2 * ((y + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
-                glm::vec3 rayDirBase = glm::vec3(xx, yy, 1);
-                glm::vec4 rayDirBaseV4 = rayMatrix * glm::vec4(rayDirBase.x, rayDirBase.y, rayDirBase.z, 1);
 
-                glm::vec3 rayDir = glm::vec3(rayDirBaseV4.x, rayDirBaseV4.y, rayDirBaseV4.z);
-
-                glm::vec3 pixelColor = Raytrace(scene, camPos, rayDir, 0);
+                glm::vec4 projectionRayWorld = scene.GetCamera().GetTransform().GetTransformMatrix() * glm::vec4(xx, yy, 1, 1);
+                glm::vec4 projectionRayDirWorld = projectionRayWorld - camPosWorld;
+                glm::vec3 camPosWorldV3 = glm::vec3(camPosWorld.x, camPosWorld.y, camPosWorld.z);
+                glm::vec3 projectionRayDirWorldV3 = glm::vec3(projectionRayDirWorld.x, projectionRayDirWorld.y, projectionRayDirWorld.z);
+                glm::vec3 pixelColor = Raytrace(scene, camPosWorldV3, projectionRayDirWorldV3, 0);
 
                 buffer[(x + y * imageWidth) * 3] = (unsigned char)(pixelColor.r * 255.0f);
                 buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)(pixelColor.g * 255.0f);
