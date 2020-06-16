@@ -45,10 +45,10 @@ namespace Tracer::Rendering {
 
         std::vector<unsigned char> RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
 
-        IntersectionData RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir, RGB_Color& albedo) const;
+        IntersectionData RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const;
 
         IntersectionData RayCastTris(Math::Tris& triangle, glm::vec3& origin, glm::vec3& dir) const;
 
-        RGB_Color Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const;
+        glm::vec3 Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const;
     };
 }  // namespace Tracer::Rendering

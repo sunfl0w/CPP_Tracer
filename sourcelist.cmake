@@ -1,9 +1,6 @@
 src/starter.cpp
+src/components/material.cpp
 src/components/mesh.cpp
-src/components/color/color.cpp
-src/components/color/hsv_Color.cpp
-src/components/color/rgb_Color.cpp
-src/components/material/material.cpp
 src/components/position/transform.cpp
 src/lib/glad/glad.c
 src/lib/stb/stb_image.c
@@ -15,5 +12,4 @@ src/objects/pointLight.cpp
 src/objects/renderableObject.cpp
 src/rendering/raytracer.cpp
 src/rendering/scene.cpp
-src/rendering/screenBuffer.cpp
 src/rendering/shader.cpp

@@ -5,9 +5,16 @@ namespace Tracer::Math {
         hit = false;
     }
 
-    IntersectionData::IntersectionData(const glm::vec3& intersectionPos, const Tris& intersectionTriangle, bool hit) {
+    IntersectionData::IntersectionData(const Tris& intersectionTriangle, const glm::vec3& intersectionPos, bool hit) {
         this->intersectionTriangle = intersectionTriangle;
         this->intersectionPos = intersectionPos;
+        this->hit = hit;
+    }
+
+    IntersectionData::IntersectionData(const Tris& intersectionTriangle, const glm::vec3& intersectionPos, const Tracer::Components::Material& material, bool hit) {
+        this->intersectionTriangle = intersectionTriangle;
+        this->intersectionPos = intersectionPos;
+        this->material = material;
         this->hit = hit;
     }
 
@@ -17,6 +24,14 @@ namespace Tracer::Math {
 
     glm::vec3& IntersectionData::GetIntersectionPos() {
         return intersectionPos;
+    }
+
+    Tracer::Components::Material& IntersectionData::GetMaterial() {
+        return material;
+    }
+
+    void IntersectionData::SetMaterial(const Tracer::Components::Material& material) {
+        this->material = material;
     }
 
     bool IntersectionData::IsHit() const {

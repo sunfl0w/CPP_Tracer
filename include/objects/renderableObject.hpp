@@ -13,15 +13,15 @@ namespace Tracer::Objects {
     private:
         Components::Position::Transform transform;
         Components::Mesh mesh;
-        Components::Material::Material material;
+        Components::Material material;
 
     public:
-        RenderableObject(glm::vec3 position, Components::Mesh mesh, Components::Material::Material material);
+        RenderableObject(const glm::vec3& position, const Components::Mesh& mesh, const Components::Material& material);
 
         Components::Position::Transform& GetTransform();
 
         Components::Mesh& GetMesh();
 
-        Components::Material::Material& GetMaterial();
+        Components::Material& GetMaterial();
     };
 }  // namespace Tracer::Objects

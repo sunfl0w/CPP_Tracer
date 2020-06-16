@@ -1,7 +1,5 @@
 #include "raytracer.hpp"
 
-using namespace Tracer::Components::Color;
-
 namespace Tracer::Rendering {
     Raytracer::Raytracer() {}
 
@@ -64,7 +62,7 @@ namespace Tracer::Rendering {
                 glm::vec3 rayDir(xx, yy, 1);
                 rayDir = glm::normalize(rayDir);
 
-                RGB_Color pixelColor = Raytrace(scene, camPos, rayDir, 2);
+                glm::vec3 pixelColor = Raytrace(scene, camPos, rayDir, 2);
 
                 buffer[(x + y * imageWidth) * 3] = (unsigned char)(pixelColor.r * 255.0f);
                 buffer[(x + y * imageWidth) * 3 + 1] = (unsigned char)(pixelColor.g * 255.0f);
@@ -74,7 +72,7 @@ namespace Tracer::Rendering {
         return buffer;
     }
 
-    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir, RGB_Color& albedo) const {
+    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
         IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 999999.9f;
         for (Objects::RenderableObject renderableObject : renderableObjects) {
@@ -88,7 +86,7 @@ namespace Tracer::Rendering {
                 if (intersect.IsHit() && dst < closesIntersectDst) {
                     closesIntersectDst = dst;
                     closestIntersect = intersect;
-                    albedo = renderableObject.GetMaterial().GetColor();
+                    closestIntersect.SetMaterial(renderableObject.GetMaterial());
                 }
             }
         }
@@ -112,7 +110,7 @@ namespace Tracer::Rendering {
         float epsilon = 0.000001f;
 
         if (det < epsilon) {
-            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
+            return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
         }
 
         float invDet = 1.0f / det;
@@ -121,14 +119,14 @@ namespace Tracer::Rendering {
 
         float x = glm::dot(tvec, pvec) * invDet;
         if (x < 0.0f || x > 1.0f) {
-            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
+            return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
         }
 
         glm::vec3 qvec = glm::cross(tvec, edge1);
         //qvec.Normalize();
         float y = glm::dot(dir, qvec) * invDet;
         if (y < 0.0f || x + y > 1.0f) {
-            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
+            return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
         }
 
         float z = glm::dot(edge2, qvec) * invDet;
@@ -140,20 +138,17 @@ namespace Tracer::Rendering {
         intersect = intersect + norm;
 
         if (z < epsilon) {
-            return IntersectionData(glm::vec3(0, 0, 0), triangle, false);
+            return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
         }
 
-        return IntersectionData(intersect, triangle, true);
+        return IntersectionData(triangle, intersect, true);
     }
 
-    RGB_Color Raytracer::Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const {
-        RGB_Color albedo(0, 0, 0);
-        Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir, albedo);
+    glm::vec3 Raytracer::Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const {
+        Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
 
         if (intersect.IsHit()) {
             glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
-            glm::vec3 emissionColor = glm::vec3(1, 0, 0);
-            //RGB_Color surfaceColor(0, 0, 0);
 
             int lightHits = 0;
             for (Objects::PointLight* light : scene.GetLightObjects()) {
@@ -164,13 +159,12 @@ namespace Tracer::Rendering {
                 shadowRayDir = glm::normalize(shadowRayDir);
                 glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
                 norm = glm::normalize(norm);
-                float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
-                diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
+                //float angleModifier = std::clamp((float)(std::acos(glm::dot(norm, shadowRayDir)) * 180.0f / M_PI / 360.0f), 0.0f, 1.0f);
+                //diffuseModifier /= 1 + std::pow(dst / (100.0f * light->GetIntensity() * angleModifier), 2.0f);
 
-                RGB_Color shadowAlbedo;
-                Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir, shadowAlbedo);
+                Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), intersect.GetIntersectionPos(), shadowRayDir);
                 if (!shadowIntersect.IsHit()) {
-                    surfaceColor += glm::vec3(albedo.r, albedo.g, albedo.b) * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * glm::vec3(light->GetColor().r, light->GetColor().g, light->GetColor().b) * light->GetIntensity();
+                    surfaceColor += intersect.GetMaterial().GetColor() * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * light->GetColor() * light->GetIntensity();
                     /*RGB_Color singleLightPixelColor = RGB_Color(std::clamp(albedo.r * (1 - diffuseModifier) + light->GetColor().r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                                 std::clamp(albedo.g * (1 - diffuseModifier) + light->GetColor().g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
                                                                 std::clamp(albedo.b * (1 - diffuseModifier) + light->GetColor().b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
@@ -181,12 +175,12 @@ namespace Tracer::Rendering {
                 }
             }
             if (lightHits > 0) {
-                return RGB_Color(surfaceColor.r, surfaceColor.g, surfaceColor.b);
+                return surfaceColor;
             } else {
-                return RGB_Color(0, 0, 0);
+                return glm::vec3(0, 0, 0);
             }
         } else {
-            return RGB_Color(0, 0, 0);
+            return glm::vec3(0, 0, 0);
         }
     }
 }  // namespace Tracer::Rendering
