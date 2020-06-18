@@ -11,7 +11,7 @@ namespace Tracer::Math {
 
     const glm::vec3 Tris::GetNormal() {
         glm::vec3 normal = glm::cross(vert0 - vert1, vert0 - vert2);
-        glm::normalize(normal);
+        normal = glm::normalize(normal);
         return normal;
     }
 }  // namespace OpenCG::Renderer

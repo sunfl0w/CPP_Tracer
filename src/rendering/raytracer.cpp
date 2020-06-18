@@ -79,7 +79,7 @@ namespace Tracer::Rendering {
 
     IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
         IntersectionData closestIntersect = Math::IntersectionData();
-        float closesIntersectDst = 999999.9f;
+        float closesIntersectDst = 99999999.9f;
         for (Objects::RenderableObject renderableObject : renderableObjects) {
             for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
                 Math::Tris transformedTriangle;
@@ -111,10 +111,16 @@ namespace Tracer::Rendering {
         //pvec.Normalize();
         float det = glm::dot(edge1, pvec);
 
-        //float epsilon = std::numeric_limits<float>::epsilon();
-        float epsilon = 0.000001f;
+        float epsilon = 0.00001f;
 
-        if (det < epsilon) {
+        //Culling stuff. Don't touch for now
+
+        /*if (det < epsilon) {
+            return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
+        }*/
+        //Culling
+
+        if(std::fabs(det) < epsilon) {
             return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
         }
 
@@ -128,7 +134,6 @@ namespace Tracer::Rendering {
         }
 
         glm::vec3 qvec = glm::cross(tvec, edge1);
-        //qvec.Normalize();
         float y = glm::dot(dir, qvec) * invDet;
         if (y < 0.0f || x + y > 1.0f) {
             return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
@@ -136,11 +141,7 @@ namespace Tracer::Rendering {
 
         float z = glm::dot(edge2, qvec) * invDet;
 
-        glm::vec3 intersect = vertex0 + edge2 * x + edge1 * y;
-        glm::vec3 norm = glm::cross(edge1, edge2);
-        norm = glm::normalize(norm);
-        norm = norm * 0.00001f;
-        intersect = intersect + norm;
+        glm::vec3 intersect = origin + dir * z;
 
         if (z < epsilon) {
             return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
@@ -153,7 +154,8 @@ namespace Tracer::Rendering {
         Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
         glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
         if (intersect.IsHit()) {
-            if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
+            if (false) {
+                //if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
                 //Reflective and refractive color computation
                 glm::vec3 intersectPos = intersect.GetIntersectionPos();
                 bool inObject = false;
@@ -202,12 +204,20 @@ namespace Tracer::Rendering {
                     }
 
                     glm::vec3 shadowRayDir = light->GetTransform().GetPosition() - intersect.GetIntersectionPos();
-                    shadowRayDir = glm::normalize(shadowRayDir);
                     glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
-                    norm = glm::normalize(norm);
 
-                    glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.1f;
+                    //norm = glm::normalize(norm);
+                    shadowRayDir = glm::normalize(shadowRayDir);
+
+                    /*bool inObject = false;
+                    if (glm::dot(dir, norm) > 0) {
+                        norm = -norm;
+                        inObject = true;
+                    }*/
+
+                    glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.001f;
                     Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), newRayOrigin, shadowRayDir);
+
                     if (!shadowIntersect.IsHit()) {
                         //Diffuse color calculation. Light intensity uses the inverse square law
                         surfaceColor += intersect.GetMaterial().GetColor() * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * light->GetColor() * light->GetIntensity() * 1.0f / std::pow(dst, 0.01f);
