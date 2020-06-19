@@ -154,17 +154,16 @@ namespace Tracer::Rendering {
         Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
         glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
         if (intersect.IsHit()) {
-            if (false) {
-                //if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
+            if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
                 //Reflective and refractive color computation
                 glm::vec3 intersectPos = intersect.GetIntersectionPos();
                 bool inObject = false;
                 glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
-                norm = glm::normalize(norm);
-                if (glm::dot(dir, norm) > 0) {
+                //norm = glm::normalize(norm);
+                /*if (glm::dot(dir, norm) > 0) {
                     norm = -norm;
                     inObject = true;
-                }
+                }*/
 
                 float facingRatio = -glm::dot(dir, norm);
                 float fresnel = glm::mix((float)std::pow(1 - facingRatio, 3), 1.0f, 0.1f);
@@ -180,7 +179,7 @@ namespace Tracer::Rendering {
                 glm::vec3 refractionColor = glm::vec3(0, 0, 0);
 
                 if (intersect.GetMaterial().GetTransparency() > 0.0f) {
-                    float ior = 1.1f;
+                    float ior = 1.5f; //Index of refraction
                     float eta = ior;
                     if (!inObject) {
                         eta = 1.0f / ior;
@@ -193,7 +192,7 @@ namespace Tracer::Rendering {
                     refractionColor = Raytrace(scene, newRayOrigin, refractionDir, depth + 1);
                 }
 
-                surfaceColor = (reflectionColor * fresnel + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
+                surfaceColor = (reflectionColor * fresnel * 0.8f + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
                 int i = 0;
             } else {
                 //Diffuse color computation
@@ -224,9 +223,9 @@ namespace Tracer::Rendering {
                     }
                 }
             }
-            if (surfaceColor.r > 1.0f || surfaceColor.g > 1.0f || surfaceColor.b > 1.0f) {
+            /*if (surfaceColor.r > 1.0f || surfaceColor.g > 1.0f || surfaceColor.b > 1.0f) {
                 surfaceColor = glm::normalize(surfaceColor);
-            }
+            }*/
         }
         return surfaceColor;
     }

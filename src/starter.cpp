@@ -124,16 +124,16 @@ void APIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLen
 int main() {
     std::vector<Objects::RenderableObject> renderableObjects;
     Mesh mesh;
-    mesh.LoadFromObjectFile("./models/Cube.obj");
+    mesh.LoadFromObjectFile("./models/Sphere.obj");
     std::cout << "Triangles to render:" + std::to_string(mesh.GetData().size()) << std::endl;
-    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(3.0f, -2.0f, 0.0f), mesh, Material(glm::vec3(0.3f, 0.5f, 0.9f), 0.0f, 0.0f));
+    Objects::RenderableObject model = Objects::RenderableObject(glm::vec3(3.0f, 0.0f, 0.0f), mesh, Material(glm::vec3(0.2f, 0.3f, 0.8f), 0.0f, 0.8f));
     renderableObjects.push_back(model);
-    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(0.0f, -2.0f, 0.0f), mesh, Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f));
+    Objects::RenderableObject model2 = Objects::RenderableObject(glm::vec3(0.0f, 0.0f, 0.0f), mesh, Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f));
     renderableObjects.push_back(model2);
 
     std::vector<Objects::PointLight*> pointLights;
-    //Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
-    //pointLights.push_back(&light);
+    Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
+    pointLights.push_back(&light);
     Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, 6.0f), glm::vec3(0.8f, 0.8f, 0.8f), 1.0f);
     pointLights.push_back(&light2);
 
