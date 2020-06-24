@@ -7,18 +7,18 @@ namespace Tracer::Rendering {
         ShaderData shaderData;
 
         int modelIndex = 0;
-        for (Objects::RenderableObject renderableObject : scene.GetRenderableObjects()) {
+        for (Objects::MeshObject meshObjects : scene.GetMeshObjects()) {
             Model model;
             int vertexIndex = 0;
             int triangleCount = 0;
-            for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+            for (Math::Tris triangle : meshObjects.GetMesh().GetData()) {
                 model.vertexData[vertexIndex] = glm::vec4(triangle.vert0, 1.0f);
                 model.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1.0f);
                 model.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1.0f);
                 vertexIndex += 3;
                 triangleCount++;
             }
-            model.modelMatrix = glm::mat4(renderableObject.GetTransform().GetTransformMatrix());
+            model.modelMatrix = glm::mat4(meshObjects.GetTransform().GetTransformMatrix());
             model.numTris = glm::vec4(triangleCount, 0, 0, 0);
             shaderData.models[modelIndex] = model;
             modelIndex++;
@@ -77,21 +77,21 @@ namespace Tracer::Rendering {
         return buffer;
     }
 
-    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
+    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::MeshObject>& meshObjects, glm::vec3& origin, glm::vec3& dir) const {
         IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 99999999.9f;
-        for (Objects::RenderableObject renderableObject : renderableObjects) {
-            for (Math::Tris triangle : renderableObject.GetMesh().GetData()) {
+        for (Objects::MeshObject meshObjects : meshObjects) {
+            for (Math::Tris triangle : meshObjects.GetMesh().GetData()) {
                 Math::Tris transformedTriangle;
-                transformedTriangle.vert0 = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert0, 1.0f);
-                transformedTriangle.vert1 = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert1, 1.0f);
-                transformedTriangle.vert2 = renderableObject.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert2, 1.0f);
+                transformedTriangle.vert0 = meshObjects.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert0, 1.0f);
+                transformedTriangle.vert1 = meshObjects.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert1, 1.0f);
+                transformedTriangle.vert2 = meshObjects.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert2, 1.0f);
                 IntersectionData intersect = RayCastTris(transformedTriangle, origin, dir);
                 float dst = glm::distance(intersect.GetIntersectionPos(), origin);
                 if (intersect.IsHit() && dst < closesIntersectDst) {
                     closesIntersectDst = dst;
                     closestIntersect = intersect;
-                    closestIntersect.SetMaterial(renderableObject.GetMaterial());
+                    closestIntersect.SetMaterial(meshObjects.GetMaterial());
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace Tracer::Rendering {
     }
 
     glm::vec3 Raytracer::Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const {
-        Math::IntersectionData intersect = RayCastObjects(scene.GetRenderableObjects(), origin, dir);
+        Math::IntersectionData intersect = RayCastObjects(scene.GetMeshObjects(), origin, dir);
         glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
         if (intersect.IsHit()) {
             if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
@@ -215,7 +215,7 @@ namespace Tracer::Rendering {
                     }*/
 
                     glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.001f;
-                    Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetRenderableObjects(), newRayOrigin, shadowRayDir);
+                    Math::IntersectionData shadowIntersect = RayCastObjects(scene.GetMeshObjects(), newRayOrigin, shadowRayDir);
 
                     if (!shadowIntersect.IsHit()) {
                         //Diffuse color calculation. Light intensity uses the inverse square law

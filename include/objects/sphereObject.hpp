@@ -5,23 +5,23 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "material.hpp"
-#include "mesh.hpp"
 #include "transform.hpp"
 
 namespace Tracer::Objects {
-    class RenderableObject {
-    private:
+    class SphereObject {
         Components::Position::Transform transform;
-        Components::Mesh mesh;
         Components::Material material;
+        float radius;
 
     public:
-        RenderableObject(const glm::vec3& position, const Components::Mesh& mesh, const Components::Material& material);
+        SphereObject(const glm::vec3& position, const Components::Material& material, float radius);
 
         Components::Position::Transform& GetTransform();
 
-        Components::Mesh& GetMesh();
-
         Components::Material& GetMaterial();
+
+        const glm::vec3& GetCenter();
+
+        float GetRadius();
     };
-}  // namespace Tracer::Objects
+}

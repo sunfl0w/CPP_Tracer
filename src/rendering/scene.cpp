@@ -1,14 +1,19 @@
 #include "scene.hpp"
 
 namespace Tracer::Rendering {
-    Scene::Scene(const std::vector<Objects::RenderableObject>& renderableObjects, const std::vector<Objects::PointLight*> pointLights, const Objects::Camera& camera) : camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)) {
-        this->renderableObjects = renderableObjects;
+    Scene::Scene(std::vector<Objects::MeshObject>& meshObjects, std::vector<Objects::SphereObject>& sphereObjects, std::vector<Objects::PointLight*> pointLights, Objects::Camera& camera) {
+        this->meshObjects = meshObjects;
+        this->sphereObjects = sphereObjects;
         this->pointLights = pointLights;
         this->camera = camera;
     }
 
-    std::vector<Objects::RenderableObject>& Scene::GetRenderableObjects() {
-        return renderableObjects;
+    std::vector<Objects::MeshObject>& Scene::GetMeshObjects() {
+        return meshObjects;
+    }
+
+    std::vector<Objects::SphereObject>& Scene::GetSphereObjects() {
+        return sphereObjects;
     }
 
     std::vector<Objects::PointLight*> Scene::GetLightObjects() {

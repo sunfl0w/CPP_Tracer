@@ -45,7 +45,7 @@ namespace Tracer::Rendering {
 
         std::vector<unsigned char> RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
 
-        IntersectionData RayCastObjects(std::vector<Objects::RenderableObject>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const;
+        IntersectionData RayCastObjects(std::vector<Objects::MeshObject>& meshObjects, glm::vec3& origin, glm::vec3& dir) const;
 
         IntersectionData RayCastTris(Math::Tris& triangle, glm::vec3& origin, glm::vec3& dir) const;
 

@@ -12,6 +12,8 @@ namespace Tracer::Objects {
         Components::Position::Transform transform;
 
     public:
+        Camera();
+        
         Camera(glm::vec3 position, glm::vec3 rotation);
 
         Components::Position::Transform& GetTransform();
