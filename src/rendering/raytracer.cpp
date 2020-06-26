@@ -78,6 +78,10 @@ namespace Tracer::Rendering {
     }
 
     IntersectionData Raytracer::RayCastObjects(std::vector<Objects::MeshObject>& meshObjects, glm::vec3& origin, glm::vec3& dir) const {
+        
+
+
+
         IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 99999999.9f;
         for (Objects::MeshObject meshObjects : meshObjects) {

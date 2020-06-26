@@ -6,18 +6,19 @@
 
 #include "renderableObject.hpp"
 #include "material.hpp"
-#include "mesh.hpp"
 #include "transform.hpp"
 
 namespace Tracer::Objects {
-    class MeshObject : public RenderableObject {
-        Components::Mesh mesh;
+    class Sphere : public RenderableObject {
+        float radius;
 
     public:
-        MeshObject(const glm::vec3& position, const Components::Material& material, const Components::Mesh& mesh);
+        Sphere(const glm::vec3& position, const Components::Material& material, float radius);
 
-        Components::Mesh& GetMesh();
+        const glm::vec3& GetCenter();
+
+        float GetRadius();
 
         virtual IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const;
     };
-}  // namespace Tracer::Objects
+}

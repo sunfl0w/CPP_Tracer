@@ -4,24 +4,25 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "intersectionData.hpp"
 #include "material.hpp"
 #include "transform.hpp"
 
 namespace Tracer::Objects {
-    class SphereObject {
+    class RenderableObject {
+    protected:
         Components::Position::Transform transform;
         Components::Material material;
-        float radius;
 
     public:
-        SphereObject(const glm::vec3& position, const Components::Material& material, float radius);
+        RenderableObject(const glm::vec3& position, const Components::Material& material);
+
+        virtual ~RenderableObject();
 
         Components::Position::Transform& GetTransform();
 
         Components::Material& GetMaterial();
 
-        const glm::vec3& GetCenter();
-
-        float GetRadius();
+        virtual IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const = 0;
     };
-}
+}  // namespace Tracer::Objects
