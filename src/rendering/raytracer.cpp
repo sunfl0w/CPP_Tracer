@@ -3,48 +3,6 @@
 namespace Tracer::Rendering {
     Raytracer::Raytracer() {}
 
-    void Raytracer::RenderSceneToImage(Scene& scene, int imageWidth, int imageHeight) const {
-        ShaderData shaderData;
-
-        int modelIndex = 0;
-        for (Objects::MeshObject meshObjects : scene.GetMeshObjects()) {
-            Model model;
-            int vertexIndex = 0;
-            int triangleCount = 0;
-            for (Math::Tris triangle : meshObjects.GetMesh().GetData()) {
-                model.vertexData[vertexIndex] = glm::vec4(triangle.vert0, 1.0f);
-                model.vertexData[vertexIndex + 1] = glm::vec4(triangle.vert1, 1.0f);
-                model.vertexData[vertexIndex + 2] = glm::vec4(triangle.vert2, 1.0f);
-                vertexIndex += 3;
-                triangleCount++;
-            }
-            model.modelMatrix = glm::mat4(meshObjects.GetTransform().GetTransformMatrix());
-            model.numTris = glm::vec4(triangleCount, 0, 0, 0);
-            shaderData.models[modelIndex] = model;
-            modelIndex++;
-        }
-        shaderData.numModels = modelIndex;
-
-        int lightIndex = 0;
-        for (Objects::PointLight* pointLight : scene.GetLightObjects()) {
-            Light light;
-            light.position = glm::vec4(pointLight->GetTransform().GetPosition(), 0);
-            light.color = glm::vec4(pointLight->GetColor().r, pointLight->GetColor().g, pointLight->GetColor().b, pointLight->GetIntensity());
-            shaderData.lights[lightIndex] = light;
-            lightIndex++;
-        }
-        shaderData.numLights = lightIndex;
-        shaderData.cameraPosition = glm::vec4(scene.GetCamera().GetTransform().GetPosition(), 0);
-
-        unsigned int shaderDataBuffer;
-        glGenBuffers(1, &shaderDataBuffer);
-
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderDataBuffer);
-        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shaderData), &shaderData, GL_DYNAMIC_DRAW);
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderDataBuffer);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-    }
-
     std::vector<unsigned char> Raytracer::RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const {
         std::vector<unsigned char> buffer = std::vector<unsigned char>(imageWidth * 3 * imageHeight);
         float invWidth = 1 / float(imageWidth), invHeight = 1 / float(imageHeight);
@@ -53,9 +11,6 @@ namespace Tracer::Rendering {
         float angle = tan(M_PI * 0.5 * fov / 180.0f);
 
         glm::vec4 camPosWorld = scene.GetCamera().GetTransform().GetTransformMatrix() * glm::vec4(0, 0, 0, 1);
-        //glm::mat4 rayMatrix = glm::mat4(1.0f);
-        //rayMatrix = glm::rotate(rayMatrix, -glm::radians(scene.GetCamera().GetTransform().GetRotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
-        //rayMatrix = glm::rotate(rayMatrix, glm::radians(scene.GetCamera().GetTransform().GetRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < imageWidth; x++) {
@@ -77,26 +32,16 @@ namespace Tracer::Rendering {
         return buffer;
     }
 
-    IntersectionData Raytracer::RayCastObjects(std::vector<Objects::MeshObject>& meshObjects, glm::vec3& origin, glm::vec3& dir) const {
-        
-
-
-
+    IntersectionData Raytracer::RayCastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
         IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 99999999.9f;
-        for (Objects::MeshObject meshObjects : meshObjects) {
-            for (Math::Tris triangle : meshObjects.GetMesh().GetData()) {
-                Math::Tris transformedTriangle;
-                transformedTriangle.vert0 = meshObjects.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert0, 1.0f);
-                transformedTriangle.vert1 = meshObjects.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert1, 1.0f);
-                transformedTriangle.vert2 = meshObjects.GetTransform().GetTransformMatrix() * glm::vec4(triangle.vert2, 1.0f);
-                IntersectionData intersect = RayCastTris(transformedTriangle, origin, dir);
-                float dst = glm::distance(intersect.GetIntersectionPos(), origin);
-                if (intersect.IsHit() && dst < closesIntersectDst) {
-                    closesIntersectDst = dst;
-                    closestIntersect = intersect;
-                    closestIntersect.SetMaterial(meshObjects.GetMaterial());
-                }
+        for (std::unique_ptr<Objects::RenderableObject>& renderableObject : renderableObjects) {
+            IntersectionData intersect = renderableObject.get()->Intersect(origin, dir);
+            float dst = glm::distance(intersect.GetIntersectionPos(), origin);
+            if (intersect.IsHit() && dst < closesIntersectDst) {
+                closesIntersectDst = dst;
+                closestIntersect = intersect;
+                closestIntersect.SetMaterial(renderableObject.get()->GetMaterial());
             }
         }
         return closestIntersect;
@@ -124,7 +69,7 @@ namespace Tracer::Rendering {
         }*/
         //Culling
 
-        if(std::fabs(det) < epsilon) {
+        if (std::fabs(det) < epsilon) {
             return IntersectionData(triangle, glm::vec3(0, 0, 0), false);
         }
 
@@ -183,7 +128,7 @@ namespace Tracer::Rendering {
                 glm::vec3 refractionColor = glm::vec3(0, 0, 0);
 
                 if (intersect.GetMaterial().GetTransparency() > 0.0f) {
-                    float ior = 1.5f; //Index of refraction
+                    float ior = 1.5f;  //Index of refraction
                     float eta = ior;
                     if (!inObject) {
                         eta = 1.0f / ior;

@@ -18,9 +18,19 @@
 #include "tris.hpp"
 
 namespace Tracer::Rendering {
-    struct Model {
+    struct Material {
+        glm::vec4 color;
+        glm::vec4 modifiers; //First value is reflectivness, second one is transparency
+    };
+
+    struct Sphere {
+        glm::mat4 transformMatrix;
+        glm::vec4 radius;
+    };
+
+    struct MeshObject {
         glm::vec4 vertexData[1024];
-        glm::mat4 modelMatrix;
+        glm::mat4 transformMatrix;
         glm::vec4 numTris;
     };
 
@@ -29,8 +39,9 @@ namespace Tracer::Rendering {
         glm::vec4 color;
     };
 
-    struct ShaderData {
-        Model models[4];
+    struct SceneData {
+        MeshObject meshObjects[4];
+        Sphere spheres[4];
         Light lights[4];
         glm::vec4 cameraPosition;
         int numLights;
@@ -41,11 +52,11 @@ namespace Tracer::Rendering {
     public:
         Raytracer();
 
-        void RenderSceneToImage(Scene& scene, int imageWidth, int imageHeight) const;
+        virtual void RenderSceneToScreen(Scene& scene, int screenWidth, int screenHeight) const = 0;
 
         std::vector<unsigned char> RenderSceneToBuffer(Scene& scene, int imageWidth, int imageHeight) const;
 
-        IntersectionData RayCastObjects(std::vector<Objects::MeshObject>& meshObjects, glm::vec3& origin, glm::vec3& dir) const;
+        IntersectionData RayCastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const;
 
         IntersectionData RayCastTris(Math::Tris& triangle, glm::vec3& origin, glm::vec3& dir) const;
 

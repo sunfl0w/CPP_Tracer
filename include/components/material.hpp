@@ -8,7 +8,7 @@ namespace Tracer::Components {
     class Material {
     private:
         glm::vec3 color;
-        float reflectivity;
+        float reflectiveness;
         float transparency;
 
     public:
