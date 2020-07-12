@@ -32,13 +32,13 @@ namespace Tracer::Rendering {
 
         void SetCamera(Objects::Camera& camera);
 
-        std::vector<std::unique_ptr<Objects::RenderableObject>> GetRenderableObjects();
+        std::vector<std::unique_ptr<Objects::RenderableObject>>& GetRenderableObjects();
 
-        std::vector<std::unique_ptr<Objects::MeshObject>> GetMeshObjects();
+        std::vector<std::unique_ptr<Objects::MeshObject>>& GetMeshObjects();
 
-        std::vector<std::unique_ptr<Objects::Sphere>> GetSpheres();
+        std::vector<std::unique_ptr<Objects::Sphere>>& GetSpheres();
 
-        std::vector<std::unique_ptr<Objects::PointLight>> GetPointLights();
+        std::vector<std::unique_ptr<Objects::PointLight>>& GetPointLights();
 
         Objects::Camera& GetCamera();
     };

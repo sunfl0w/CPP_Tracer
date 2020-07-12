@@ -5,4 +5,6 @@ namespace Tracer::Rendering {
         this->window = window;
         SDL_GetWindowSize(window, &screenWidth, &screenHeight);
     }
+
+    Raytracer::~Raytracer() {}
 }  // namespace Tracer::Rendering

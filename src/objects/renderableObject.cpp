@@ -6,6 +6,8 @@ namespace Tracer::Objects {
         this->material = material;
     }
 
+    RenderableObject::~RenderableObject() {}
+
     Components::Position::Transform& RenderableObject::GetTransform() {
         return transform;
     }

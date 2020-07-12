@@ -8,8 +8,12 @@ src/lib/stb/stb_truetype.c
 src/math/intersectionData.cpp
 src/math/tris.cpp
 src/objects/camera.cpp
+src/objects/meshObject.cpp
 src/objects/pointLight.cpp
 src/objects/renderableObject.cpp
+src/objects/sphere.cpp
 src/rendering/raytracer.cpp
+src/rendering/raytracerCPU.cpp
+src/rendering/raytracerGPU.cpp
 src/rendering/scene.cpp
 src/rendering/shader.cpp

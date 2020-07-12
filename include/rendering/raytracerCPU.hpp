@@ -28,6 +28,6 @@ namespace Tracer::Rendering {
 
         glm::vec3 Raytrace(Scene& scene, glm::vec3& origin, glm::vec3& dir, int depth) const;
 
-        Tracer::Math::IntersectionData RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>> renderableObjects, glm::vec3& origin, glm::vec3& dir) const;
+        Tracer::Math::IntersectionData RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const;
     };
 }  // namespace Tracer::Rendering

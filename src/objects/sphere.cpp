@@ -9,7 +9,7 @@ namespace Tracer::Objects {
         return radius;
     }
 
-    Tracer::Math::IntersectionData Sphere::Intersect(glm::vec3& origin, glm::vec3& dir) const {
+    Tracer::Math::IntersectionData Sphere::Intersect(glm::vec3& origin, glm::vec3& dir) {
         glm::vec3 centerOrigin = transform.GetPosition() - origin;
         float tco = glm::dot(centerOrigin, dir);
         if (tco < 0) {

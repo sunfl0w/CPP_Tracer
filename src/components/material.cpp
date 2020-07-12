@@ -9,15 +9,15 @@ namespace Tracer::Components {
         this->transparency = transparency;
     }
 
-        glm::vec3& Material::GetColor() {
+        const glm::vec3& Material::GetColor() const {
             return color;
         }
 
-        float Material::GetReflectivity() {
+        float Material::GetReflectivity() const {
             return reflectiveness;
         }
 
-        float Material::GetTransparency() {
+        float Material::GetTransparency() const {
             return transparency;
         }
 }  // namespace Tracer::Components::MaterialComponents

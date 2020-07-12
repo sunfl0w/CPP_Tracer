@@ -13,6 +13,8 @@ namespace Tracer::Rendering {
     public:
         Raytracer(SDL_Window* window);
 
+        virtual ~Raytracer();
+
         virtual void RenderSceneToWindow(Scene& scene) const = 0;
     };
 }  // namespace Tracer::Rendering

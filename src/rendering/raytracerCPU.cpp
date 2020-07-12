@@ -2,6 +2,8 @@
 
 namespace Tracer::Rendering {
     RaytracerCPU::RaytracerCPU(SDL_Window* window) : Raytracer(window) {
+        textureShader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
+
         float vertices[] = {
             1.0f, 1.0f, 1.0f, 1.0f,
             1.0f, -1.0f, 1.0f, 0.0f,
@@ -33,14 +35,13 @@ namespace Tracer::Rendering {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        //Texture
+        //Gen Texure Texture
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 600, 400, 0, GL_RGBA, GL_FLOAT, NULL);
-        glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -53,7 +54,7 @@ namespace Tracer::Rendering {
 
         std::vector<unsigned char> buffer = RenderSceneToBuffer(scene);
 
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 600, 400, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, screenWidth, screenHeight, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -70,7 +71,7 @@ namespace Tracer::Rendering {
         float aspectratio = screenWidth / float(screenHeight);
         float angle = tan(M_PI * 0.5 * fov / 180.0f);
 
-        glm::vec4 camPosWorld = glm::vec4(scene.GetCamera().GetTransform().GetPosition(), 0);
+        glm::vec4 camPosWorld = scene.GetCamera().GetTransform().GetTransformMatrix() * glm::vec4(0, 0, 0, 1);
 
 #pragma omp parallel for schedule(runtime)
         for (int x = 0; x < screenWidth; x++) {
@@ -100,7 +101,7 @@ namespace Tracer::Rendering {
                 //Reflective and refractive color computation
                 glm::vec3 intersectPos = intersect.GetIntersectionPos();
                 bool inObject = false;
-                glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
+                glm::vec3 norm = intersect.GetIntersectionNormal();
                 //norm = glm::normalize(norm);
                 /*if (glm::dot(dir, norm) > 0) {
                     norm = -norm;
@@ -115,9 +116,6 @@ namespace Tracer::Rendering {
 
                 glm::vec3 newRayOrigin = intersectPos + norm * 0.0001f;
                 glm::vec3 reflectionColor = Raytrace(scene, newRayOrigin, reflectionDir, depth + 1);
-                if (depth == 0) {
-                    int i = 0;
-                }
                 glm::vec3 refractionColor = glm::vec3(0, 0, 0);
 
                 if (intersect.GetMaterial().GetTransparency() > 0.0f) {
@@ -135,7 +133,6 @@ namespace Tracer::Rendering {
                 }
 
                 surfaceColor = (reflectionColor * fresnel * 0.8f + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
-                int i = 0;
             } else {
                 //Diffuse color computation
                 for (std::unique_ptr<Objects::PointLight>& pointLight : scene.GetPointLights()) {
@@ -145,7 +142,7 @@ namespace Tracer::Rendering {
                     }
 
                     glm::vec3 shadowRayDir = pointLight->GetTransform().GetPosition() - intersect.GetIntersectionPos();
-                    glm::vec3 norm = intersect.GetIntersectionTriangle().GetNormal();
+                    glm::vec3 norm = intersect.GetIntersectionNormal();
 
                     //norm = glm::normalize(norm);
                     shadowRayDir = glm::normalize(shadowRayDir);
@@ -165,14 +162,11 @@ namespace Tracer::Rendering {
                     }
                 }
             }
-            /*if (surfaceColor.r > 1.0f || surfaceColor.g > 1.0f || surfaceColor.b > 1.0f) {
-                surfaceColor = glm::normalize(surfaceColor);
-            }*/
         }
         return surfaceColor;
     }
 
-    Tracer::Math::IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>> renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
+    Tracer::Math::IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
         Tracer::Math::IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 99999999.9f;
         for (std::unique_ptr<Objects::RenderableObject>& renderableObject : renderableObjects) {
@@ -181,7 +175,6 @@ namespace Tracer::Rendering {
             if (intersect.IsHit() && dst < closesIntersectDst) {
                 closesIntersectDst = dst;
                 closestIntersect = intersect;
-                closestIntersect.SetMaterial(renderableObject.get()->GetMaterial());
             }
         }
         return closestIntersect;

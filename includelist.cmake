@@ -14,3 +14,4 @@ include/lib/stb
 include/math
 include/objects
 include/rendering
+include/rendering/glDebugging

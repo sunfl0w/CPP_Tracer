@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-namespace Tarcer::Rendering {
+namespace Tarcer::Rendering::GLDebugging {
     void APIENTRY GLDebugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* data) {
         std::string sourceType;
         std::string errorType;

@@ -48,13 +48,6 @@ int main() {
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-#ifdef ENABLE_OPENGL_DEBUG
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-    glEnable(GL_DEBUG_OUTPUT);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-    glDebugMessageCallback(GLDebugMessageCallback, 0);
-#endif
-
     SDL_Window* window = SDL_CreateWindow("CPP_Tracer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_OPENGL);
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
 
@@ -62,9 +55,17 @@ int main() {
 
     if (!gladLoadGL()) {
         std::cout << "Unable to load OpenGL\n";
+        return -1;
     }
 
-    Raytracer* raytracer = &RaytracerCPU(window);
+#ifdef ENABLE_OPENGL_DEBUG
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(Tarcer::Rendering::GLDebugging::GLDebugMessageCallback, 0);
+#endif
+
+    Raytracer* raytracer = new RaytracerCPU(window);
 
     std::chrono::steady_clock::time_point start;
     float delta = 0.0f;
@@ -83,12 +84,14 @@ int main() {
                 }
             }
         }
-        scene.GetCamera().GetTransform().RotateAroundOrigin(glm::vec3(0, 1, 0), delta * 20);
+        //When rotating around the the origin the position of a transform is not entirely correct!
+        scene.GetCamera().GetTransform().RotateAroundOrigin(glm::vec3(0, 1, 0), delta * 20.0f);
 
         raytracer->RenderSceneToWindow(scene);
 
-        delta = std::pow(10.0, 9) / std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
-        std::cout << "FPS: " << std::to_string(delta) << "\n";
+        delta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() * std::pow(10.0, -9);
+        std::cout << "FPS: " << std::to_string(1.0f / delta) << "\n";
     }
+    delete raytracer;
     return 0;
 }

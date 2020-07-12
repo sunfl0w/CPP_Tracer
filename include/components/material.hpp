@@ -16,10 +16,10 @@ namespace Tracer::Components {
         
         Material(const glm::vec3& color, float reflectivity, float transparency);
 
-        glm::vec3& GetColor();
+        const glm::vec3& GetColor() const;
 
-        float GetReflectivity();
+        float GetReflectivity() const;
 
-        float GetTransparency();
+        float GetTransparency() const;
     };
 }  // namespace Tracer::Components::Material

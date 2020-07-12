@@ -17,6 +17,6 @@ namespace Tracer::Objects {
 
         float GetRadius();
 
-        virtual Tracer::Math::IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const;
+        virtual Tracer::Math::IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir);
     };
 }
