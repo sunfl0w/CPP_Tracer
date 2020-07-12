@@ -22,7 +22,7 @@ namespace Tracer::Rendering {
 
         Shader(std::string shaderPath0, GLenum shaderType0, std::string shaderPath1, GLenum shaderType1);
 
-        void Activate();
+        void Activate() const;
 
         unsigned int GetID();
 

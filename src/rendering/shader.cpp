@@ -14,7 +14,7 @@ namespace Tracer::Rendering {
         LinkShaderProgram(std::vector<unsigned int> {shader0, shader1});
     }
 
-    void Shader::Activate() {
+    void Shader::Activate() const {
         glUseProgram(ID);
     }
 
