@@ -22,7 +22,7 @@ namespace Tracer::Components::Position {
 
         glm::mat4& GetTransformMatrix();
 
-        const glm::vec3& GetPosition();
+        const glm::vec3& GetPosition() const;
 
         void SetPosition(const glm::vec3& position);
 

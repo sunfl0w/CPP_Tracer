@@ -64,24 +64,28 @@ int main() {
         std::cout << "Unable to load OpenGL\n";
     }
 
-    RaytracerCPU raytracerCPU = RaytracerCPU(window);
+    Raytracer* raytracer = &RaytracerCPU(window);
 
     std::chrono::steady_clock::time_point start;
     float delta = 0.0f;
 
-    bool close = false;
-    while (!close) {
+    bool running = true;
+    while (running) {
         start = std::chrono::steady_clock::now();
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
-                close = true;
+                running = false;
+            } else if(event.type == SDL_KEYDOWN) {
+                if(event.key.keysym.sym == SDLK_ESCAPE) {
+                    running = false;
+                }
             }
         }
         scene.GetCamera().GetTransform().RotateAroundOrigin(glm::vec3(0, 1, 0), delta * 20);
 
-        raytracerCPU.RenderSceneToWindow(scene);
+        raytracer->RenderSceneToWindow(scene);
 
         delta = std::pow(10.0, 9) / std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count();
         std::cout << "FPS: " << std::to_string(delta) << "\n";

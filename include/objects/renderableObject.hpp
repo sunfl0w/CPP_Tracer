@@ -23,6 +23,6 @@ namespace Tracer::Objects {
 
         Components::Material& GetMaterial();
 
-        virtual IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const = 0;
+        virtual Tracer::Math::IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) = 0;
     };
 }  // namespace Tracer::Objects

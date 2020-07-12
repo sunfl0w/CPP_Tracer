@@ -10,7 +10,7 @@
 namespace Tracer::Math {
     class IntersectionData {
     private:
-        Tris intersectionTriangle;
+        glm::vec3 intersectionNorm;
         glm::vec3 intersectionPos;
         Tracer::Components::Material material;
         bool hit;
@@ -18,17 +18,13 @@ namespace Tracer::Math {
     public:
         IntersectionData();
 
-        IntersectionData(const Tris& intersectionTriangle, const glm::vec3& intersectionPos, bool hit);
+        IntersectionData(const glm::vec3& intersectionNorm, const glm::vec3& intersectionPos, const Tracer::Components::Material& material, bool hit);
 
-        IntersectionData(const Tris& intersectionTriangle, const glm::vec3& intersectionPos, const Tracer::Components::Material& material, bool hit);
+        const glm::vec3& GetIntersectionNormal() const;
 
-        Tris& GetIntersectionTriangle();
+        const glm::vec3& GetIntersectionPos() const;
 
-        glm::vec3& GetIntersectionPos();
-
-        Tracer::Components::Material& GetMaterial();
-
-        void SetMaterial(const Tracer::Components::Material& material);
+        const Tracer::Components::Material& GetMaterial() const;
 
         bool IsHit() const;
     };

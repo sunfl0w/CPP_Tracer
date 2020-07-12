@@ -15,10 +15,8 @@ namespace Tracer::Objects {
     public:
         Sphere(const glm::vec3& position, const Components::Material& material, float radius);
 
-        const glm::vec3& GetCenter();
-
         float GetRadius();
 
-        virtual IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const;
+        virtual Tracer::Math::IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const;
     };
 }

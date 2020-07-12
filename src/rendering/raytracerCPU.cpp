@@ -160,7 +160,7 @@ namespace Tracer::Rendering {
                     Math::IntersectionData shadowIntersect = RaycastObjects(scene.GetRenderableObjects(), newRayOrigin, shadowRayDir);
 
                     if (!shadowIntersect.IsHit()) {
-                        //Diffuse color calculation. Light intensity uses the inverse square law
+                        //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
                         surfaceColor += intersect.GetMaterial().GetColor() * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * pointLight->GetColor() * pointLight->GetIntensity() * 1.0f / std::pow(dst, 0.01f);
                     }
                 }
@@ -172,11 +172,11 @@ namespace Tracer::Rendering {
         return surfaceColor;
     }
 
-    IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>> renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
-        IntersectionData closestIntersect = Math::IntersectionData();
+    Tracer::Math::IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>> renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
+        Tracer::Math::IntersectionData closestIntersect = Math::IntersectionData();
         float closesIntersectDst = 99999999.9f;
         for (std::unique_ptr<Objects::RenderableObject>& renderableObject : renderableObjects) {
-            IntersectionData intersect = renderableObject->Intersect(origin, dir);
+            Tracer::Math::IntersectionData intersect = renderableObject->Intersect(origin, dir);
             float dst = glm::distance(intersect.GetIntersectionPos(), origin);
             if (intersect.IsHit() && dst < closesIntersectDst) {
                 closesIntersectDst = dst;

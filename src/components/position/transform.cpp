@@ -14,7 +14,7 @@ namespace Tracer::Components::Position {
         return modelMatrix;
     }
 
-    const glm::vec3& Transform::GetPosition() {
+    const glm::vec3& Transform::GetPosition() const {
         return position;
     }
 

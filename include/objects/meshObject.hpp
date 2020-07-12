@@ -18,6 +18,8 @@ namespace Tracer::Objects {
 
         Components::Mesh& GetMesh();
 
-        virtual IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir) const;
+        virtual Tracer::Math::IntersectionData Intersect(glm::vec3& origin, glm::vec3& dir);
+
+        Tracer::Math::IntersectionData IntersectTris(Math::Tris& triangle, glm::vec3& origin, glm::vec3& dir) const;
     };
 }  // namespace Tracer::Objects
