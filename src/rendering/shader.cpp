@@ -22,16 +22,16 @@ namespace Tracer::Rendering {
         return ID;
     }
 
-    void Shader::SetInt(std::string name, int value) {
+    void Shader::SetInt(std::string name, int value) const {
         unsigned int uniformLocation = glGetUniformLocation(ID, name.c_str());
         glUniform1i(uniformLocation, value);
     }
 
-    void Shader::SetVec4(std::string name, glm::vec4 vector) {
+    void Shader::SetVec4(std::string name, glm::vec4 vector) const {
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vector));
     }
 
-    void Shader::SetMat4(std::string name, glm::mat4 matrix) {
+    void Shader::SetMat4(std::string name, glm::mat4 matrix) const {
         unsigned int uniformLocation = glGetUniformLocation(ID, name.c_str());
         glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
     }

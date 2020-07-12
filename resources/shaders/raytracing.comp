@@ -36,8 +36,6 @@ void main() {
 
     //Constants and definitions
     const float pi = 3.14159f;
-    const int imageWidth = 600;
-    const int imageHeight = 400;
 
     //Computing ray direction
     float invWidth = 1 / float(imageWidth), invHeight = 1 / float(imageHeight);

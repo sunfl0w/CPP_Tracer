@@ -1,11 +1,23 @@
 #include "raytracerGPU.hpp"
 
 namespace Tracer::Rendering {
-    RaytracerGPU::RaytracerGPU() {
+    RaytracerGPU::RaytracerGPU(SDL_Window* window) : Raytracer(window) {
         computeShader = Shader("resources/shaders/raytracing.comp", GL_COMPUTE_SHADER);
+
+        //Creating a texture, make it an image and bind it to an image unit
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, screenWidth, screenHeight, 0, GL_RGBA, GL_FLOAT, NULL);
+        glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    void RaytracerGPU::RenderSceneToScreen(Scene& scene, int screenWidth, int screenHeight) const {
+    void RaytracerGPU::RenderSceneToWindow(Scene& scene) const {
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         SceneData sceneData = ConvertSceneToStruct(scene);
 
         computeShader.Activate();
@@ -17,12 +29,16 @@ namespace Tracer::Rendering {
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderDataBuffer);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-        glDispatchCompute(600, 400, 1);
+        glDispatchCompute(screenWidth, screenHeight, 1);
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+        SDL_GL_SwapWindow(window);
     }
 
     SceneData RaytracerGPU::ConvertSceneToStruct(Scene& scene) const {
         SceneData sceneData;
+        sceneData.screenWidth = screenWidth;
+        sceneData.screenHeight = screenHeight;
 
         //MeshObjects
         int meshObjectIndex = 0;
@@ -72,4 +88,4 @@ namespace Tracer::Rendering {
 
         return sceneData;
     }
-}
+}  // namespace Tracer::Rendering

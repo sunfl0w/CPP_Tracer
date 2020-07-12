@@ -15,6 +15,7 @@
 namespace Tracer::Rendering {
     class Scene {
     private:
+        std::vector<std::unique_ptr<Objects::RenderableObject>> renderableObjects;
         std::vector<std::unique_ptr<Objects::MeshObject>> meshObjects;
         std::vector<std::unique_ptr<Objects::Sphere>> spheres;
         std::vector<std::unique_ptr<Objects::PointLight>> pointLights;

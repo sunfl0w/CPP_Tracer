@@ -6,8 +6,6 @@
 
 #include "tris.hpp"
 
-using namespace Tracer::Math;
-
 namespace Tracer::Components::Position {
     class Transform {
     private:

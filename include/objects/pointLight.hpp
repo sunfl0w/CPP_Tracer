@@ -9,7 +9,7 @@
 namespace Tracer::Objects {
     class PointLight {
     private:
-        Components::Position::Transform transform;
+        Tracer::Components::Position::Transform transform;
         glm::vec3 color;
         float intensity;
 

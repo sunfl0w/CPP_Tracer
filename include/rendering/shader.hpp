@@ -26,11 +26,11 @@ namespace Tracer::Rendering {
 
         unsigned int GetID();
 
-        void SetInt(std::string name, int value);
+        void SetInt(std::string name, int value) const;
 
-        void SetVec4(std::string name, glm::vec4 vector);
+        void SetVec4(std::string name, glm::vec4 vector) const;
 
-        void SetMat4(std::string name, glm::mat4 matrix);
+        void SetMat4(std::string name, glm::mat4 matrix) const;
 
     private:
         unsigned int CompileShaderFromFile(std::string shaderPath, GLenum shaderType);

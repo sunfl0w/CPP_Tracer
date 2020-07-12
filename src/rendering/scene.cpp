@@ -5,10 +5,12 @@ namespace Tracer::Rendering {
 
     void Scene::AddMeshObject(Objects::MeshObject& meshObject) {
         meshObjects.push_back(std::make_unique<Objects::MeshObject>(meshObject));
+        renderableObjects.push_back(std::make_unique<Objects::MeshObject>(meshObject));
     }
 
     void Scene::AddSphere(Objects::Sphere& sphere) {
         spheres.push_back(std::make_unique<Objects::Sphere>(sphere));
+        renderableObjects.push_back(std::make_unique<Objects::MeshObject>(sphere));
     }
 
     void Scene::AddPointLight(Objects::PointLight& pointLight) {
@@ -20,13 +22,6 @@ namespace Tracer::Rendering {
     }
 
     std::vector<std::unique_ptr<Objects::RenderableObject>> Scene::GetRenderableObjects() {
-        std::vector<std::unique_ptr<Objects::RenderableObject>> renderableObjects = std::vector<std::unique_ptr<Objects::RenderableObject>>();
-        for (std::unique_ptr<Objects::MeshObject>& meshObject : meshObjects) {
-            renderableObjects.push_back(std::move(meshObject));
-        }
-        for (std::unique_ptr<Objects::Sphere>& sphere : spheres) {
-            renderableObjects.push_back(std::move(sphere));
-        }
         return renderableObjects;
     }
 

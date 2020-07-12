@@ -1,6 +1,13 @@
 #pragma once
 
+#include <glad/glad.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "raytracer.hpp"
+#include "shader.hpp"
 
 namespace Tracer::Rendering {
     //Structs for arranging data that can be sent to the gpu
@@ -39,14 +46,17 @@ namespace Tracer::Rendering {
         int numMeshModels;
         int numSpheres;
         int numPointLights;
+        int screenWidth;
+        int screenHeight;
     };
 
     class RaytracerGPU : public Raytracer {
         Shader computeShader;
+        unsigned int texture;
     public:
-        RaytracerGPU();
+        RaytracerGPU(SDL_Window* window);
 
-        virtual void RenderSceneToScreen(Scene& scene, int screenWidth, int screenHeight) const;
+        virtual void RenderSceneToWindow(Scene& scene) const;
 
     private:
         SceneData ConvertSceneToStruct(Scene& scene) const;
