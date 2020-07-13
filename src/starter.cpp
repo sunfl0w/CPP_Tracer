@@ -24,17 +24,22 @@ int main() {
 
     std::vector<Objects::RenderableObject> renderableObjects;
     Mesh mesh;
-    mesh.LoadFromObjectFile("./models/Sphere.obj");
+    mesh.LoadFromObjectFile("./models/Cube.obj");
 
-    //Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.2f, 0.3f, 0.8f), 0.0f, 0.8f), mesh);
+    //Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
     //scene.AddMeshObject(model);
-    //Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f), mesh);
-    //scene.AddMeshObject(model2);
+    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, -3.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
+    model2.GetTransform().SetScale(glm::vec3(10, 1, 10));
+    scene.AddMeshObject(model2);
 
-    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.8f, 0.8f), 1.0f, 0.0f), 1.0f);
+    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f, 0.0f), 1.0f);
     scene.AddSphere(sphere);
-    Objects::Sphere sphere2 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.4f, 0.2f), 1.0f, 0.0f), 1.0f);
-    scene.AddSphere(sphere2);
+    //Objects::Sphere sphere2 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.2f, 0.9f), 1.0f, 0.0f), 1.0f);
+    //scene.AddSphere(sphere2);
+    Objects::Sphere sphere3 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 3.0f), Material(glm::vec3(0.2f, 0.9f, 0.3f), 0.0f, 1.0f), 1.0f);
+    scene.AddSphere(sphere3);
+    Objects::Sphere sphere4 = Objects::Sphere(glm::vec3(0.0f, 3.0f, 2.0f), Material(glm::vec3(0.6f, 0.9f, 0.3f), 0.0f, 0.0f), 1.0f);
+    scene.AddSphere(sphere4);
 
     Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
     scene.AddPointLight(light);

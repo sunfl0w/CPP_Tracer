@@ -103,18 +103,19 @@ namespace Tracer::Rendering {
                 glm::vec3 intersectPos = intersect.GetIntersectionPos();
                 bool inObject = false;
                 glm::vec3 norm = intersect.GetIntersectionNormal();
-                if (glm::dot(dir, norm) > 0) {
+                /*if (glm::dot(dir, norm) > 0) {
                     norm = -norm;
                     inObject = true;
-                }
+                }*/
 
                 float facingRatio = -glm::dot(dir, norm);
                 float fresnel = glm::mix((float)std::pow(1 - facingRatio, 3), 1.0f, 0.1f);
 
                 glm::vec3 reflectionDir = dir - norm * 2.0f * glm::dot(dir, norm);
+
                 reflectionDir = glm::normalize(reflectionDir);
 
-                glm::vec3 newRayOrigin = intersectPos + norm * 0.001f;
+                glm::vec3 newRayOrigin = intersectPos + norm * 0.0001f;
                 glm::vec3 reflectionColor = Raytrace(scene, newRayOrigin, reflectionDir, depth + 1);
                 glm::vec3 refractionColor = glm::vec3(0, 0, 0);
 
@@ -128,7 +129,7 @@ namespace Tracer::Rendering {
                     float k = 1 - eta * eta * (1 - cosi * cosi);
                     glm::vec3 refractionDir = dir * eta + norm * (eta * cosi - std::sqrt(k));
                     refractionDir = glm::normalize(refractionDir);
-                    newRayOrigin = intersectPos - norm * 0.0001f;
+                    newRayOrigin = intersectPos - norm * 0.001f;
                     refractionColor = Raytrace(scene, newRayOrigin, refractionDir, depth + 1);
                 }
 
@@ -165,7 +166,7 @@ namespace Tracer::Rendering {
             }
             return surfaceColor;
         }
-        return glm::vec3(0, 0.5f, 0.3f);
+        return glm::vec3(0, 0.0f, 0.0f);
     }
 
     Tracer::Math::IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
