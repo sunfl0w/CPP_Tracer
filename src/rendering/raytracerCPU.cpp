@@ -103,10 +103,10 @@ namespace Tracer::Rendering {
                 glm::vec3 intersectPos = intersect.GetIntersectionPos();
                 bool inObject = false;
                 glm::vec3 norm = intersect.GetIntersectionNormal();
-                /*if (glm::dot(dir, norm) > 0) {
+                if (glm::dot(dir, norm) > 0) {
                     norm = -norm;
                     inObject = true;
-                }*/
+                }
 
                 float facingRatio = -glm::dot(dir, norm);
                 float fresnel = glm::mix((float)std::pow(1 - facingRatio, 3), 1.0f, 0.1f);

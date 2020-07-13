@@ -28,15 +28,15 @@ int main() {
 
     //Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
     //scene.AddMeshObject(model);
-    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, -3.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
+    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, -3.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f, 0.0f), mesh);
     model2.GetTransform().SetScale(glm::vec3(10, 1, 10));
     scene.AddMeshObject(model2);
 
-    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 0.0f, 0.0f), 1.0f);
+    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.1f, 0.9f, 0.9f), 0.0f, 0.0f), 1.0f);
     scene.AddSphere(sphere);
     //Objects::Sphere sphere2 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.2f, 0.9f), 1.0f, 0.0f), 1.0f);
     //scene.AddSphere(sphere2);
-    Objects::Sphere sphere3 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 3.0f), Material(glm::vec3(0.2f, 0.9f, 0.3f), 0.0f, 1.0f), 1.0f);
+    Objects::Sphere sphere3 = Objects::Sphere(glm::vec3(0.0f, -1.0f, 3.0f), Material(glm::vec3(0.2f, 0.9f, 0.3f), 0.0f, 1.0f), 1.0f);
     scene.AddSphere(sphere3);
     Objects::Sphere sphere4 = Objects::Sphere(glm::vec3(0.0f, 3.0f, 2.0f), Material(glm::vec3(0.6f, 0.9f, 0.3f), 0.0f, 0.0f), 1.0f);
     scene.AddSphere(sphere4);
