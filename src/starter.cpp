@@ -26,10 +26,15 @@ int main() {
     Mesh mesh;
     mesh.LoadFromObjectFile("./models/Sphere.obj");
 
-    Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.2f, 0.3f, 0.8f), 0.0f, 0.8f), mesh);
-    scene.AddMeshObject(model);
-    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f), mesh);
-    scene.AddMeshObject(model2);
+    //Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.2f, 0.3f, 0.8f), 0.0f, 0.8f), mesh);
+    //scene.AddMeshObject(model);
+    //Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.4f, 0.2f), 0.0f, 0.0f), mesh);
+    //scene.AddMeshObject(model2);
+
+    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.8f, 0.8f), 1.0f, 0.0f), 1.0f);
+    scene.AddSphere(sphere);
+    Objects::Sphere sphere2 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.8f, 0.4f, 0.2f), 1.0f, 0.0f), 1.0f);
+    scene.AddSphere(sphere2);
 
     Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
     scene.AddPointLight(light);

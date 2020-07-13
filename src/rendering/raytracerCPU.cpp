@@ -83,6 +83,7 @@ namespace Tracer::Rendering {
                 glm::vec4 projectionRayDirWorld = projectionRayWorld - camPosWorld;
                 glm::vec3 camPosWorldV3 = glm::vec3(camPosWorld.x, camPosWorld.y, camPosWorld.z);
                 glm::vec3 projectionRayDirWorldV3 = glm::vec3(projectionRayDirWorld.x, projectionRayDirWorld.y, projectionRayDirWorld.z);
+                projectionRayDirWorldV3 = glm::normalize(projectionRayDirWorldV3);
                 glm::vec3 pixelColor = Raytrace(scene, camPosWorldV3, projectionRayDirWorldV3, 0);
 
                 buffer[(x + y * screenWidth) * 3] = (unsigned char)(pixelColor.r * 255.0f);
@@ -97,16 +98,15 @@ namespace Tracer::Rendering {
         Math::IntersectionData intersect = RaycastObjects(scene.GetRenderableObjects(), origin, dir);
         glm::vec3 surfaceColor = glm::vec3(0, 0, 0);
         if (intersect.IsHit()) {
-            if (depth < 3 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
+            if (depth < 5 && (intersect.GetMaterial().GetReflectivity() > 0.0f || intersect.GetMaterial().GetTransparency() > 0.0f)) {
                 //Reflective and refractive color computation
                 glm::vec3 intersectPos = intersect.GetIntersectionPos();
                 bool inObject = false;
                 glm::vec3 norm = intersect.GetIntersectionNormal();
-                //norm = glm::normalize(norm);
-                /*if (glm::dot(dir, norm) > 0) {
+                if (glm::dot(dir, norm) > 0) {
                     norm = -norm;
                     inObject = true;
-                }*/
+                }
 
                 float facingRatio = -glm::dot(dir, norm);
                 float fresnel = glm::mix((float)std::pow(1 - facingRatio, 3), 1.0f, 0.1f);
@@ -114,12 +114,12 @@ namespace Tracer::Rendering {
                 glm::vec3 reflectionDir = dir - norm * 2.0f * glm::dot(dir, norm);
                 reflectionDir = glm::normalize(reflectionDir);
 
-                glm::vec3 newRayOrigin = intersectPos + norm * 0.0001f;
+                glm::vec3 newRayOrigin = intersectPos + norm * 0.001f;
                 glm::vec3 reflectionColor = Raytrace(scene, newRayOrigin, reflectionDir, depth + 1);
                 glm::vec3 refractionColor = glm::vec3(0, 0, 0);
 
                 if (intersect.GetMaterial().GetTransparency() > 0.0f) {
-                    float ior = 1.5f;  //Index of refraction
+                    float ior = 1.1f;  //Index of refraction
                     float eta = ior;
                     if (!inObject) {
                         eta = 1.0f / ior;
@@ -132,7 +132,8 @@ namespace Tracer::Rendering {
                     refractionColor = Raytrace(scene, newRayOrigin, refractionDir, depth + 1);
                 }
 
-                surfaceColor = (reflectionColor * fresnel * 0.8f + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
+                surfaceColor = (reflectionColor * fresnel * intersect.GetMaterial().GetReflectivity() + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
+                int i = 0;
             } else {
                 //Diffuse color computation
                 for (std::unique_ptr<Objects::PointLight>& pointLight : scene.GetPointLights()) {
@@ -162,8 +163,9 @@ namespace Tracer::Rendering {
                     }
                 }
             }
+            return surfaceColor;
         }
-        return surfaceColor;
+        return glm::vec3(0, 0.5f, 0.3f);
     }
 
     Tracer::Math::IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {

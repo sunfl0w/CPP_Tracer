@@ -15,11 +15,11 @@ namespace Tracer::Objects {
         if (tco < 0) {
             return Tracer::Math::IntersectionData(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), material, false);
         }
-        float dstToCenterSqr = glm::dot(centerOrigin, centerOrigin) - tco * tco;
-        if(dstToCenterSqr > radius * radius) {
+        float dstToCenterSqr = glm::dot(centerOrigin, centerOrigin) - (tco * tco);
+        if(dstToCenterSqr > (radius * radius)) {
             return Tracer::Math::IntersectionData(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), material, false);
         }
-        float thc = std::sqrt(radius * radius - dstToCenterSqr);
+        float thc = std::sqrt((radius * radius) - dstToCenterSqr);
         float th0 = tco - thc;
         float th1 = tco + thc;
         if(th0 > th1) {
@@ -32,6 +32,7 @@ namespace Tracer::Objects {
             }
         }
         glm::vec3 hitPos = origin + th0 * dir;
-        return Tracer::Math::IntersectionData(hitPos - transform.GetPosition(), hitPos, material, true);
+        glm::vec3 normal = glm::normalize((hitPos - transform.GetPosition()) / radius);
+        return Tracer::Math::IntersectionData(normal, hitPos, material, true);
     }
 }  // namespace Tracer::Objects
