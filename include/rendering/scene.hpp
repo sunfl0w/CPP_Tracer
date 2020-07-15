@@ -6,10 +6,10 @@
 #include <memory>
 #include <vector>
 
+#include "renderableObject.hpp"
 #include "camera.hpp"
 #include "meshObject.hpp"
 #include "pointLight.hpp"
-#include "renderableObject.hpp"
 #include "sphere.hpp"
 
 namespace Tracer::Rendering {

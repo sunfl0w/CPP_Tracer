@@ -4,7 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "tris.hpp"
 #include "material.hpp"
 
 namespace Tracer::Math {

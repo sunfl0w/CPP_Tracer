@@ -16,7 +16,7 @@ namespace Tracer::Objects {
     public:
         PointLight(const glm::vec3& position, const glm::vec3& color, float intensity);
 
-        Components::Position::Transform& GetTransform();
+        Tracer::Components::Position::Transform& GetTransform();
 
         glm::vec3& GetColor();
 

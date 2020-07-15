@@ -5,9 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "renderableObject.hpp"
-#include "material.hpp"
 #include "mesh.hpp"
-#include "transform.hpp"
 
 namespace Tracer::Objects {
     class MeshObject : public RenderableObject {

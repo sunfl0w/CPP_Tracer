@@ -16,7 +16,7 @@ find_package(OpenGL REQUIRED)
 file(STRINGS "includelist.cmake" includes)
 file(STRINGS "sourcelist.cmake" sources)
 
-include_directories(${includes} ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRs})
+include_directories(BEFORE ${includes} ${OPENGL_INCLUDE_DIRS} ${SDL2_INCLUDE_DIRs})
 
 add_executable(CPP_Tracer_Starter ${sources})
 

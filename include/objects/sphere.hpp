@@ -6,8 +6,6 @@
 #include <glm/gtx/intersect.hpp>
 
 #include "renderableObject.hpp"
-#include "material.hpp"
-#include "transform.hpp"
 
 namespace Tracer::Objects {
     class Sphere : public RenderableObject {

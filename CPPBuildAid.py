@@ -76,7 +76,7 @@ def build(argv):
     for relativeSourceFilePath in relativeSourceFilePaths:
         sourceListFile.write(relativeSourceFilePath + "\n")
     sourceListFile.close()
-
+    
     relativeHeaderFileDirectories = generateIncludeList()
     includeListFile = open("includelist.cmake", "w")
     for relativeHeaderFileDirectory in relativeHeaderFileDirectories:

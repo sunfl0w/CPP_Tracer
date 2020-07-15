@@ -9,13 +9,13 @@
 namespace Tracer::Objects {
     class Camera {
     private:
-        Components::Position::Transform transform;
+        Tracer::Components::Position::Transform transform;
 
     public:
         Camera();
         
         Camera(glm::vec3 position, glm::vec3 rotation);
 
-        Components::Position::Transform& GetTransform();
+        Tracer::Components::Position::Transform& GetTransform();
     };
 }  // namespace Tracer::Objects
