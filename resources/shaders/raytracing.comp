@@ -2,7 +2,7 @@
 
 struct Material {
     vec4 color;
-    vec4 modifiers;  //First value is reflectivness, second one is transparency
+    vec4 modifiers;//First value is reflectivness, second one is transparency
 };
 
 struct Sphere {
@@ -20,7 +20,7 @@ struct MeshObject {
 
 struct PointLight {
     vec4 position;
-    vec4 color;
+    vec4 color;//Last vlaue is intensity
 };
 
 struct Camera {
@@ -32,7 +32,7 @@ struct SceneData {
     Sphere spheres[4];
     PointLight pointLights[4];
     Camera camera;
-    int numMeshModels;
+    int numMeshObjects;
     int numSpheres;
     int numPointLights;
     int screenWidth;
@@ -40,6 +40,7 @@ struct SceneData {
 };
 
 struct IntersectionData {
+    Material material;
     vec3 position;
     vec3 normal;
     bool hit;
@@ -51,15 +52,15 @@ layout(std430, binding = 1) buffer sceneDataBuffer {
     SceneData sceneData;
 };
 
-vec3 raytrace(vec3 origin, vec3 rayDir);
-
-IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir);
+vec3 raytrace(vec3 origin, vec3 dir, int depth);
+IntersectionData raycastObjects(vec3 origin, vec3 dir);
 
 void main() {
     vec4 pixelColor = vec4(1.0, 0.0, 0.0, 1.0);
 
     //Constants and definitions
     const float pi = 3.14159f;
+    const int maxDepth = 5;
 
     //Computing ray direction
     float invWidth = 1 / float(sceneData.screenWidth), invHeight = 1 / float(sceneData.screenHeight);
@@ -68,12 +69,17 @@ void main() {
     float angle = tan(pi * 0.5 * fov / 180.0f);
     float xx = (2 * ((gl_GlobalInvocationID.x + 0.5) * invWidth) - 1) * angle * aspectratio;
     float yy = -(1 - 2 * ((gl_GlobalInvocationID.y + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
-    vec3 rayDir = vec3(xx, yy, 1);
-    rayDir = normalize(rayDir);
 
-    pixelColor.xyz = raytrace(cameraPosition.xyz, rayDir);
+    //Calculating the camera ray with camera transformations in mind
+    vec4 camPosWorld = sceneData.camera.modelMatrix * vec4(0, 0, 0, 1);
+    vec4 projectionRayWorld = sceneData.camera.modelMatrix * vec4(xx, yy, 1, 1);
+    vec4 projectionRayDirWorld = projectionRayWorld - camPosWorld;
+    projectionRayDirWorld = normalize(projectionRayDirWorld);
+
+    //Actual raytracing
+    pixelColor.xyz = raytrace(camPosWorld.xyz, projectionRayDirWorld.xyz, 0);
+
     //pixelColor = pixelColor * 0.1f;
-    pixelColor.xyz = pixelColor.xyz / 255.0f;
     //pixelColor.w = 1.0f;
     //pixelColor.xyz = models[1].vertexData[35].xyz;
 
@@ -81,61 +87,89 @@ void main() {
     imageStore(img_output, pixel_coords, pixelColor);
 }
 
-vec3 raytrace(vec3 origin, vec3 rayDir) {
-    const float pi = 3.14159f;
-    IntersectionData intersect = rayCastTriangles(origin, rayDir);
+vec3 raytrace(vec3 origin, vec3 dir, int depth) {
+    IntersectionData intersect = raycastObjects(origin, dir);
+        vec3 surfaceColor = vec3(0, 0, 0);
+        if (intersect.hit) {
+            if (depth < 5 && (intersect.material.modifiers.x > 0.0f || intersect.material.modifiers.y > 0.0f)) {
+                //Reflective and refractive color computation
+                vec3 intersectPos = intersect.position;
+                bool inObject = false;
+                vec3 norm = intersect.normal;
+                if (dot(dir, norm) > 0) {
+                    norm = -norm;
+                    inObject = true;
+                }
 
-    if (intersect.hit) {
-        vec3 diffuseColor = vec3(0, 0, 0);
-        vec3 albedo = vec3(255, 255, 0);
-        int lightHits = 0;
-        for (int i = 0; i < numLights; i++) {
-            float diffuseModifier = 1.0f;
+                float facingRatio = -dot(dir, norm);
+                float fresnel = mix(pow(1 - facingRatio, 3), 1.0f, 0.1f);
 
-            float dst = distance(intersect.position, lights[i].position.xyz);
-            vec3 shadowRayDir = lights[i].position.xyz - intersect.position;
-            shadowRayDir = normalize(shadowRayDir);
-            vec3 norm = cross(intersect.tris[0] - intersect.tris[1], intersect.tris[0] - intersect.tris[2]);
-            norm = normalize(norm);
-            float angleModifier = clamp((acos(dot(norm, shadowRayDir)) * 180.0f / pi / 360.0f), 0.0f, 1.0f);
-            diffuseModifier = diffuseModifier / (1 + pow(dst / (100.0f * lights[i].color.a * angleModifier), 2.0f));
+                vec3 reflectionDir = dir - norm * 2.0f * dot(dir, norm);
+                reflectionDir = normalize(reflectionDir);
 
-            IntersectionData shadowIntersect = rayCastTriangles(intersect.position, shadowRayDir);
-            if (!shadowIntersect.hit) {
-                vec3 lightColor = lights[i].color.xyz;
-                vec3 singleLightPixelColor = vec3(clamp(albedo.r * (1 - diffuseModifier) + lightColor.r * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
-                                                  clamp(albedo.g * (1 - diffuseModifier) + lightColor.g * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f),
-                                                  clamp(albedo.b * (1 - diffuseModifier) + lightColor.b * (1 - diffuseModifier) * 0.3f, 0.0f, 255.0f));
-                diffuseColor = vec3(clamp(diffuseColor.r + singleLightPixelColor.r * (1.0f / numLights), 0.0f, 255.0f),
-                                    clamp(diffuseColor.g + singleLightPixelColor.g * (1.0f / numLights), 0.0f, 255.0f),
-                                    clamp(diffuseColor.b + singleLightPixelColor.b * (1.0f / numLights), 0.0f, 255.0f));
-                lightHits++;
+                vec3 newRayOrigin = intersectPos + norm * 0.0001f;
+                vec3 reflectionColor = raytrace(newRayOrigin, reflectionDir, depth + 1);
+                vec3 refractionColor = vec3(0, 0, 0);
+
+                if (intersect.material.modifiers.y > 0.0f) {
+                    float ior = 1.1f;  //Index of refraction
+                    float eta = ior;
+                    if (!inObject) {
+                        eta = 1.0f / ior;
+                    }
+                    float cosi = -dot(dir, norm);
+                    float k = 1 - eta * eta * (1 - cosi * cosi);
+                    vec3 refractionDir = dir * eta + norm * (eta * cosi - sqrt(k));
+                    refractionDir = normalize(refractionDir);
+                    newRayOrigin = intersectPos - norm * 0.001f;
+                    refractionColor = raytrace(newRayOrigin, refractionDir, depth + 1);
+                }
+
+                surfaceColor = (reflectionColor * fresnel * intersect.material.modifiers.x + refractionColor * (1 - fresnel) * intersect.material.modifiers.y) * intersect.material.color.xyz;
+            } else {
+                //Diffuse color computation
+                for(int i = 0; i < sceneData.numPointLights; i++) {               
+                    float dst = distance(intersect.position, sceneData.pointLights[i].position.xyz);
+                    if (dst < 1.0f) {
+                        dst = 1.0f;
+                    }
+
+                    vec3 shadowRayDir = sceneData.pointLights[i].position.xyz - intersect.position;
+                    vec3 norm = intersect.normal;
+                    shadowRayDir = normalize(shadowRayDir);
+
+                    /*bool inObject = false;
+                    if (glm::dot(dir, norm) > 0) {
+                        norm = -norm;
+                        inObject = true;
+                    }*/
+
+                    vec3 newRayOrigin = intersect.position + norm * 0.001f;
+                    IntersectionData shadowIntersect = raycastObjects(newRayOrigin, shadowRayDir);
+
+                    if (!shadowIntersect.hit) {
+                        //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
+                        surfaceColor += intersect.material.color.xyz * 1.0f * max(0.0f, dot(norm, shadowRayDir)) * sceneData.pointLights[i].color.xyz * sceneData.pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
+                    }
+                }
             }
         }
-        if (lightHits > 0) {
-            return diffuseColor;
-        } else {
-            vec3 nullVec = vec3(0, 0, 0);
-            return nullVec;
-        }
-    } else {
-        vec3 nullVec = vec3(0, 0, 0);
-        return nullVec;
-    }
+        return surfaceColor;
 }
 
-IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir) {
+IntersectionData raycastObjects(vec3 origin, vec3 rayDir) {
     IntersectionData closestIntersect;
     closestIntersect.hit = false;
     closestIntersect.position = vec3(0, 0, 0);
     float dst = 9999999.0f;
 
-    for (int m = 0; m < numModels; m++) {
-        for (int i = 0; i < models[m].numTris.x * 3; i += 3) {
+    //Mesh raycasting
+    for (int m = 0; m < sceneData.numMeshObjects; m++) {
+        for (int i = 0; i < sceneData.meshObjects[m].numTris.x * 3; i += 3) {
             //Möller–Trumbore intersection algorithm
-            vec3 vertex0 = (models[m].modelMatrix * models[m].vertexData[i]).xyz;
-            vec3 vertex1 = (models[m].modelMatrix * models[m].vertexData[i + 1]).xyz;
-            vec3 vertex2 = (models[m].modelMatrix * models[m].vertexData[i + 2]).xyz;
+            vec3 vertex0 = (sceneData.meshObjects[m].modelMatrix * sceneData.meshObjects[m].vertexData[i]).xyz;
+            vec3 vertex1 = (sceneData.meshObjects[m].modelMatrix * sceneData.meshObjects[m].vertexData[i + 1]).xyz;
+            vec3 vertex2 = (sceneData.meshObjects[m].modelMatrix * sceneData.meshObjects[m].vertexData[i + 2]).xyz;
 
             //vec3 vertex0 = models[m].vertexData[i].xyz;
             //vec3 vertex1 = models[m].vertexData[i + 1].xyz;
@@ -186,8 +220,42 @@ IntersectionData rayCastTriangles(vec3 origin, vec3 rayDir) {
                 tris[0] = vertex0;
                 tris[1] = vertex1;
                 tris[2] = vertex2;
-                closestIntersect = IntersectionData(true, intersect, tris);
+                closestIntersect = IntersectionData(sceneData.meshObjects[m].material, intersect, norm, true);
             }
+        }
+    }
+
+    //Sphere raycasting
+    for (int s = 0; s < sceneData.numSpheres; s++) {
+        vec3 centerOrigin = sceneData.spheres[s].position.xyz - origin;
+        float tco = dot(centerOrigin, rayDir);
+        if (tco < 0) {
+            continue;
+        }
+        float dstToCenterSqr = dot(centerOrigin, centerOrigin) - (tco * tco);
+        float radiusSquared = sceneData.spheres[s].radius.x * sceneData.spheres[s].radius.x;
+        if(dstToCenterSqr > radiusSquared) {
+            continue;
+        }
+        float thc = sqrt(radiusSquared - dstToCenterSqr);
+        float th0 = tco - thc;
+        float th1 = tco + thc;
+        if(th0 > th1) {
+            float temp = th0;
+            th0 = th1;
+            th1 = temp;
+        }
+        if(th0 < 0) {
+            th0 = th1;
+            if(th0 < 0) {
+                continue;
+            }
+        }
+        vec3 hitPos = origin + th0 * rayDir;
+        vec3 normal = normalize((hitPos - sceneData.spheres[s].position.xyz) / sceneData.spheres[s].radius.x);
+
+        if (distance(hitPos, origin) < dst) {
+            closestIntersect = IntersectionData(sceneData.spheres[s].material, hitPos, normal, true);
         }
     }
     return closestIntersect;

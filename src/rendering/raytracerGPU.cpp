@@ -58,7 +58,7 @@ namespace Tracer::Rendering {
             sceneData.meshObjects[meshObjectIndex] = meshObjectData;
             meshObjectIndex++;
         }
-        sceneData.numMeshModels = meshObjectIndex;
+        sceneData.numMeshObjects = meshObjectIndex;
 
         //Spheres
         int sphereIndex = 0;

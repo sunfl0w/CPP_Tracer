@@ -31,7 +31,7 @@ namespace Tracer::Rendering {
 
     struct PointLight {
         glm::vec4 position;
-        glm::vec4 color;
+        glm::vec4 color;//Last vlaue is intensity
     };
 
     struct Camera {
@@ -43,7 +43,7 @@ namespace Tracer::Rendering {
         Sphere spheres[4];
         PointLight pointLights[4];
         Camera camera;
-        int numMeshModels;
+        int numMeshObjects;
         int numSpheres;
         int numPointLights;
         int screenWidth;

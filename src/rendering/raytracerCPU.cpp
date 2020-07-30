@@ -79,11 +79,14 @@ namespace Tracer::Rendering {
                 float xx = (2 * ((x + 0.5) * invWidth) - 1) * angle * aspectratio;
                 float yy = -(1 - 2 * ((y + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
 
+                //Calculating the camera ray with camera transformations in mind
                 glm::vec4 projectionRayWorld = scene.GetCamera().GetTransform().GetTransformMatrix() * glm::vec4(xx, yy, 1, 1);
                 glm::vec4 projectionRayDirWorld = projectionRayWorld - camPosWorld;
                 glm::vec3 camPosWorldV3 = glm::vec3(camPosWorld.x, camPosWorld.y, camPosWorld.z);
                 glm::vec3 projectionRayDirWorldV3 = glm::vec3(projectionRayDirWorld.x, projectionRayDirWorld.y, projectionRayDirWorld.z);
                 projectionRayDirWorldV3 = glm::normalize(projectionRayDirWorldV3);
+
+                //Actual raytracing
                 glm::vec3 pixelColor = Raytrace(scene, camPosWorldV3, projectionRayDirWorldV3, 0);
 
                 buffer[(x + y * screenWidth) * 3] = (unsigned char)(pixelColor.r * 255.0f);
@@ -134,7 +137,6 @@ namespace Tracer::Rendering {
                 }
 
                 surfaceColor = (reflectionColor * fresnel * intersect.GetMaterial().GetReflectivity() + refractionColor * (1 - fresnel) * intersect.GetMaterial().GetTransparency()) * intersect.GetMaterial().GetColor();
-                int i = 0;
             } else {
                 //Diffuse color computation
                 for (std::unique_ptr<Objects::PointLight>& pointLight : scene.GetPointLights()) {
@@ -145,8 +147,6 @@ namespace Tracer::Rendering {
 
                     glm::vec3 shadowRayDir = pointLight->GetTransform().GetPosition() - intersect.GetIntersectionPos();
                     glm::vec3 norm = intersect.GetIntersectionNormal();
-
-                    //norm = glm::normalize(norm);
                     shadowRayDir = glm::normalize(shadowRayDir);
 
                     /*bool inObject = false;
@@ -164,9 +164,8 @@ namespace Tracer::Rendering {
                     }
                 }
             }
-            return surfaceColor;
         }
-        return glm::vec3(0, 0.0f, 0.0f);
+        return surfaceColor;
     }
 
     Tracer::Math::IntersectionData RaytracerCPU::RaycastObjects(std::vector<std::unique_ptr<Objects::RenderableObject>>& renderableObjects, glm::vec3& origin, glm::vec3& dir) const {
