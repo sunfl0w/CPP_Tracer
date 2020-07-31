@@ -52,6 +52,10 @@ namespace Tracer::Rendering {
 
     class RaytracerGPU : public Raytracer {
         Shader computeShader;
+        Shader textureShader;
+        unsigned int VAO;
+        unsigned int VBO;
+        unsigned int EBO;
         unsigned int texture;
     public:
         RaytracerGPU(SDL_Window* window);

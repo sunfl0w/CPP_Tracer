@@ -2,7 +2,7 @@
 
 struct Material {
     vec4 color;
-    vec4 modifiers;//First value is reflectivness, second one is transparency
+    vec4 modifiers;  //First value is reflectivness, second one is transparency
 };
 
 struct Sphere {
@@ -20,7 +20,7 @@ struct MeshObject {
 
 struct PointLight {
     vec4 position;
-    vec4 color;//Last vlaue is intensity
+    vec4 color;  //Last vlaue is intensity
 };
 
 struct Camera {
@@ -46,13 +46,31 @@ struct IntersectionData {
     bool hit;
 };
 
+struct Ray {
+    vec3 origin;
+    vec3 direction;
+};
+
+struct RTNode {
+    IntersectionData intersectionData;
+    Ray reflectionRay;
+    vec3 reflectionColor;
+    bool hasReflectionRay;
+    Ray refractionRay;
+    vec3 refractionColor;
+    bool hasRefractionRay;
+    float fresnel;
+    vec3 combinedColor;
+};
+
 layout(local_size_x = 1, local_size_y = 1) in;
 layout(rgba32f, binding = 0) uniform image2D img_output;
 layout(std430, binding = 1) buffer sceneDataBuffer {
     SceneData sceneData;
 };
 
-vec3 raytrace(vec3 origin, vec3 dir, int depth);
+vec3 raytracePixel(vec3 origin, vec3 dir);
+RTNode raytraceRay(Ray ray, int depth);
 IntersectionData raycastObjects(vec3 origin, vec3 dir);
 
 void main() {
@@ -60,7 +78,6 @@ void main() {
 
     //Constants and definitions
     const float pi = 3.14159f;
-    const int maxDepth = 5;
 
     //Computing ray direction
     float invWidth = 1 / float(sceneData.screenWidth), invHeight = 1 / float(sceneData.screenHeight);
@@ -77,84 +94,126 @@ void main() {
     projectionRayDirWorld = normalize(projectionRayDirWorld);
 
     //Actual raytracing
-    pixelColor.xyz = raytrace(camPosWorld.xyz, projectionRayDirWorld.xyz, 0);
-
-    //pixelColor = pixelColor * 0.1f;
-    //pixelColor.w = 1.0f;
-    //pixelColor.xyz = models[1].vertexData[35].xyz;
+    pixelColor.xyz = raytracePixel(camPosWorld.xyz, projectionRayDirWorld.xyz);
 
     ivec2 pixel_coords = ivec2(gl_GlobalInvocationID.xy);
     imageStore(img_output, pixel_coords, pixelColor);
 }
 
-vec3 raytrace(vec3 origin, vec3 dir, int depth) {
-    IntersectionData intersect = raycastObjects(origin, dir);
-        vec3 surfaceColor = vec3(0, 0, 0);
-        if (intersect.hit) {
-            if (depth < 5 && (intersect.material.modifiers.x > 0.0f || intersect.material.modifiers.y > 0.0f)) {
-                //Reflective and refractive color computation
-                vec3 intersectPos = intersect.position;
-                bool inObject = false;
-                vec3 norm = intersect.normal;
-                if (dot(dir, norm) > 0) {
-                    norm = -norm;
-                    inObject = true;
-                }
+RTNode raytraceRay(Ray ray, int depth) {
+    IntersectionData intersect = raycastObjects(ray.origin, ray.direction);
+    RTNode node;
+    node.intersectionData = intersect;
 
-                float facingRatio = -dot(dir, norm);
-                float fresnel = mix(pow(1 - facingRatio, 3), 1.0f, 0.1f);
+    if ((intersect.material.modifiers.x > 0.0f || intersect.material.modifiers.y > 0.0f) && depth < 5) {
+        //Reflective and refractive color computation
+        bool inObject = false;
+        vec3 norm = intersect.normal;
+        if (dot(ray.direction, norm) > 0) {
+            norm = -norm;
+            inObject = true;
+        }
 
-                vec3 reflectionDir = dir - norm * 2.0f * dot(dir, norm);
-                reflectionDir = normalize(reflectionDir);
+        float facingRatio = -dot(ray.direction, norm);
+        float fresnel = mix(pow(1 - facingRatio, 3), 1.0f, 0.1f);
+        node.fresnel = fresnel;
 
-                vec3 newRayOrigin = intersectPos + norm * 0.0001f;
-                vec3 reflectionColor = raytrace(newRayOrigin, reflectionDir, depth + 1);
-                vec3 refractionColor = vec3(0, 0, 0);
+        vec3 reflectionDir = ray.direction - norm * 2.0f * dot(ray.direction, norm);
+        reflectionDir = normalize(reflectionDir);
 
-                if (intersect.material.modifiers.y > 0.0f) {
-                    float ior = 1.1f;  //Index of refraction
-                    float eta = ior;
-                    if (!inObject) {
-                        eta = 1.0f / ior;
-                    }
-                    float cosi = -dot(dir, norm);
-                    float k = 1 - eta * eta * (1 - cosi * cosi);
-                    vec3 refractionDir = dir * eta + norm * (eta * cosi - sqrt(k));
-                    refractionDir = normalize(refractionDir);
-                    newRayOrigin = intersectPos - norm * 0.001f;
-                    refractionColor = raytrace(newRayOrigin, refractionDir, depth + 1);
-                }
+        vec3 newRayOrigin = intersect.position + norm * 0.0001f;
 
-                surfaceColor = (reflectionColor * fresnel * intersect.material.modifiers.x + refractionColor * (1 - fresnel) * intersect.material.modifiers.y) * intersect.material.color.xyz;
-            } else {
-                //Diffuse color computation
-                for(int i = 0; i < sceneData.numPointLights; i++) {               
-                    float dst = distance(intersect.position, sceneData.pointLights[i].position.xyz);
-                    if (dst < 1.0f) {
-                        dst = 1.0f;
-                    }
+        Ray reflectionRay = Ray(newRayOrigin, reflectionDir);
+        node.reflectionRay = reflectionRay;
+        node.hasReflectionRay = true;
 
-                    vec3 shadowRayDir = sceneData.pointLights[i].position.xyz - intersect.position;
-                    vec3 norm = intersect.normal;
-                    shadowRayDir = normalize(shadowRayDir);
+        if (intersect.material.modifiers.y > 0.0f) {
+            float ior = 1.1f;  //Index of refraction
+            float eta = ior;
+            if (!inObject) {
+                eta = 1.0f / ior;
+            }
+            float cosi = -dot(ray.direction, norm);
+            float k = 1 - eta * eta * (1 - cosi * cosi);
+            vec3 refractionDir = ray.direction * eta + norm * (eta * cosi - sqrt(k));
+            refractionDir = normalize(refractionDir);
+            newRayOrigin = intersect.position - norm * 0.0001f;
 
-                    /*bool inObject = false;
-                    if (glm::dot(dir, norm) > 0) {
-                        norm = -norm;
-                        inObject = true;
-                    }*/
+            Ray refractionRay = Ray(newRayOrigin, refractionDir);
+            node.reflectionRay = refractionRay;
+            node.hasRefractionRay = true;
+        }
+    } else {
+        //Diffuse color computation
+        for (int i = 0; i < sceneData.numPointLights; i++) {
+            float dst = distance(intersect.position, sceneData.pointLights[i].position.xyz);
+            if (dst < 1.0f) {
+                dst = 1.0f;
+            }
 
-                    vec3 newRayOrigin = intersect.position + norm * 0.001f;
-                    IntersectionData shadowIntersect = raycastObjects(newRayOrigin, shadowRayDir);
+            vec3 shadowRayDir = sceneData.pointLights[i].position.xyz - intersect.position;
+            vec3 norm = intersect.normal;
+            shadowRayDir = normalize(shadowRayDir);
 
-                    if (!shadowIntersect.hit) {
-                        //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
-                        surfaceColor += intersect.material.color.xyz * 1.0f * max(0.0f, dot(norm, shadowRayDir)) * sceneData.pointLights[i].color.xyz * sceneData.pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
-                    }
-                }
+            vec3 newRayOrigin = intersect.position + norm * 0.001f;
+            IntersectionData shadowIntersect = raycastObjects(newRayOrigin, shadowRayDir);
+
+            if (!shadowIntersect.hit) {
+                //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
+                node.combinedColor += intersect.material.color.xyz * 1.0f * max(0.0f, dot(norm, shadowRayDir)) * sceneData.pointLights[i].color.xyz * sceneData.pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
             }
         }
-        return surfaceColor;
+    }
+    return node;
+}
+
+vec3 raytracePixel(vec3 origin, vec3 dir) {
+    //Constants and definitions
+    const int maxDepth = 5;
+    const int maxNodes = 63;  //Basically pow(2, maxDepth + 1) - 1
+
+    RTNode raytracingArray[maxNodes];
+
+    //Build raytracing tree structure
+    for (int i = 0; i < maxNodes; i++) {
+        int parent = int(i - 1 / 2);
+        int depth = int(log2(i + 1));
+        if (parent >= 0) {
+            if (i == 2 * parent + 1) {
+                raytracingArray[i] = raytraceRay(raytracingArray[parent].reflectionRay, depth);
+            } else if (i == 2 * parent + 2) {
+                raytracingArray[i] = raytraceRay(raytracingArray[parent].refractionRay, depth);
+            }
+        } else {
+            raytracingArray[i] = raytraceRay(Ray(origin, dir), depth);
+        }
+    }
+
+    //Backtrack from last node to the first
+    for (int i = maxNodes - 1; i >= 0; i--) {
+        int parentIndex = int(i - 1 / 2);
+        RTNode parent = raytracingArray[parentIndex];
+        RTNode current = raytracingArray[i];
+
+        //Is leaf or inner node?
+        if (i >= pow(2, maxDepth) - 1) {
+            if (2 * parentIndex + 1 == i && parent.hasReflectionRay) {
+                parent.reflectionColor = current.combinedColor;
+            } else if (2 * parentIndex + 2 == i && parent.hasRefractionRay) {
+                parent.refractionColor = current.combinedColor;
+            }
+        } else {
+            current.combinedColor = (current.reflectionColor * current.fresnel * current.intersectionData.material.modifiers.x + current.refractionColor * (1 - current.fresnel) * current.intersectionData.material.modifiers.y) * current.intersectionData.material.color.xyz;
+
+            if (2 * parentIndex + 1 == i && parent.hasReflectionRay) {
+                parent.reflectionColor = current.combinedColor;
+            } else if (2 * parentIndex + 2 == i && parent.hasRefractionRay) {
+                parent.refractionColor = current.combinedColor;
+            }
+        }
+    }
+
+    return raytracingArray[0].combinedColor;
 }
 
 IntersectionData raycastObjects(vec3 origin, vec3 rayDir) {
@@ -170,10 +229,6 @@ IntersectionData raycastObjects(vec3 origin, vec3 rayDir) {
             vec3 vertex0 = (sceneData.meshObjects[m].modelMatrix * sceneData.meshObjects[m].vertexData[i]).xyz;
             vec3 vertex1 = (sceneData.meshObjects[m].modelMatrix * sceneData.meshObjects[m].vertexData[i + 1]).xyz;
             vec3 vertex2 = (sceneData.meshObjects[m].modelMatrix * sceneData.meshObjects[m].vertexData[i + 2]).xyz;
-
-            //vec3 vertex0 = models[m].vertexData[i].xyz;
-            //vec3 vertex1 = models[m].vertexData[i + 1].xyz;
-            //vec3 vertex2 = models[m].vertexData[i + 2].xyz;
 
             vec3 edge1 = vertex1 - vertex0;
             vec3 edge2 = vertex2 - vertex0;
@@ -234,20 +289,20 @@ IntersectionData raycastObjects(vec3 origin, vec3 rayDir) {
         }
         float dstToCenterSqr = dot(centerOrigin, centerOrigin) - (tco * tco);
         float radiusSquared = sceneData.spheres[s].radius.x * sceneData.spheres[s].radius.x;
-        if(dstToCenterSqr > radiusSquared) {
+        if (dstToCenterSqr > radiusSquared) {
             continue;
         }
         float thc = sqrt(radiusSquared - dstToCenterSqr);
         float th0 = tco - thc;
         float th1 = tco + thc;
-        if(th0 > th1) {
+        if (th0 > th1) {
             float temp = th0;
             th0 = th1;
             th1 = temp;
         }
-        if(th0 < 0) {
+        if (th0 < 0) {
             th0 = th1;
-            if(th0 < 0) {
+            if (th0 < 0) {
                 continue;
             }
         }

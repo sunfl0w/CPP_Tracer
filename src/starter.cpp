@@ -13,6 +13,8 @@
 #include "meshObject.hpp"
 #include "scene.hpp"
 #include "raytracerCPU.hpp"
+#include "raytracerGPU.hpp"
+#include "raytracerIterative.hpp"
 #include "openGLDebug.hpp"
 
 using namespace Tracer;
@@ -28,17 +30,17 @@ int main() {
 
     //Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
     //scene.AddMeshObject(model);
-    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, -3.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
+    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, -3.0f, 0.0f), Tracer::Components::Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
     model2.GetTransform().SetScale(glm::vec3(10, 1, 10));
     scene.AddMeshObject(model2);
 
-    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.1f, 0.9f, 0.9f), 0.0f, 0.0f), 1.0f);
+    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Tracer::Components::Material(glm::vec3(0.1f, 0.9f, 0.9f), 0.0f, 0.0f), 1.0f);
     scene.AddSphere(sphere);
     //Objects::Sphere sphere2 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.2f, 0.9f), 1.0f, 0.0f), 1.0f);
     //scene.AddSphere(sphere2);
-    Objects::Sphere sphere3 = Objects::Sphere(glm::vec3(0.0f, -1.0f, 3.0f), Material(glm::vec3(0.2f, 0.9f, 0.3f), 0.0f, 1.0f), 1.0f);
+    Objects::Sphere sphere3 = Objects::Sphere(glm::vec3(0.0f, -1.0f, 3.0f), Tracer::Components::Material(glm::vec3(0.2f, 0.9f, 0.3f), 0.0f, 1.0f), 1.0f);
     scene.AddSphere(sphere3);
-    Objects::Sphere sphere4 = Objects::Sphere(glm::vec3(0.0f, 3.0f, 2.0f), Material(glm::vec3(0.6f, 0.9f, 0.3f), 0.0f, 0.0f), 1.0f);
+    Objects::Sphere sphere4 = Objects::Sphere(glm::vec3(0.0f, 3.0f, 2.0f), Tracer::Components::Material(glm::vec3(0.6f, 0.9f, 0.3f), 0.0f, 0.0f), 1.0f);
     scene.AddSphere(sphere4);
 
     Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
@@ -76,6 +78,8 @@ int main() {
 #endif
 
     Raytracer* raytracer = new RaytracerCPU(window);
+    //Raytracer* raytracer = new RaytracerGPU(window);
+    //Raytracer* raytracer = new RaytracerIterative(window);
 
     std::chrono::steady_clock::time_point start;
     float delta = 0.0f;
@@ -100,7 +104,7 @@ int main() {
         raytracer->RenderSceneToWindow(scene);
 
         delta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() * std::pow(10.0, -9);
-        std::cout << "FPS: " << std::to_string(1.0f / delta) << "\n";
+        //std::cout << "FPS: " << std::to_string(1.0f / delta) << "\n";
     }
     delete raytracer;
     return 0;

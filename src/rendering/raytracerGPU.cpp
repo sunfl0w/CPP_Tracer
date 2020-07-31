@@ -3,6 +3,38 @@
 namespace Tracer::Rendering {
     RaytracerGPU::RaytracerGPU(SDL_Window* window) : Raytracer(window) {
         computeShader = Shader("resources/shaders/raytracing.comp", GL_COMPUTE_SHADER);
+        textureShader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
+
+        //Populate buffer objects for later rendering of the texture
+        float vertices[] = {
+            1.0f, 1.0f, 1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f, 0.0f,
+            -1.0f, 1.0f, 0.0f, 1.0f};
+
+        unsigned int indices[] = {
+            0, 1, 3,
+            1, 2, 3};
+
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
+
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_DYNAMIC_DRAW);
+
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        glBindVertexArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         //Creating a texture, make it an image and bind it to an image unit
         glGenTextures(1, &texture);
@@ -31,6 +63,18 @@ namespace Tracer::Rendering {
 
         glDispatchCompute(screenWidth, screenHeight, 1);
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        textureShader.Activate();
+        textureShader.SetInt("tex", 0);
+
+        glBindVertexArray(VAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         SDL_GL_SwapWindow(window);
     }

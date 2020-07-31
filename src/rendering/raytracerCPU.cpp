@@ -4,6 +4,7 @@ namespace Tracer::Rendering {
     RaytracerCPU::RaytracerCPU(SDL_Window* window) : Raytracer(window) {
         textureShader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
 
+        //Populate buffer objects for later rendering of the texture
         float vertices[] = {
             1.0f, 1.0f, 1.0f, 1.0f,
             1.0f, -1.0f, 1.0f, 0.0f,
@@ -35,13 +36,14 @@ namespace Tracer::Rendering {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-        //Gen Texure Texture
+        //Init Texure
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        std::vector<unsigned char> buffer = std::vector<unsigned char>(screenWidth * 3 * screenHeight);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -132,7 +134,7 @@ namespace Tracer::Rendering {
                     float k = 1 - eta * eta * (1 - cosi * cosi);
                     glm::vec3 refractionDir = dir * eta + norm * (eta * cosi - std::sqrt(k));
                     refractionDir = glm::normalize(refractionDir);
-                    newRayOrigin = intersectPos - norm * 0.001f;
+                    newRayOrigin = intersectPos - norm * 0.0001f;
                     refractionColor = Raytrace(scene, newRayOrigin, refractionDir, depth + 1);
                 }
 
@@ -155,7 +157,7 @@ namespace Tracer::Rendering {
                         inObject = true;
                     }*/
 
-                    glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.001f;
+                    glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.0001f;
                     Math::IntersectionData shadowIntersect = RaycastObjects(scene.GetRenderableObjects(), newRayOrigin, shadowRayDir);
 
                     if (!shadowIntersect.IsHit()) {
