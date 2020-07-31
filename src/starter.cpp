@@ -22,7 +22,7 @@ using namespace Tracer::Rendering;
 using namespace Tracer::Components;
 
 int main() {
-    Scene scene = Scene();
+     Scene scene = Scene();
 
     std::vector<Objects::RenderableObject> renderableObjects;
     Mesh mesh;
@@ -77,9 +77,9 @@ int main() {
     glDebugMessageCallback(Tarcer::Rendering::GLDebugging::GLDebugMessageCallback, 0);
 #endif
 
-    Raytracer* raytracer = new RaytracerCPU(window);
+    //Raytracer* raytracer = new RaytracerCPU(window);
     //Raytracer* raytracer = new RaytracerGPU(window);
-    //Raytracer* raytracer = new RaytracerIterative(window);
+    Raytracer* raytracer = new RaytracerIterative(window);
 
     std::chrono::steady_clock::time_point start;
     float delta = 0.0f;

@@ -102,19 +102,26 @@ namespace Tracer::Rendering {
     glm::vec3 RaytracerIterative::raytracePixel(Scene& scene, glm::vec3 origin, glm::vec3 dir) const {
         //Constants and definitions
         const int maxDepth = 5;
-        const int maxNodes = 63;  //Basically pow(2, maxDepth + 1) - 1
+        const int maxNodes = 62;  //Basically pow(2, maxDepth + 1) - 1
 
         RTNode raytracingArray[maxNodes];
+        for (int i = 0; i < maxNodes; i++) {
+            raytracingArray[i].combinedColor = glm::vec3(0, 0, 0);
+            raytracingArray[i].fresnel = 0;
+            raytracingArray[i].hasReflectionRay = false;
+            raytracingArray[i].hasRefractionRay = false;
+        }
 
         //Build raytracing tree structure
         for (int i = 0; i < maxNodes; i++) {
-            int parent = int(i - 1 / 2);
+            int parentIndex = std::floor((i - 1) / 2.0f);
             int depth = std::floor(log2(i + 1));
-            if (parent > 0) {
-                if (i == 2 * parent + 1) {
-                    raytracingArray[i] = raytraceRay(scene, raytracingArray[parent].reflectionRay, depth);
-                } else if (i == 2 * parent + 2) {
-                    raytracingArray[i] = raytraceRay(scene, raytracingArray[parent].refractionRay, depth);
+            if (parentIndex > -1) {
+                RTNode parent = raytracingArray[parentIndex];
+                if (i == 2 * parentIndex + 1 && parent.hasReflectionRay) {
+                    raytracingArray[i] = raytraceRay(scene, raytracingArray[parentIndex].reflectionRay, depth);
+                } else if (i == 2 * parentIndex + 2 && parent.hasRefractionRay) {
+                    raytracingArray[i] = raytraceRay(scene, raytracingArray[parentIndex].refractionRay, depth);
                 }
             } else {
                 Ray ray;
@@ -127,7 +134,7 @@ namespace Tracer::Rendering {
 
         //Backtrack from last node to the first
         for (int i = maxNodes - 1; i > 0; i--) {
-            int parentIndex = int(i - 1 / 2);
+            int parentIndex = std::floor((i - 1) / 2.0f);
             RTNode parent = raytracingArray[parentIndex];
             RTNode current = raytracingArray[i];
 
@@ -139,7 +146,9 @@ namespace Tracer::Rendering {
                     parent.refractionColor = current.combinedColor;
                 }
             } else {
-                current.combinedColor = (current.reflectionColor * current.fresnel * current.intersectionData.material.GetReflectivity() + current.refractionColor * (1 - current.fresnel) * current.intersectionData.material.GetTransparency()) * current.intersectionData.material.GetColor();
+                if(current.hasReflectionRay || current.hasRefractionRay) {
+                    current.combinedColor = (current.reflectionColor * current.fresnel * current.intersectionData.material.GetReflectivity() + current.refractionColor * (1 - current.fresnel) * current.intersectionData.material.GetTransparency()) * current.intersectionData.material.GetColor();
+                }
 
                 if (2 * parentIndex + 1 == i && parent.hasReflectionRay) {
                     parent.reflectionColor = current.combinedColor;
@@ -147,10 +156,14 @@ namespace Tracer::Rendering {
                     parent.refractionColor = current.combinedColor;
                 }
             }
+            raytracingArray[parentIndex] = parent;
+            raytracingArray[i] = current;
         }
-        /*if (raytracingArray[0].combinedColor != glm::vec3(0, 0, 0)) {
-            int k = 0;
-        }*/
+        RTNode current = raytracingArray[0];
+        if(current.hasReflectionRay || current.hasRefractionRay) {
+            current.combinedColor = (current.reflectionColor * current.fresnel * current.intersectionData.material.GetReflectivity() + current.refractionColor * (1 - current.fresnel) * current.intersectionData.material.GetTransparency()) * current.intersectionData.material.GetColor();
+        }
+        raytracingArray[0] = current;
         return raytracingArray[0].combinedColor;
     }
 
@@ -204,7 +217,7 @@ namespace Tracer::Rendering {
                     Ray refractionRay;
                     refractionRay.origin = newRayOrigin;
                     refractionRay.direction = refractionDir;
-                    node.reflectionRay = refractionRay;
+                    node.refractionRay = refractionRay;
                     node.hasRefractionRay = true;
                 }
             } else {
