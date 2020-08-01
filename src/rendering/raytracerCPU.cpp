@@ -151,12 +151,6 @@ namespace Tracer::Rendering {
                     glm::vec3 norm = intersect.GetIntersectionNormal();
                     shadowRayDir = glm::normalize(shadowRayDir);
 
-                    /*bool inObject = false;
-                    if (glm::dot(dir, norm) > 0) {
-                        norm = -norm;
-                        inObject = true;
-                    }*/
-
                     glm::vec3 newRayOrigin = intersect.GetIntersectionPos() + norm * 0.0001f;
                     Math::IntersectionData shadowIntersect = RaycastObjects(scene.GetRenderableObjects(), newRayOrigin, shadowRayDir);
 

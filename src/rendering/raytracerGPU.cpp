@@ -2,7 +2,7 @@
 
 namespace Tracer::Rendering {
     RaytracerGPU::RaytracerGPU(SDL_Window* window) : Raytracer(window) {
-        computeShader = Shader("resources/shaders/raytracing.comp", GL_COMPUTE_SHADER);
+        computeShader = Shader("resources/shaders/raytracingSimple.comp", GL_COMPUTE_SHADER);
         textureShader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
 
         //Populate buffer objects for later rendering of the texture
@@ -61,7 +61,7 @@ namespace Tracer::Rendering {
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderDataBuffer);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-        glDispatchCompute(screenWidth, screenHeight, 1);
+        glDispatchCompute(screenWidth / 8.0f, screenHeight / 8.0f, 1);
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -99,6 +99,9 @@ namespace Tracer::Rendering {
             }
             meshObjectData.modelMatrix = meshObject->GetTransform().GetTransformMatrix();
             meshObjectData.numTris = glm::vec4(triangleCount, 0, 0, 0);
+            meshObjectData.material.color = glm::vec4(meshObject->GetMaterial().GetColor(), 0);
+            meshObjectData.material.modifiers.x = meshObject->GetMaterial().GetReflectivity();
+            meshObjectData.material.modifiers.y = meshObject->GetMaterial().GetTransparency();
             sceneData.meshObjects[meshObjectIndex] = meshObjectData;
             meshObjectIndex++;
         }
@@ -110,6 +113,9 @@ namespace Tracer::Rendering {
             Sphere sphereData;
             sphereData.radius[0] = sphere->GetRadius();
             sphereData.position = glm::vec4(sphere->GetTransform().GetPosition(), 0);
+            sphereData.material.color = glm::vec4(sphere->GetMaterial().GetColor(), 0);
+            sphereData.material.modifiers.x = sphere->GetMaterial().GetReflectivity();
+            sphereData.material.modifiers.y = sphere->GetMaterial().GetTransparency();
             sceneData.spheres[sphereIndex] = sphereData;
             sphereIndex++;
         }
@@ -129,6 +135,7 @@ namespace Tracer::Rendering {
         //Camera
         Camera cameraData;
         cameraData.modelMatrix = scene.GetCamera().GetTransform().GetTransformMatrix();
+        sceneData.camera = cameraData;
 
         return sceneData;
     }

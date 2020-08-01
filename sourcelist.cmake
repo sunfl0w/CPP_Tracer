@@ -15,6 +15,5 @@ src/objects/sphere.cpp
 src/rendering/raytracer.cpp
 src/rendering/raytracerCPU.cpp
 src/rendering/raytracerGPU.cpp
-src/rendering/raytracerIterativ.cpp
 src/rendering/scene.cpp
 src/rendering/shader.cpp

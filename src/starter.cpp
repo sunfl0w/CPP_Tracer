@@ -2,27 +2,26 @@
 #include <glad/glad.h>
 #include <string.h>
 
+#include <chrono>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <vector>
-#include <chrono>
 
 #include "mesh.hpp"
 #include "meshObject.hpp"
-#include "scene.hpp"
+#include "openGLDebug.hpp"
 #include "raytracerCPU.hpp"
 #include "raytracerGPU.hpp"
-#include "raytracerIterative.hpp"
-#include "openGLDebug.hpp"
+#include "scene.hpp"
 
 using namespace Tracer;
 using namespace Tracer::Rendering;
 using namespace Tracer::Components;
 
 int main() {
-     Scene scene = Scene();
+    Scene scene = Scene();
 
     std::vector<Objects::RenderableObject> renderableObjects;
     Mesh mesh;
@@ -78,8 +77,7 @@ int main() {
 #endif
 
     //Raytracer* raytracer = new RaytracerCPU(window);
-    //Raytracer* raytracer = new RaytracerGPU(window);
-    Raytracer* raytracer = new RaytracerIterative(window);
+    Raytracer* raytracer = new RaytracerGPU(window);
 
     std::chrono::steady_clock::time_point start;
     float delta = 0.0f;
@@ -92,8 +90,8 @@ int main() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = false;
-            } else if(event.type == SDL_KEYDOWN) {
-                if(event.key.keysym.sym == SDLK_ESCAPE) {
+            } else if (event.type == SDL_KEYDOWN) {
+                if (event.key.keysym.sym == SDLK_ESCAPE) {
                     running = false;
                 }
             }
@@ -104,7 +102,7 @@ int main() {
         raytracer->RenderSceneToWindow(scene);
 
         delta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() * std::pow(10.0, -9);
-        //std::cout << "FPS: " << std::to_string(1.0f / delta) << "\n";
+        std::cout << "FPS: " << std::to_string(1.0f / delta) << "\n";
     }
     delete raytracer;
     return 0;

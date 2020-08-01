@@ -1,5 +1,7 @@
 #version 430 core
 
+//Just as a reference. Does not work as GPUs do not allow recursion
+
 struct Material {
     vec4 color;
     vec4 modifiers;//First value is reflectivness, second one is transparency
