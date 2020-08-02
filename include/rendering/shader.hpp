@@ -28,6 +28,8 @@ namespace Tracer::Rendering {
 
         void SetInt(std::string name, int value) const;
 
+        void SetVec2(std::string name, glm::vec2 vector) const;
+
         void SetVec4(std::string name, glm::vec4 vector) const;
 
         void SetMat4(std::string name, glm::mat4 matrix) const;

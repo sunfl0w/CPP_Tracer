@@ -23,8 +23,11 @@ namespace Tracer::Rendering {
     }
 
     void Shader::SetInt(std::string name, int value) const {
-        unsigned int uniformLocation = glGetUniformLocation(ID, name.c_str());
-        glUniform1i(uniformLocation, value);
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    }
+
+    void Shader::SetVec2(std::string name, glm::vec2 vector) const {
+        glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(vector));
     }
 
     void Shader::SetVec4(std::string name, glm::vec4 vector) const {
@@ -32,8 +35,7 @@ namespace Tracer::Rendering {
     }
 
     void Shader::SetMat4(std::string name, glm::mat4 matrix) const {
-        unsigned int uniformLocation = glGetUniformLocation(ID, name.c_str());
-        glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(matrix));
+        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
     //Private
