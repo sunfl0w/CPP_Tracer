@@ -10,12 +10,12 @@ namespace Tracer::Rendering::Text {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         stbi_set_flip_vertically_on_load(true);
 
-        int width, height, channelCount;
+        int channelCount;
         unsigned char *data = stbi_load(bitmapPath.c_str(), &width, &height, &channelCount, 0);
         if (data) {
             if (channelCount == 3) {
@@ -29,6 +29,19 @@ namespace Tracer::Rendering::Text {
             std::cout << "Failed to load bitmap\n";
         }
         stbi_image_free(data);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    unsigned int BitmapFont::GetCharacterSize() const {
+        return characterSize;
+    }
+
+    int BitmapFont::GetWidth() const {
+        return width;
+    }
+
+    int BitmapFont::GetHeight() const {
+        return height;
     }
 
     void BitmapFont::Activate() const {
@@ -39,4 +52,4 @@ namespace Tracer::Rendering::Text {
     unsigned int BitmapFont::GetID() const {
         return bitmapID;
     }
-}
+}  // namespace Tracer::Rendering::Text

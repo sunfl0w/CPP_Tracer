@@ -17,3 +17,5 @@ src/rendering/raytracerCPU.cpp
 src/rendering/raytracerGPU.cpp
 src/rendering/scene.cpp
 src/rendering/shader.cpp
+src/rendering/text/bitmapFont.cpp
+src/rendering/text/bitmapTextRenderer.cpp

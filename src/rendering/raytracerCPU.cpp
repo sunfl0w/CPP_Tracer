@@ -48,9 +48,6 @@ namespace Tracer::Rendering {
     }
 
     void RaytracerCPU::RenderSceneToWindow(Scene& scene) const {
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         textureShader.Activate();
         textureShader.SetInt("tex", 0);
 
@@ -62,8 +59,6 @@ namespace Tracer::Rendering {
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-
-        SDL_GL_SwapWindow(window);
     }
 
     std::vector<unsigned char> RaytracerCPU::RenderSceneToBuffer(Scene& scene) const {

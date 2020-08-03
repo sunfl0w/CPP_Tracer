@@ -15,3 +15,4 @@ include/math
 include/objects
 include/rendering
 include/rendering/glDebugging
+include/rendering/text

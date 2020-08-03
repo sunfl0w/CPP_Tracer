@@ -3,7 +3,7 @@
 namespace Tracer::Rendering {
     RaytracerGPU::RaytracerGPU(SDL_Window* window) : Raytracer(window) {
         computeShader = Shader("resources/shaders/raytracingSimple.comp", GL_COMPUTE_SHADER);
-        textureShader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
+        textureShader = Shader("resources/shaders/raytracedImage.vs", GL_VERTEX_SHADER, "resources/shaders/raytracedImage.fs", GL_FRAGMENT_SHADER);
 
         //Populate buffer objects for later rendering of the texture
         float vertices[] = {
@@ -15,6 +15,8 @@ namespace Tracer::Rendering {
         unsigned int indices[] = {
             0, 1, 3,
             1, 2, 3};
+
+        unsigned int VBO, EBO;
 
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -44,28 +46,27 @@ namespace Tracer::Rendering {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, screenWidth, screenHeight, 0, GL_RGBA, GL_FLOAT, NULL);
         glBindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
         glBindTexture(GL_TEXTURE_2D, 0);
+
+        //Create buffer for the compute shader
+        glGenBuffers(1, &shaderDataBuffer);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderDataBuffer);
+        SceneData emptySceneData;
+        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(emptySceneData), &emptySceneData, GL_DYNAMIC_DRAW);
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderDataBuffer);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     }
 
     void RaytracerGPU::RenderSceneToWindow(Scene& scene) const {
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         SceneData sceneData = ConvertSceneToStruct(scene);
 
         computeShader.Activate();
 
-        unsigned int shaderDataBuffer;
-        glGenBuffers(1, &shaderDataBuffer);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, shaderDataBuffer);
-        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(sceneData), &sceneData, GL_DYNAMIC_DRAW);
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, shaderDataBuffer);
+        glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(sceneData), &sceneData);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
         glDispatchCompute(screenWidth / 8.0f, screenHeight / 8.0f, 1);
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
 
         textureShader.Activate();
         textureShader.SetInt("tex", 0);
@@ -75,8 +76,6 @@ namespace Tracer::Rendering {
         glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-
-        SDL_GL_SwapWindow(window);
     }
 
     SceneData RaytracerGPU::ConvertSceneToStruct(Scene& scene) const {

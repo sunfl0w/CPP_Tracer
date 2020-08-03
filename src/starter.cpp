@@ -8,6 +8,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <iomanip>
 
 #include "mesh.hpp"
 #include "meshObject.hpp"
@@ -15,10 +17,13 @@
 #include "raytracerCPU.hpp"
 #include "raytracerGPU.hpp"
 #include "scene.hpp"
+#include "bitmapFont.hpp"
+#include "bitmapTextRenderer.hpp"
 
 using namespace Tracer;
 using namespace Tracer::Rendering;
 using namespace Tracer::Components;
+using namespace Tracer::Rendering::Text;
 
 int main() {
     Scene scene = Scene();
@@ -75,17 +80,23 @@ int main() {
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(Tarcer::Rendering::GLDebugging::GLDebugMessageCallback, 0);
 #endif
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+    BitmapFont bitmapFont = BitmapFont("resources/textures/SimpleAsciiFont.png", 8);
+    BitmapTextRenderer bitmapTextRenderer = BitmapTextRenderer(bitmapFont, window);
 
     //Raytracer* raytracer = new RaytracerCPU(window);
     Raytracer* raytracer = new RaytracerGPU(window);
+
+    std::stringstream stream;
 
     std::chrono::steady_clock::time_point start;
     float delta = 0.0f;
 
     bool running = true;
-    while (running) {
-        start = std::chrono::steady_clock::now();
 
+    start = std::chrono::steady_clock::now();
+    while (running) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
@@ -96,13 +107,24 @@ int main() {
                 }
             }
         }
+
         //When rotating around the the origin the position of a transform is not entirely correct!
         scene.GetCamera().GetTransform().RotateAroundOrigin(glm::vec3(0, 1, 0), delta * 20.0f);
+
+        glClear(GL_COLOR_BUFFER_BIT);
 
         raytracer->RenderSceneToWindow(scene);
 
         delta = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - start).count() * std::pow(10.0, -9);
-        std::cout << "FPS: " << std::to_string(1.0f / delta) << "\n";
+        start = std::chrono::steady_clock::now();
+
+        stream << std::setprecision(2) << std::fixed << (1.0f / delta);
+        std::string fps = stream.str();
+        stream.str(std::string());
+
+        bitmapTextRenderer.DrawText("FPS: " + fps, glm::vec2(300, 0), glm::vec2(16, 16));
+        
+        SDL_GL_SwapWindow(window);
     }
     delete raytracer;
     return 0;
