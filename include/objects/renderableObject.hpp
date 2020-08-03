@@ -6,7 +6,7 @@
 
 #include "intersectionData.hpp"
 #include "material.hpp"
-#include "transform.hpp"
+#include "position/transform.hpp"
 
 namespace Tracer::Objects {
     class RenderableObject {
