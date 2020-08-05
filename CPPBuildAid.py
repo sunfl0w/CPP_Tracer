@@ -12,22 +12,31 @@ def generateSourceList():
 
     sourceFiles = []
     sourcePath = os.path.join(os.getcwd(), "src")
+    sourcePathDependencies = os.path.join(os.getcwd(), "deps/src")
+
+    # Adding source files
     if (sourcePath):
         for dirpath, dirs, files in os.walk(sourcePath):
             for filename in files:
                 if(str(filename).endswith('.c') or str(filename).endswith('.cpp')):
                     relativeFilePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
                     sourceFiles.append(relativeFilePath)
-
-                    # Counting source code lines
-                    if("lib" not in dirpath and "library" not in dirpath):
-                        with open(os.path.join(dirpath, filename), "r") as sourcefile:
-                            sourceFileLines += len(sourcefile.readlines())
-        print("Total source code lines: {}".format(sourceFileLines))
-        return sourceFiles
+                    with open(os.path.join(dirpath, filename), "r") as sourcefile:
+                        sourceFileLines += len(sourcefile.readlines())
     else:
         print("Unable to find src directory. Terminating")
         exit(1)
+
+    # Adding source files of external dependencies
+    if (sourcePathDependencies):
+        for dirpath, dirs, files in os.walk(sourcePathDependencies):
+            for filename in files:
+                if(str(filename).endswith('.c') or str(filename).endswith('.cpp')):
+                    relativeFilePath = os.path.relpath(os.path.join(dirpath, filename), os.getcwd())
+                    sourceFiles.append(relativeFilePath)
+
+    print("Total source code lines: {}".format(sourceFileLines))
+    return sourceFiles
 
 
 def generateIncludeList():
@@ -35,22 +44,31 @@ def generateIncludeList():
 
     headerFileDirectories = []
     includePath = os.path.join(os.getcwd(), "include")
+    includePathDependencies = os.path.join(os.getcwd(), "deps/include")
+
+    # Adding header files
     if (includePath):
         for dirpath, dirs, files in os.walk(includePath):
             relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
             headerFileDirectories.append(relativeDirectoryPath)
 
             # Counting headerfile lines of code
-            if("lib" not in dirpath and "library" not in dirpath):
-                for filename in files:
-                    if(str(filename).endswith('.h') or str(filename).endswith('.hpp')):
-                        with open(os.path.join(dirpath, filename), "r") as headerfile:
-                            headerFileLines += len(headerfile.readlines())
-        print("Total header code lines: {}".format(headerFileLines))
-        return headerFileDirectories
+            for filename in files:
+                if(str(filename).endswith('.h') or str(filename).endswith('.hpp')):
+                    with open(os.path.join(dirpath, filename), "r") as headerfile:
+                        headerFileLines += len(headerfile.readlines())
     else:
         print("Unable to find include directory. Terminating")
         exit(1)
+
+    # Adding header files of external dependencies
+    if (includePathDependencies):
+        for dirpath, dirs, files in os.walk(includePathDependencies):
+            relativeDirectoryPath = os.path.relpath(dirpath, os.getcwd())
+            headerFileDirectories.append(relativeDirectoryPath)
+
+    print("Total header code lines: {}".format(headerFileLines))
+    return headerFileDirectories
 
 
 def build(argv):
@@ -58,7 +76,7 @@ def build(argv):
     startTime = datetime.now()
 
     argumentParser = argparse.ArgumentParser()
-    argumentParser.add_argument("-bt", "--buildType")
+    argumentParser.add_argument("-b", "--buildType")
     argumentParser.add_argument("-t", "--threads")
 
     args = argumentParser.parse_args()
@@ -76,7 +94,7 @@ def build(argv):
     for relativeSourceFilePath in relativeSourceFilePaths:
         sourceListFile.write(relativeSourceFilePath + "\n")
     sourceListFile.close()
-    
+
     relativeHeaderFileDirectories = generateIncludeList()
     includeListFile = open("includelist.cmake", "w")
     for relativeHeaderFileDirectory in relativeHeaderFileDirectories:

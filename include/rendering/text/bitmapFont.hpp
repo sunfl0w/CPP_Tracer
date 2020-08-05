@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lib/glad/glad.h>
+#include <glad.h>
 #include <stb_image.h>
 
 #include <iostream>

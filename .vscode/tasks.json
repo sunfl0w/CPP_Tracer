@@ -29,7 +29,7 @@
             },
             "args": [
                 "CPPBuildAid.py",
-                "-bt",
+                "-b",
                 "release",
                 "-t",
                 "8"

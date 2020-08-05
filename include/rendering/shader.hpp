@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lib/glad/glad.h>
+#include <glad.h>
 
 #include <fstream>
 #include <glm/glm.hpp>

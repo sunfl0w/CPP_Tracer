@@ -2,9 +2,6 @@ src/starter.cpp
 src/components/material.cpp
 src/components/mesh.cpp
 src/components/position/transform.cpp
-src/lib/glad/glad.c
-src/lib/stb/stb_image.c
-src/lib/stb/stb_truetype.c
 src/math/intersectionData.cpp
 src/math/tris.cpp
 src/objects/camera.cpp
@@ -19,3 +16,6 @@ src/rendering/scene.cpp
 src/rendering/shader.cpp
 src/rendering/text/bitmapFont.cpp
 src/rendering/text/bitmapTextRenderer.cpp
+deps/src/glad/glad.c
+deps/src/stb/stb_image.c
+deps/src/stb/stb_truetype.c
