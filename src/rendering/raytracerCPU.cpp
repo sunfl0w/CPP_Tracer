@@ -2,7 +2,7 @@
 
 namespace Tracer::Rendering {
     RaytracerCPU::RaytracerCPU(SDL_Window* window) : Raytracer(window) {
-        textureShader = Shader("resources/shaders/texture.vs", GL_VERTEX_SHADER, "resources/shaders/texture.fs", GL_FRAGMENT_SHADER);
+        textureShader = Shader("resources/shaders/raytracedImage.vs", GL_VERTEX_SHADER, "resources/shaders/raytracedImage.fs", GL_FRAGMENT_SHADER);
 
         //Populate buffer objects for later rendering of the texture
         float vertices[] = {
@@ -43,7 +43,7 @@ namespace Tracer::Rendering {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         std::vector<unsigned char> buffer = std::vector<unsigned char>(screenWidth * 3 * screenHeight);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -52,13 +52,15 @@ namespace Tracer::Rendering {
         textureShader.SetInt("tex", 0);
 
         std::vector<unsigned char> buffer = RenderSceneToBuffer(scene);
+        int size = buffer.size();
 
+        glBindTexture(GL_TEXTURE_2D, texture);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, screenWidth, screenHeight, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
         glBindVertexArray(VAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     std::vector<unsigned char> RaytracerCPU::RenderSceneToBuffer(Scene& scene) const {

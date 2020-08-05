@@ -12,6 +12,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -Wall -O3 -fopenmp -march=
 find_package(SDL2 REQUIRED SDL2)
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
+find_package(Boost COMPONENTS system thread program_options)
 
 file(STRINGS "includelist.cmake" includes)
 file(STRINGS "sourcelist.cmake" sources)
@@ -28,3 +29,7 @@ endif(OpenGL_FOUND)
 if (SDL2_FOUND)
     target_link_libraries(CPP_Tracer_Starter SDL2::SDL2)
 endif (SDL2_FOUND)
+
+if(Boost_FOUND)
+    target_link_libraries(CPP_Tracer_Starter ${Boost_LIBRARIES})
+endif(Boost_FOUND)
