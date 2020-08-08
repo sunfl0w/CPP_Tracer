@@ -5,6 +5,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
 #include <vector>
+#include <pugixml.hpp>
 
 #include "renderableObject.hpp"
 #include "camera.hpp"
@@ -23,6 +24,8 @@ namespace Tracer::Rendering {
 
     public:
         Scene();
+
+        void LoadSceneDataFromFile(std::string path);
 
         void AddMeshObject(Objects::MeshObject& meshObject);
 

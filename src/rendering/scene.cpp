@@ -3,6 +3,11 @@
 namespace Tracer::Rendering {
     Scene::Scene() {}
 
+    void Scene::LoadSceneDataFromFile(std::string path) {
+        pugi::xml_document xmlDoc;
+        xmlDoc.load_file(path.c_str());
+    }
+
     void Scene::AddMeshObject(Objects::MeshObject& meshObject) {
         meshObjects.push_back(std::make_unique<Objects::MeshObject>(meshObject));
         renderableObjects.push_back(std::make_unique<Objects::MeshObject>(meshObject));
