@@ -15,4 +15,5 @@ deps/include/glm/gtc
 deps/include/glm/gtx
 deps/include/glm/simd
 deps/include/KHR
+deps/include/pugixml
 deps/include/stb

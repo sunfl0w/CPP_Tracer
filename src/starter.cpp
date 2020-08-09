@@ -63,33 +63,7 @@ int main(int argc, char* argv[]) {
 
     //Defining a test scene
     Scene scene = Scene();
-
-    std::vector<Objects::RenderableObject> renderableObjects;
-    Mesh mesh;
-    mesh.LoadFromObjectFile("./models/Cube.obj");
-
-    //Objects::MeshObject model = Objects::MeshObject(glm::vec3(3.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
-    //scene.AddMeshObject(model);
-    Objects::MeshObject model2 = Objects::MeshObject(glm::vec3(0.0f, -3.0f, 0.0f), Tracer::Components::Material(glm::vec3(0.9f, 0.9f, 0.9f), 1.0f, 0.0f), mesh);
-    model2.GetTransform().SetScale(glm::vec3(10, 1, 10));
-    scene.AddMeshObject(model2);
-
-    Objects::Sphere sphere = Objects::Sphere(glm::vec3(3.0f, 0.0f, 0.0f), Tracer::Components::Material(glm::vec3(0.1f, 0.9f, 0.9f), 0.0f, 0.0f), 1.0f);
-    scene.AddSphere(sphere);
-    //Objects::Sphere sphere2 = Objects::Sphere(glm::vec3(0.0f, 0.0f, 0.0f), Material(glm::vec3(0.9f, 0.2f, 0.9f), 1.0f, 0.0f), 1.0f);
-    //scene.AddSphere(sphere2);
-    Objects::Sphere sphere3 = Objects::Sphere(glm::vec3(0.0f, -1.0f, 3.0f), Tracer::Components::Material(glm::vec3(0.2f, 0.9f, 0.3f), 0.0f, 1.0f), 1.0f);
-    scene.AddSphere(sphere3);
-    Objects::Sphere sphere4 = Objects::Sphere(glm::vec3(0.0f, 3.0f, 2.0f), Tracer::Components::Material(glm::vec3(0.6f, 0.9f, 0.3f), 0.0f, 0.0f), 1.0f);
-    scene.AddSphere(sphere4);
-
-    Objects::PointLight light = Objects::PointLight(glm::vec3(10.0f, 0.0f, -10.0f), glm::vec3(1.0f, 1.0f, 0.4f), 1.0f);
-    scene.AddPointLight(light);
-    Objects::PointLight light2 = Objects::PointLight(glm::vec3(-10.0f, 0.0f, 6.0f), glm::vec3(0.8f, 0.8f, 0.8f), 1.0f);
-    scene.AddPointLight(light2);
-
-    Objects::Camera camera = Objects::Camera(glm::vec3(0.0f, 0.0f, -15.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-    scene.SetCamera(camera);
+    scene.LoadSceneDataFromFile("resources/scenes/TestScene.xml");
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -144,9 +118,7 @@ int main(int argc, char* argv[]) {
                 }
             }
         }
-
-        //When rotating around the the origin the position of a transform and its rotation are not entirely correct!
-        scene.GetCamera().GetTransform().RotateAroundOrigin(glm::vec3(0, 1, 0), delta * 20.0f);
+        scene.Update(delta);
 
         glClear(GL_COLOR_BUFFER_BIT);
 

@@ -21,6 +21,7 @@ namespace Tracer::Rendering {
         std::vector<std::unique_ptr<Objects::Sphere>> spheres;
         std::vector<std::unique_ptr<Objects::PointLight>> pointLights;
         Objects::Camera camera;
+        bool rotateCameraAroundOrigin = false;
 
     public:
         Scene();
@@ -35,6 +36,10 @@ namespace Tracer::Rendering {
 
         void SetCamera(Objects::Camera& camera);
 
+        void SetCameraRotateAroundOrigin(bool value);
+
+        void Update(float delta);
+
         std::vector<std::unique_ptr<Objects::RenderableObject>>& GetRenderableObjects();
 
         std::vector<std::unique_ptr<Objects::MeshObject>>& GetMeshObjects();
@@ -44,5 +49,7 @@ namespace Tracer::Rendering {
         std::vector<std::unique_ptr<Objects::PointLight>>& GetPointLights();
 
         Objects::Camera& GetCamera();
+
+        bool GetCameraRotateAroundOrigin();
     };
 }  // namespace Tracer::Rendering

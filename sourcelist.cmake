@@ -17,5 +17,6 @@ src/rendering/shader.cpp
 src/rendering/text/bitmapFont.cpp
 src/rendering/text/bitmapTextRenderer.cpp
 deps/src/glad/glad.c
+deps/src/pugixml/pugixml.cpp
 deps/src/stb/stb_image.c
 deps/src/stb/stb_truetype.c

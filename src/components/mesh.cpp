@@ -9,6 +9,11 @@ namespace Tracer::Components {
         std::fstream objectFile;
         objectFile.open(filePath);
 
+        if(!objectFile) {
+            std::cout << "Unable to open obj file.\n";
+            exit(1);
+        }
+
         std::vector<std::string> lines;
         std::string string;
         while (std::getline(objectFile, string)) {

@@ -9,7 +9,7 @@
             },
             "args": [
                 "CPPBuildAid.py",
-                "-bt",
+                "-b",
                 "debug",
                 "-t",
                 "8"
