@@ -16,6 +16,8 @@
                 "1080",
                 "-r",
                 "GPU",
+                "-p",
+                "resources/scenes/TestScene.xml",
                 "-f",
             ],
             "stopAtEntry": false,

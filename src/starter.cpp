@@ -30,7 +30,7 @@ using namespace boost::program_options;
 int main(int argc, char* argv[]) {
     //Defining and hendeling program program
     options_description optionsDesribtion("Raytracer options");
-    optionsDesribtion.add_options()("help,h", "Help Screen")("screenWidth,x", value<unsigned int>()->default_value(600), "The width of the rendering window")("screenHeight,y", value<unsigned int>()->default_value(400), "The height of the rendering window")("renderingMode,r", value<std::string>()->default_value("CPU"), "Type of rendering: CPU/GPU")("allowFPS,f", "Enables/Disables the fps counter");
+    optionsDesribtion.add_options()("help,h", "Help Screen")("screenWidth,x", value<unsigned int>()->default_value(600), "The width of the rendering window")("screenHeight,y", value<unsigned int>()->default_value(400), "The height of the rendering window")("renderingMode,r", value<std::string>()->default_value("CPU"), "Type of rendering: CPU/GPU")("allowFPS,f", "Enables/Disables the fps counter")("scenePath,p", value<std::string>(), "Path to the scene to load and render.");
 
     variables_map variableMap;
     store(command_line_parser(argc, argv).options(optionsDesribtion).run(), variableMap);
@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
     int screenHeight = 0;
     RenderingMode renderingMode = RenderingMode::CPU;
     bool showFPSCounter = false;
+    std::string scenePath;
 
     if (variableMap.count("screenWidth")) {
         screenWidth = variableMap["screenWidth"].as<unsigned int>();
@@ -60,10 +61,13 @@ int main(int argc, char* argv[]) {
     if (variableMap.count("allowFPS")) {
         showFPSCounter = true;
     }
+    if(variableMap.count("scenePath")) {
+        scenePath = variableMap["scenePath"].as<std::string>();
+    }
 
     //Defining a test scene
     Scene scene = Scene();
-    scene.LoadSceneDataFromFile("resources/scenes/TestScene.xml");
+    scene.LoadSceneDataFromFile(scenePath);
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
