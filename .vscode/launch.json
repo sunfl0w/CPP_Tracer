@@ -17,7 +17,7 @@
                 "-r",
                 "GPU",
                 "-p",
-                "resources/scenes/TestScene.xml",
+                "resources/scenes/CyberScene.xml",
                 "-f",
             ],
             "stopAtEntry": false,

@@ -6,10 +6,14 @@ namespace Tracer::Components {
     }
 
     void Mesh::LoadFromObjectFile(std::string filePath) {
+        if (std::filesystem::path(filePath).extension() != ".obj") {
+            std::cout << "The file containing the mesh is not an obj file.\n";
+            exit(1);
+        }
         std::fstream objectFile;
         objectFile.open(filePath);
 
-        if(!objectFile) {
+        if (!objectFile) {
             std::cout << "Unable to open obj file.\n";
             exit(1);
         }
@@ -33,20 +37,20 @@ namespace Tracer::Components {
                 for (int i = 0; i < 3; i++) {
                     coordinateStartPos = line.find(" ", coordinateStartPos);
                     if (line[coordinateStartPos + 1] == '-') {
-                        if(i == 0) {
+                        if (i == 0) {
                             vertex.x = std::stof(line.substr(coordinateStartPos + 1, 9));
-                        } else if(i == 1) {
+                        } else if (i == 1) {
                             vertex.y = std::stof(line.substr(coordinateStartPos + 1, 9));
-                        } else if(i == 2) {
+                        } else if (i == 2) {
                             vertex.z = std::stof(line.substr(coordinateStartPos + 1, 9));
                         }
                         coordinateStartPos += 10;
                     } else {
-                        if(i == 0) {
+                        if (i == 0) {
                             vertex.x = std::stof(line.substr(coordinateStartPos + 1, 8));
-                        } else if(i == 1) {
+                        } else if (i == 1) {
                             vertex.y = std::stof(line.substr(coordinateStartPos + 1, 8));
-                        } else if(i == 2) {
+                        } else if (i == 2) {
                             vertex.z = std::stof(line.substr(coordinateStartPos + 1, 8));
                         }
                         coordinateStartPos += 8;
@@ -62,11 +66,11 @@ namespace Tracer::Components {
                 for (int i = 0; i < 3; i++) {
                     vertexStartPos = line.find(" ", vertexStartPos);
                     size_t vertexEndPos = line.find(" ", vertexStartPos + 1);
-                    if(i == 0) {
+                    if (i == 0) {
                         triangle.vert0 = vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1];
-                    } else if(i == 1) {
+                    } else if (i == 1) {
                         triangle.vert1 = vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1];
-                    } else if(i == 2) {
+                    } else if (i == 2) {
                         triangle.vert2 = vertecies[std::stoi(line.substr(vertexStartPos + 1, vertexEndPos - vertexStartPos + 1)) - 1];
                     }
                     vertexStartPos += 2;
@@ -80,4 +84,4 @@ namespace Tracer::Components {
     std::vector<Math::Tris>& Mesh::GetData() {
         return data;
     }
-}  // namespace OpenCG::Components
+}  // namespace Tracer::Components

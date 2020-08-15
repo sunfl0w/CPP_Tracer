@@ -5,7 +5,10 @@ namespace Tracer::Rendering {
 
     void Scene::LoadSceneDataFromFile(std::string path) {
         pugi::xml_document xmlDoc;
-        xmlDoc.load_file(path.c_str());
+        if(xmlDoc.load_file(path.c_str()).status != pugi::xml_parse_status::status_ok) {
+            std::cout << "Unable to load scene file.\n";
+            exit(1);
+        }
         pugi::xml_node sceneNode = xmlDoc.child("CPP_TracerScene");
 
         //Spheres
@@ -58,7 +61,10 @@ namespace Tracer::Rendering {
             Components::Material material = Components::Material(color, reflectivity, transparency);
 
             Components::Mesh mesh;
-            mesh.LoadFromObjectFile(meshObjectNode.attribute("modelPath").as_string());
+            std::string relativeMeshPath = meshObjectNode.attribute("modelPath").as_string();
+            std::filesystem::path testPath = std::filesystem::path(relativeMeshPath);
+            testPath = std::filesystem::weakly_canonical(testPath);
+            mesh.LoadFromObjectFile(testPath);
             Objects::MeshObject meshObject = Objects::MeshObject(position, material, mesh);
             meshObject.GetTransform().SetRotation(rotation);
             meshObject.GetTransform().SetScale(scale);

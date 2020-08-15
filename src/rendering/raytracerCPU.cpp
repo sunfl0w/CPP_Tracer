@@ -52,7 +52,6 @@ namespace Tracer::Rendering {
         textureShader.SetInt("tex", 0);
 
         std::vector<unsigned char> buffer = RenderSceneToBuffer(scene);
-        int size = buffer.size();
 
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, screenWidth, screenHeight, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());

@@ -49,13 +49,13 @@ namespace Tracer::Components::Position {
 
     void Transform::UpdateModelMatrix() {
         modelMatrix = glm::mat4(1.0f);
-        modelMatrix = glm::translate(modelMatrix, position);
+        modelMatrix = glm::scale(modelMatrix, scale);
         modelMatrix = glm::translate(modelMatrix, glm::vec3(0.5f * scale.x, 0.5f * scale.y, 0.5f * scale.z));
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
         modelMatrix = glm::rotate(modelMatrix, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
         modelMatrix = glm::translate(modelMatrix, glm::vec3(-0.5f * scale.x, -0.5f * scale.y, -0.5f * scale.z));
-        modelMatrix = glm::scale(modelMatrix, scale);
+        modelMatrix = glm::translate(modelMatrix, position);
     }
 
     void Transform::RotateAroundOrigin(const glm::vec3& axis, float angle) {
