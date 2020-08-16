@@ -39,7 +39,7 @@ namespace Tracer::Rendering {
     };
 
     struct SceneData {
-        MeshObject meshObjects[4];
+        MeshObject meshObjects[8];
         Sphere spheres[4];
         PointLight pointLights[4];
         Camera camera;

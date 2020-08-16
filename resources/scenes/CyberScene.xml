@@ -17,7 +17,7 @@
                     <Transform>
                         <Position x="0.0" y="-2.25" z="0.0"/>
                         <Rotation x="0.0" y="0.0" z="0.0"/>
-                        <Scale x="10.0" y="1.0" z="10.0"/>
+                        <Scale x="15.0" y="1.0" z="15.0"/>
                     </Transform>
                     <Material reflectivity="1.0" transparency="0.0">
                         <Color r="0.9" g="0.9" b="0.9"/>
@@ -25,9 +25,39 @@
                 </MeshObject>
                 <MeshObject modelPath="resources/models/Cube.obj">
                     <Transform>
-                        <Position x="0.0" y="-2.25" z="15.0"/>
+                        <Position x="0.0" y="0.0" z="12.0"/>
                         <Rotation x="0.0" y="0.0" z="0.0"/>
-                        <Scale x="10.0" y="10.0" z="1.0"/>
+                        <Scale x="15.0" y="10.0" z="1.0"/>
+                    </Transform>
+                    <Material reflectivity="1.0" transparency="0.0">
+                        <Color r="0.9" g="0.9" b="0.9"/>
+                    </Material>
+                </MeshObject>
+                <MeshObject modelPath="resources/models/Cube.obj">
+                    <Transform>
+                        <Position x="0.0" y="0.0" z="-12.0"/>
+                        <Rotation x="0.0" y="0.0" z="0.0"/>
+                        <Scale x="15.0" y="10.0" z="1.0"/>
+                    </Transform>
+                    <Material reflectivity="1.0" transparency="0.0">
+                        <Color r="0.9" g="0.9" b="0.9"/>
+                    </Material>
+                </MeshObject>
+                <MeshObject modelPath="resources/models/Cube.obj">
+                    <Transform>
+                        <Position x="12.0" y="0.0" z="0.0"/>
+                        <Rotation x="0.0" y="0.0" z="0.0"/>
+                        <Scale x="1.0" y="10.0" z="15.0"/>
+                    </Transform>
+                    <Material reflectivity="1.0" transparency="0.0">
+                        <Color r="0.9" g="0.9" b="0.9"/>
+                    </Material>
+                </MeshObject>
+                <MeshObject modelPath="resources/models/Cube.obj">
+                    <Transform>
+                        <Position x="-12.0" y="0.0" z="0.0"/>
+                        <Rotation x="0.0" y="0.0" z="0.0"/>
+                        <Scale x="1.0" y="10.0" z="15.0"/>
                     </Transform>
                     <Material reflectivity="1.0" transparency="0.0">
                         <Color r="0.9" g="0.9" b="0.9"/>
@@ -37,16 +67,20 @@
         </RenderableObjects>
         <PointLights>
             <PointLight intensity="1.0">
-                <Position x="5.0" y="0.0" z="5.0"/>
+                <Position x="3.0" y="5.0" z="0.0"/>
                 <Color r="1.0" g="0.4" b="0.4"/>
             </PointLight>
             <PointLight intensity="1.0">
-                <Position x="-5.0" y="0.0" z="5.0"/>
+                <Position x="-3.0" y="5.0" z="0.0"/>
                 <Color r="0.4" g="0.4" b="1.0"/>
             </PointLight>
             <PointLight intensity="1.0">
-                <Position x="0.0" y="0.0" z="-4.0"/>
-                <Color r="0.4" g="1.0" b="0.4"/>
+                <Position x="0.0" y="5.0" z="3.0"/>
+                <Color r="1.0" g="0.4" b="0.4"/>
+            </PointLight>
+            <PointLight intensity="1.0">
+                <Position x="0.0" y="5.0" z="-3.0"/>
+                <Color r="0.4" g="0.4" b="1.0"/>
             </PointLight>
         </PointLights>
         <Camera>

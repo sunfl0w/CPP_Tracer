@@ -152,7 +152,7 @@ namespace Tracer::Rendering {
 
                     if (!shadowIntersect.IsHit()) {
                         //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
-                        surfaceColor += intersect.GetMaterial().GetColor() * 1.0f * std::max(0.0f, glm::dot(norm, shadowRayDir)) * pointLight->GetColor() * pointLight->GetIntensity() * 1.0f / std::pow(dst, 0.01f);
+                        surfaceColor += intersect.GetMaterial().GetColor() * (1.0f / scene.GetPointLights().size()) * std::max(0.0f, glm::dot(norm, shadowRayDir)) * pointLight->GetColor() * pointLight->GetIntensity() * 1.0f / std::pow(dst, 0.01f);
                     }
                 }
             }

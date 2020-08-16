@@ -67,7 +67,7 @@ struct RTNode {
 layout(local_size_x = 8, local_size_y = 8) in;
 layout(rgba32f, binding = 0) uniform image2D img_output;
 layout(std430, binding = 1) buffer sceneDataBuffer {
-    MeshObject meshObjects[4];
+    MeshObject meshObjects[8];
     Sphere spheres[4];
     PointLight pointLights[4];
     Camera camera;
@@ -184,8 +184,7 @@ RTNode raytraceRay(Ray ray, int depth, int maxDepth) {
 
                 if (!shadowIntersect.hit) {
                     //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
-                    node.color += intersect.material.color.xyz * 1.0f * max(0.0f, dot(intersect.normal, shadowRayDir)) * pointLights[i].color.xyz * pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
-                    node.isLeaf = true;
+                    node.color += intersect.material.color.xyz * (1.0f / numPointLights) * max(0.0f, dot(intersect.normal, shadowRayDir)) * pointLights[i].color.xyz * pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
                 }
             }
             node.isLeaf = true;

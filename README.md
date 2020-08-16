@@ -26,3 +26,12 @@ One can create a scene by creating a xml file describing the objects in that sce
 
 #### Using meshes
 The meshes to render need to made out of triangles only. Only obj files are allowed.
+
+#### Limitations of the GPU raytracer
+To reach acceptable performance nubers the GPU variant will only compute refractive or reflective rays as a direct result of another ray. A raytraced scene might therefore look different when comparing the CPU and the GPU raytracer. The GPU raytracer also only supports alimited number of lights, meshes, triangles and spheres. Those are predefined values that can be changed by editing the raytracerGPU header and the raytracingSimple compute shader. The limits needed to be set so the compute shader can actually work. A GLSL shader only supports fixed lenght arrays in that case.
+
+#### Performance
+The performance is not great. The CPU version is really slow and also the GPU version is not that much better. Especially meshes are really expensive to raytrace. Limiting the recursive ray depth to 5 really helps with mirrors but also cuts back on realism. One can improve the reytracing performance by adjusting the values in the compute shader for the GPU or editing the glDispatchCompute call. One can also further limit the recursive depth.
+
+#### Will there be further development?
+Not really. I might improve performance by using bounding volumes (or by immproving existing code) and other neat little tricks but do not count on that as I am really glad to have brought this project to a state I am satisfied with and I really want to do other stuff for now. I think building a raytracer is a nice exercise for a few months to get used to a graphics API and learn something about the presummable future of graphics in general.
