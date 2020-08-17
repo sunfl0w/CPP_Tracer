@@ -9,6 +9,11 @@ Acknowledgements and license notices may be found in the Acknowledgements.md
 #### Short description of CPP_Tracer
 This is a somewhat small raytracer project that allows to load and render scenes composed of 3D objects via raytracing.
 This can either be done on the CPU while utilizing several CPU-Cores or by the GPU with the help of a GLSL shader program.
+The code is heavily inspired by the work on https://www.scratchapixel.com/ , it is a great website for learning commputer graphics.
+
+#### Images
+![Imgur](https://i.imgur.com/ZIm1xfF.png)
+![Imgur](https://i.imgur.com/WvKWcG7.png)
 
 #### Controls
 The renderer my be exited by closing the window or by pressing ESC.

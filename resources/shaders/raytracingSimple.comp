@@ -184,7 +184,7 @@ RTNode raytraceRay(Ray ray, int depth, int maxDepth) {
 
                 if (!shadowIntersect.hit) {
                     //Diffuse color calculation. Light intensity uses the inverse square law with a scaling modifier
-                    node.color += intersect.material.color.xyz * (1.0f / numPointLights) * max(0.0f, dot(intersect.normal, shadowRayDir)) * pointLights[i].color.xyz * pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
+                    node.color += intersect.material.color.xyz * max(0.0f, dot(intersect.normal, shadowRayDir)) * pointLights[i].color.xyz * pointLights[i].color.w * 1.0f / pow(dst, 0.01f);
                 }
             }
             node.isLeaf = true;
