@@ -94,8 +94,8 @@ void main() {
     float fov = 30;
     float aspectratio = screenWidth / float(screenHeight);
     float angle = tan(pi * 0.5 * fov / 180.0f);
-    float xx = (2 * ((gl_GlobalInvocationID.x + 0.5) * invWidth) - 1) * angle * aspectratio;
-    float yy = -(1 - 2 * ((gl_GlobalInvocationID.y + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
+    float xx = (2 * ((float(gl_GlobalInvocationID.x) + 0.5) * invWidth) - 1) * angle * aspectratio;
+    float yy = -(1 - 2 * ((float(gl_GlobalInvocationID.y) + 0.5) * invHeight)) * angle;  //Y-Axis is flipped
 
     //Calculating the camera ray with camera transformations in mind
     vec4 camPosWorld = camera.modelMatrix * vec4(0, 0, 0, 1);
