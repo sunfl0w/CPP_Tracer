@@ -5,6 +5,7 @@
 - GLM https://github.com/g-truc/glm
 - stb Libraries https://github.com/nothings/stb
 - pugixml https://github.com/zeux/pugixml
+- CPPBuildAid https://github.com/sunfl0w/CppBuildAid (also by sunfl0w)
 
 #### Boost Software License
 - Boost Libraries https://www.boost.org/
